@@ -15,6 +15,16 @@ class RouteServiceProvider extends ServiceProvider {
 	protected $namespace = 'App\Http\Controllers';
 
 	/**
+	 * Create a short-hand key for CSRF checking.
+	 * @var array 
+	 */
+	protected $middleware = [
+		
+		'csrf'  => 'Illuminate\Foundation\Http\Middleware\VerifyCsrfToken',
+		
+	];
+	
+	/**
 	 * Define your route model bindings, pattern filters, etc.
 	 *
 	 * @param  \Illuminate\Routing\Router  $router
