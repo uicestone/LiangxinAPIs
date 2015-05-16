@@ -26,9 +26,17 @@ class Input extends \Illuminate\Support\Facades\Input {
 			$data = $raw;
 		}
 		
-		if(isset($field) && is_array($data) && array_key_exists($field, $data))
+		if(isset($field))
 		{
-			return $data[$field];
+			if(is_array($data) && array_key_exists($field, $data))
+			{
+				return $data[$field];
+			}
+			else
+			{
+				return;
+			}
+			
 		}
 		
 		return $data;
