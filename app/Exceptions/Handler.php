@@ -1,6 +1,6 @@
 <?php namespace App\Exceptions;
 
-use Exception;
+use Exception, Request;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler {
@@ -36,6 +36,11 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
+		if(Request::wantsJson())
+		{
+			return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], 401);
+		}
+		
 		return parent::render($request, $e);
 	}
 

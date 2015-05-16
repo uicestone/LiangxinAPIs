@@ -3,9 +3,8 @@
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 use App\User;
-use Input;
+use Input, Exception;
 
 abstract class Controller extends BaseController {
 
@@ -22,7 +21,7 @@ abstract class Controller extends BaseController {
 			
 			if(!$user)
 			{
-				throw new TokenNotFoundException;
+				throw new Exception('Token not found.', 403);
 			}
 			
 			app()->user = $user;

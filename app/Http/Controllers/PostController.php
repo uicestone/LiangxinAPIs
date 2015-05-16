@@ -3,10 +3,8 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use App\Post;
-use Input;
+use Input, Exception;
 
 class PostController extends Controller {
 
@@ -57,7 +55,7 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new UnauthorizedHttpException;
+			throw new Exception('Authentication is required for this action.', 401);
 		}
 		
 		$post = new Post();
@@ -72,7 +70,7 @@ class PostController extends Controller {
 			
 			if(!$parent_post)
 			{
-				throw new ResourceNotFoundException;
+				throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
 			}
 			
 			$post->parent()->associate($parent_post);
@@ -126,7 +124,7 @@ class PostController extends Controller {
 			
 			if(!$parent_post)
 			{
-				throw new ResourceNotFoundException;
+				throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
 			}
 			
 			$post->parent()->associate($parent_post);
