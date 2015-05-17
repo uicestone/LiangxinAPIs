@@ -54,7 +54,7 @@ class GroupController extends Controller {
 	 */
 	public function show($id)
 	{
-		$group = Group::with('parent')->find($id);
+		$group = Group::with('parent', 'posts')->find($id);
 		$group->has_children = $group->has_children;
 		return $group;
 	}

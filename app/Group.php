@@ -21,6 +21,11 @@ class Group extends Model {
 		return $this->hasMany('App\Group', 'parent_id');
 	}
 	
+	public function posts()
+	{
+		return $this->hasMany('App\Post');
+	}
+
 	public function getHasChildrenAttribute()
 	{
 		return (bool)count($this->children);
