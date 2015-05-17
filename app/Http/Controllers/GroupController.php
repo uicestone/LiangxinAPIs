@@ -16,7 +16,7 @@ class GroupController extends Controller {
 	 */
 	public function index()
 	{
-		$query = Group::with('parent');
+		$query = Group::query();
 		
 		if(Input::query('parent'))
 		{
@@ -28,7 +28,12 @@ class GroupController extends Controller {
 			$query->where('name', 'like', '%' . Input::query('keyword') . '%');
 		}
 		
-		return $query->get();
+		return $query->get()->map(function($item)
+		{
+			$item->has_children = $item->has_children;
+			return $item;
+		});
+		
 	}
 
 	/**
@@ -49,7 +54,9 @@ class GroupController extends Controller {
 	 */
 	public function show($id)
 	{
-		return Group::with('parent')->find($id);
+		$group = Group::with('parent')->find($id);
+		$group->has_children = $group->has_children;
+		return $group;
 	}
 
 	/**
