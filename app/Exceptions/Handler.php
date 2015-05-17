@@ -36,9 +36,9 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
-		if(Request::wantsJson())
+		if(!env('APP_DEBUG') && Request::wantsJson())
 		{
-			return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], 401);
+			return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], $e->getCode());
 		}
 		
 		return parent::render($request, $e);
