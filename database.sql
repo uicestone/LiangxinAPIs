@@ -87,6 +87,7 @@ CREATE TABLE `posts` (
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `contact` varchar(255) DEFAULT NULL,
   `group_id` int(11) unsigned NOT NULL,
   `password` char(60) DEFAULT NULL,
   `token` char(60) DEFAULT NULL,
