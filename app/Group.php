@@ -28,7 +28,7 @@ class Group extends Model {
 
 	public function getHasChildrenAttribute()
 	{
-		return (bool)count($this->children);
+		return (bool)$this->children()->count();
 	}
 
 }

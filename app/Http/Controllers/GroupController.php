@@ -28,7 +28,7 @@ class GroupController extends Controller {
 			$query->where('name', 'like', '%' . Input::query('keyword') . '%');
 		}
 		
-		return $query->get()->map(function($item)
+		return $query->get(['id', 'name', 'members', 'avatar', 'leader', 'contact', 'address', 'parent_id'])->map(function($item)
 		{
 			$item->has_children = $item->has_children;
 			return $item;
