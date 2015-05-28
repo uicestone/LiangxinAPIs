@@ -16,7 +16,7 @@ class PostController extends Controller {
 	public function index()
 	{
 		
-		$query = Post::with('author');
+		$query = Post::with('author', 'poster');
 		
 		foreach(['type', 'author_id', 'parent_id', 'group_id', 'event_type', 'class_type'] as $field)
 		{

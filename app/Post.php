@@ -31,6 +31,11 @@ class Post extends Model {
 		return $this->belongsTo('App\Group');
 	}
 	
+	public function poster()
+	{
+		return $this->hasOne('App\Post', 'id', 'poster_id');
+	}
+	
 	public function getCommentsAttribute()
 	{
 		return $this->children()->where('type', '评论')->get();
