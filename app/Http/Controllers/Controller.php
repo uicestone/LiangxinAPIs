@@ -15,13 +15,13 @@ abstract class Controller extends BaseController {
 		
 		app()->user = null;
 		
-		if(Input::query('token'))
+		if(Input::header('Authorization'))
 		{
-			$user = User::where('token', Input::query('token'))->first();
+			$user = User::where('token', Input::header('Authorization'))->first();
 			
 			if(!$user)
 			{
-				throw new Exception('Token not found.', 403);
+				throw new Exception('Authorization key not found.', 403);
 			}
 			
 			app()->user = $user;
