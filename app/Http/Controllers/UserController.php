@@ -3,7 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
-use Input, Hash;
+use Input, Hash, Exception, Response;
 
 use Illuminate\Http\Request;
 
@@ -82,19 +82,43 @@ class UserController extends Controller {
 	 */
 	public function authenticate()
 	{
-		$user = User::where('name', Input::data('username'))->where('password', Input::data('password'))->first();
+		
+		if(!Input::data('username'))
+		{
+			throw new Exception('请输入用户名', 400);
+		}
+		
+		if(!Input::data('password'))
+		{
+			throw new Exception('请输入密码', 400);
+		}
+		
+		$query_user = User::where(function($query)
+		{
+			$query->where('name', Input::data('username'))->orWhere('contact', Input::data('username'));
+		});
+		
+		if(!$query_user->first())
+		{
+			throw new Exception('用户名或联系方式不存在', 401);
+		}
+		
+		$user = $query_user->where('password', Input::data('password'))->first();
 		
 		if(!$user)
 		{
-			return;
+			throw new Exception('密码错误', 401);
 		}
 		
-		$token = Hash::make($user->name . $user->password . time());
+		$token = Hash::make($user->name . $user->password . microtime(true));
+		
 		$user->token = $token;
 		
 		$user->save();
 		
-		return $user;
+		$user->setHidden(array_diff($user->getHidden(), ['token']));
+		
+		return Response::json($user)->header('Token', $user->token);
 	}
 
 }
