@@ -90,6 +90,8 @@ class PostController extends Controller {
 	{
 		$post->comments = $post->comments;
 		
+		$post->liked = $post->liked;
+		
 		if(in_array($post->type, ['活动', '课堂']))
 		{
 			$post->images = $post->images;
@@ -157,6 +159,9 @@ class PostController extends Controller {
 			throw new Exception('用户已经收藏该文章，无法重复收藏', 409);
 		}
 		
+		$post->likes = $post->likedUsers()->count();
+		$post->save();
+		
 		return $post->likedUsers()->attach(app()->user);
 	}
 	
@@ -171,6 +176,9 @@ class PostController extends Controller {
 		{
 			throw new Exception('用户尚未收藏该文章，无法取消收藏', 409);
 		}
+		
+		$post->likes = $post->likedUsers()->count();
+		$post->save();
 		
 		return $post->likedUsers()->detach(app()->user);
 	}

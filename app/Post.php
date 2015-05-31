@@ -71,4 +71,14 @@ class Post extends Model {
 		return $this->children()->where('type', '附件')->get();
 	}
 	
+	public function getLikedAttribute()
+	{
+		if(!app()->user)
+		{
+			return false;
+		}
+		
+		return $this->likedUsers->contains(app()->user);
+	}
+	
 }
