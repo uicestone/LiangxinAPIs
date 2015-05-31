@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
-# Host: localhost (MySQL 5.5.30-log)
+# Host: 127.0.0.1 (MySQL 5.5.43-0ubuntu0.14.10.1)
 # Database: liangxin
-# Generation Time: 2015-05-16 13:31:42 +0000
+# Generation Time: 2015-05-31 14:52:20 +0000
 # ************************************************************
 
 
@@ -18,6 +18,38 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table event_attend
+# ------------------------------------------------------------
+
+CREATE TABLE `event_attend` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `event_attend_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `event_attend_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table group_follow
+# ------------------------------------------------------------
+
+CREATE TABLE `group_follow` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `group_follow_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `group_follow_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 # Dump of table groups
@@ -39,6 +71,22 @@ CREATE TABLE `groups` (
   KEY `name` (`name`),
   KEY `parent` (`parent_id`),
   CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `groups` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table post_like
+# ------------------------------------------------------------
+
+CREATE TABLE `post_like` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `post_like_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `post_like_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
