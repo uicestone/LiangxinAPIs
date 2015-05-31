@@ -42,7 +42,27 @@ class PostController extends Controller {
 			$query->skip((Input::query('page') - 1) * $per_page)->take($per_page);
 		}
 		
-		return $query->get();
+		return $query->get()->map(function($post)
+		{
+			if($post->type === '活动')
+			{
+				$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date']);
+			}
+			
+			if($post->type === '课堂')
+			{
+				$post->addVisible(['class_type']);
+			}
+			
+			if($post->type === '横幅')
+			{
+				$post->addVisible(['banner_position']);
+			}
+			
+			$post->liked = $post->liked;
+
+			return $post;
+		});
 		
 	}
 
