@@ -25,6 +25,11 @@ class Group extends Model {
 	{
 		return $this->hasMany('App\Post');
 	}
+	
+	public function followedUsers()
+	{
+		return $this->belongsToMany('App\User', 'group_follow');
+	}
 
 	public function getHasChildrenAttribute()
 	{

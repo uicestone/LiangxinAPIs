@@ -37,5 +37,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	{
 		return $this->belongsTo('App\Group');
 	}
+	
+	public function followingGroups()
+	{
+		return $this->belongsToMany('App\Group', 'group_follow');
+	}
+	
+	public function attendingEvents()
+	{
+		return $this->belongsToMany('App\Post', 'event_attent');
+	}
+	
+	public function likedPosts()
+	{
+		return $this->belongsToMany('App\Post', 'post_like');
+	}
 
 }

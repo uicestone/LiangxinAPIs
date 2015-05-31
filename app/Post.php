@@ -36,6 +36,16 @@ class Post extends Model {
 		return $this->hasOne('App\Post', 'id', 'poster_id');
 	}
 	
+	public function attendedUsers()
+	{
+		return $this->belongsToMany('App\User', 'event_attend');
+	}
+	
+	public function likedUsers()
+	{
+		return $this->belongsToMany('App\User', 'post_like');
+	}
+	
 	public function getCommentsAttribute()
 	{
 		return $this->children()->where('type', '评论')->get();

@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Group;
-use Input;
+use Input, Exception;
 
 class GroupController extends Controller {
 
@@ -79,6 +79,36 @@ class GroupController extends Controller {
 	public function destroy($id)
 	{
 		//
+	}
+	
+	public function follow(Group $group)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法关注该群组', 401);
+		}
+		
+		if($group->followedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户已经关注该群组，无法重复关注', 409);
+		}
+		
+		return $group->followedUsers()->attach(app()->user);
+	}
+	
+	public function unFollow(Group $group)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法取消关注该群组', 401);
+		}
+		
+		if(!$group->followedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户尚未关注该群组，无法取消关注', 409);
+		}
+		
+		return $group->followedUsers()->detach(app()->user);
 	}
 
 }

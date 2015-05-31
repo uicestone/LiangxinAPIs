@@ -145,4 +145,64 @@ class PostController extends Controller {
 		//
 	}
 
+	public function like(Post $post)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法收藏该文章', 401);
+		}
+		
+		if($post->likedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户已经收藏该文章，无法重复收藏', 409);
+		}
+		
+		return $post->likedUsers()->attach(app()->user);
+	}
+	
+	public function unLike(Post $post)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法取消收藏该文章', 401);
+		}
+		
+		if(!$post->likedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户尚未收藏该文章，无法取消收藏', 409);
+		}
+		
+		return $post->likedUsers()->detach(app()->user);
+	}
+
+	public function attend(Post $event)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法参与该活动', 401);
+		}
+		
+		if($event->attendedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户已经参与该活动，无法重复参与', 409);
+		}
+		
+		return $event->attendedUsers()->attach(app()->user);
+	}
+	
+	public function unAttend(Post $event)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法取消参与该活动', 401);
+		}
+		
+		if(!$event->attendedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户尚未参与该活动，无法取消参与', 409);
+		}
+		
+		return $event->attendedUsers()->detach(app()->user);
+	}
+
 }
