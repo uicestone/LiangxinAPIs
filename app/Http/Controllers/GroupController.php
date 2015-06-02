@@ -49,12 +49,12 @@ class GroupController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  Group $group
 	 * @return Response
 	 */
-	public function show($id)
+	public function show(Group $group)
 	{
-		$group = Group::with('parent', 'posts')->find($id);
+		$group->load('parent', 'posts');
 		$group->has_children = $group->has_children;
 		return $group;
 	}
@@ -62,10 +62,10 @@ class GroupController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+	 * @param  Group $group
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Group $group)
 	{
 		//
 	}
@@ -73,10 +73,10 @@ class GroupController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  Group $group
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy(Group $group)
 	{
 		//
 	}
