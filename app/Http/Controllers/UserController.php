@@ -2,7 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\User, App\Config, App\Sms;
 use Input, Hash, Exception, Response;
 
 use Illuminate\Http\Request;
@@ -120,5 +120,105 @@ class UserController extends Controller {
 		
 		return Response::json($user)->header('Token', $user->token);
 	}
-
+	
+	/**
+	 * update contact, password, reset password of a user
+	 */
+	public function updateProfile()
+	{
+		// update profile
+		if(app()->user && Input::data('contact'))
+		{
+			$mobile = Input::data('contact');
+			
+			if(!Input::query('verification_code'))
+			{
+				// write sms code to db, and send
+				$code = floor(rand(1E5, 1E6-1));
+				Config::create([
+					'key'=>'mobile_code_' . $mobile . '_' . $code,
+					'value'=>json_encode(['expires_at'=>time() + 600])
+				]);
+				
+				return Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
+			}
+			else
+			{
+				$code = Input::query('verification_code');
+				$config_item = Config::where('key', 'mobile_code_' . $mobile . '_' . $code)->first();
+				
+				if(!$config_item)
+				{
+					throw new Exception('短信验证码错误', 401);
+				}
+				
+				if(json_decode($config_item->value)->expires_at < time())
+				{
+					throw new Exception('短信验证码已过期', 401);
+				}
+				
+				app()->user->contact = $mobile;
+				app()->user->save();
+				
+				$config_item->delete();
+			}
+			
+			return app()->user;
+		}
+		
+		// reset password
+		if(!app()->user && Input::query('username') && Input::query('contact'))
+		{
+			
+			$mobile = (string) Input::query('contact');
+			
+			$user = User::where('name', Input::query('username'))->first();
+			
+			if(!$user)
+			{
+				throw new Exception('用户名不存在', 401);
+			}
+			
+			if($user->contact !== $mobile)
+			{
+				throw new Exception('用户名和联系方式不匹配', 401);
+			}
+			
+			if(!Input::query('verification_code'))
+			{
+				// send sms code to contact
+				$code = floor(rand(1E5, 1E6-1));
+				Config::create([
+					'key'=>'mobile_code_' . $mobile . '_' . $code,
+					'value'=>json_encode(['expires_at'=>time() + 600])
+				]);
+				
+				Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
+			}
+			elseif(Input::get('password'))
+			{
+				// update password
+				$code = Input::query('verification_code');
+				$config_item = Config::where('key', 'mobile_code_' . $mobile . '_' . $code)->first();
+				
+				if(!$config_item)
+				{
+					throw new Exception('短信验证码错误', 401);
+				}
+				
+				if(json_decode($config_item->value)->expires_at < time())
+				{
+					throw new Exception('短信验证码已过期', 401);
+				}
+				
+				$user = User::where('contact', $mobile)->first();
+				
+				$user->password = Input::get('password');
+				$user->save();
+				
+				$config_item->delete();
+				return $user;
+			}
+		}
+	}
 }
