@@ -140,7 +140,7 @@ class UserController extends Controller {
 					'value'=>json_encode(['expires_at'=>time() + 600])
 				]);
 				
-				return Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
+				Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
 			}
 			else
 			{
