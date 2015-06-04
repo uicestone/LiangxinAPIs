@@ -44,19 +44,22 @@ class PostController extends Controller {
 		
 		return $query->get()->map(function($post)
 		{
-			if($post->type === '活动')
+			
+			$post->addHidden('content');
+			
+			if($post->type !== '活动')
 			{
-				$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date']);
+				$post->addHidden(['event_date', 'event_address', 'event_type', 'due_date']);
 			}
 			
-			if($post->type === '课堂')
+			if($post->type !== '课堂')
 			{
-				$post->addVisible(['class_type']);
+				$post->addHidden(['class_type']);
 			}
 			
-			if($post->type === '横幅')
+			if($post->type !== '横幅')
 			{
-				$post->addVisible(['banner_position']);
+				$post->addHidden(['banner_position']);
 			}
 			
 			$post->liked = $post->liked;
@@ -123,14 +126,29 @@ class PostController extends Controller {
 			$post->articles = $post->articles;
 			$post->attachments = $post->attachments;
 		}
-
+		
 		if($post->type === '活动')
 		{
 			$post->load('attendedUsers');
 		}
-
-		$post->load('likedUsers');
 		
+		$post->load('likedUsers', 'author', 'poster', 'parent');
+		
+		if($post->type !== '活动')
+		{
+			$post->addHidden(['event_date', 'event_address', 'event_type', 'due_date']);
+		}
+
+		if($post->type !== '课堂')
+		{
+			$post->addHidden(['class_type']);
+		}
+
+		if($post->type !== '横幅')
+		{
+			$post->addHidden(['banner_position']);
+		}
+
 		return $post;
 	}
 

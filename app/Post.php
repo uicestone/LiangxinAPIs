@@ -10,7 +10,6 @@ class Post extends Model {
 	 * @var array
 	 */
 	protected $fillable = ['type', 'title', 'excerpt', 'content', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'url', 'likes'];
-	protected $visible = ['id', 'type', 'title', 'excerpt', 'content', 'url', 'likes', 'likedUsers', 'attendedUsers', 'children', 'comments', 'images', 'videos', 'attachments', 'articles', 'updated_at', 'created_at'];
 	
 	public function parent()
 	{
