@@ -16,7 +16,7 @@ class PostController extends Controller {
 	public function index()
 	{
 		
-		$query = Post::with('author', 'poster');
+		$query = Post::with('group', 'author', 'poster');
 		
 		foreach(['type', 'author_id', 'parent_id', 'group_id', 'event_type', 'class_type'] as $field)
 		{
@@ -45,11 +45,15 @@ class PostController extends Controller {
 		return $query->get()->map(function($post)
 		{
 			
-			$post->addHidden('content');
+			$post->addHidden('content', 'likedUsers');
 			
 			if($post->type !== '活动')
 			{
 				$post->addHidden(['event_date', 'event_address', 'event_type', 'due_date']);
+			}
+			else
+			{
+				$post->has_due_date = $post->has_due_date;
 			}
 			
 			if($post->type !== '课堂')
@@ -111,37 +115,31 @@ class PostController extends Controller {
 	 */
 	public function show(Post $post)
 	{
+		$post->load('likedUsers', 'author', 'poster', 'parent');
+		
 		$post->comments = $post->comments;
 		
 		$post->liked = $post->liked;
-		
-		if(in_array($post->type, ['活动', '课堂']))
-		{
-			$post->images = $post->images;
-		}
-		
-		if($post->type === '课堂')
-		{
-			$post->videos = $post->videos;
-			$post->articles = $post->articles;
-			$post->attachments = $post->attachments;
-		}
-		
-		if($post->type === '活动')
-		{
-			$post->load('attendedUsers');
-		}
-		
-		$post->load('likedUsers', 'author', 'poster', 'parent');
 		
 		if($post->type !== '活动')
 		{
 			$post->addHidden(['event_date', 'event_address', 'event_type', 'due_date']);
 		}
+		else
+		{
+			$post->load('attendees');
+			$post->has_due_date = $post->has_due_date;
+		}
 
 		if($post->type !== '课堂')
 		{
 			$post->addHidden(['class_type']);
+		}
+		else
+		{
+			$post->videos = $post->videos;
+			$post->articles = $post->articles;
+			$post->attachments = $post->attachments;
 		}
 
 		if($post->type !== '横幅')
@@ -149,6 +147,11 @@ class PostController extends Controller {
 			$post->addHidden(['banner_position']);
 		}
 
+		if(in_array($post->type, ['活动', '课堂']))
+		{
+			$post->images = $post->images;
+		}
+		
 		return $post;
 	}
 
@@ -243,12 +246,12 @@ class PostController extends Controller {
 			throw new Exception('用户没有登录，无法参与该活动', 401);
 		}
 		
-		if($event->attendedUsers->contains(app()->user->id))
+		if($event->attendees->contains(app()->user->id))
 		{
 			throw new Exception('用户已经参与该活动，无法重复参与', 409);
 		}
 		
-		return $event->attendedUsers()->attach(app()->user);
+		return $event->attendees()->attach(app()->user);
 	}
 	
 	public function unAttend(Post $event)
@@ -258,12 +261,12 @@ class PostController extends Controller {
 			throw new Exception('用户没有登录，无法取消参与该活动', 401);
 		}
 		
-		if(!$event->attendedUsers->contains(app()->user->id))
+		if(!$event->attendees->contains(app()->user->id))
 		{
 			throw new Exception('用户尚未参与该活动，无法取消参与', 409);
 		}
 		
-		return $event->attendedUsers()->detach(app()->user);
+		return $event->attendees()->detach(app()->user);
 	}
 
 }

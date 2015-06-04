@@ -36,7 +36,7 @@ class Post extends Model {
 		return $this->hasOne('App\Post', 'id', 'poster_id');
 	}
 	
-	public function attendedUsers()
+	public function attendees()
 	{
 		return $this->belongsToMany('App\User', 'event_attend');
 	}
@@ -79,6 +79,11 @@ class Post extends Model {
 		}
 		
 		return $this->likedUsers->contains(app()->user);
+	}
+	
+	public function getHasDueDateAttribute()
+	{
+		return (bool) $this->due_date;
 	}
 	
 }

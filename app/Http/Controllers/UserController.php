@@ -16,7 +16,7 @@ class UserController extends Controller {
 	 */
 	public function index()
 	{
-		$query = User::with('group');
+		$query = User::query();
 		
 		if(Input::query('group_id'))
 		{
