@@ -31,6 +31,14 @@ class PostController extends Controller {
 			$query->where('title', 'like', '%' . Input::query('keyword') . '%');
 		}
 		
+		if(Input::query('liked_user_id'))
+		{
+			$query->whereHas('likedUsers', function($query)
+			{
+				return $query->where('user_id', Input::query('liked_user_id'));
+			});
+		}
+		
 		if(Input::query('order_by'))
 		{
 			$query->orderBy(Input::query('order_by'), Input::query('order') ? Input::query('order') : 'asc');
