@@ -39,29 +39,22 @@ class UserController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  User $user
 	 * @return Response
 	 */
-	public function show($id)
+	public function show(User $user)
 	{
-		return User::find($id)->with('group')->get();
+		$user->load('group', 'followingGroups', 'likedPosts', 'attendingEvents');
+		return $user;
 	}
 	
 	/**
-	 * Display a post directly
-	 */
-	public function display($post)
-	{
-		return $post->content;
-	}
-
-	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+	 * @param  User $user
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(User $user)
 	{
 		//
 	}
@@ -69,10 +62,10 @@ class UserController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  User $user
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy(User $user)
 	{
 		//
 	}

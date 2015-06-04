@@ -45,7 +45,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	
 	public function attendingEvents()
 	{
-		return $this->belongsToMany('App\Post', 'event_attent');
+		return $this->belongsToMany('App\Post', 'event_attend');
 	}
 	
 	public function likedPosts()

@@ -29,5 +29,6 @@ Route::delete('api/v1/like/{post}', 'PostController@unLike');
 
 Route::model('post', 'App\Post');
 Route::model('group', 'App\Group');
+Route::model('user', 'App\User');
 
 Route::get('post/{post}', 'PostController@display');

@@ -123,8 +123,23 @@ class PostController extends Controller {
 			$post->articles = $post->articles;
 			$post->attachments = $post->attachments;
 		}
+
+		if($post->type === '活动')
+		{
+			$post->load('attendedUsers');
+		}
+
+		$post->load('likedUsers');
 		
 		return $post;
+	}
+
+	/**
+	 * Display a post directly
+	 */
+	public function display(Post $post)
+	{
+		return $post->content;
 	}
 
 	/**
