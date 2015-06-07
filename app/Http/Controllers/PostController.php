@@ -97,7 +97,11 @@ class PostController extends Controller {
 		$post->fill(Input::data());
 		
 		$post->author()->associate(app()->user);
-		$post->group()->associate(app()->user->group);
+		
+		if(app()->user->group)
+		{
+			$post->group()->associate(app()->user->group);
+		}
 		
 		if(Input::data('parent_id'))
 		{
