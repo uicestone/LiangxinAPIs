@@ -35,5 +35,15 @@ class Group extends Model {
 	{
 		return (bool)$this->children()->count();
 	}
+	
+	public function getFollowingAttribute()
+	{
+		if(!app()->user)
+		{
+			return null;
+		}
+		
+		return $this->followedUsers()->contains(app()->user);
+	}
 
 }

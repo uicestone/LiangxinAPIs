@@ -31,6 +31,7 @@ class GroupController extends Controller {
 		return $query->get(['id', 'name', 'members', 'avatar', 'leader', 'contact', 'address', 'parent_id'])->map(function($item)
 		{
 			$item->has_children = $item->has_children;
+			$item->following = $item->following;
 			return $item;
 		});
 		

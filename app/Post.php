@@ -75,7 +75,7 @@ class Post extends Model {
 	{
 		if(!app()->user)
 		{
-			return false;
+			return null;
 		}
 		
 		return $this->likedUsers->contains(app()->user);
