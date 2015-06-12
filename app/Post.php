@@ -53,7 +53,11 @@ class Post extends Model {
 	
 	public function getImagesAttribute()
 	{
-		return $this->children()->where('type', '图片')->get();
+		return $this->children()->where('type', '图片')->get()->map(function($item)
+		{
+			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
+			return $item;
+		});
 	}
 	
 	public function getArticlesAttribute()
@@ -68,7 +72,11 @@ class Post extends Model {
 	
 	public function getAttachmentsAttribute()
 	{
-		return $this->children()->where('type', '附件')->get();
+		return $this->children()->where('type', '附件')->get()->map(function($item)
+		{
+			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
+			return $item;
+		});;
 	}
 	
 	public function getLikedAttribute()

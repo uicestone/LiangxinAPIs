@@ -197,7 +197,7 @@ class PostController extends Controller {
 			$post->addHidden(['banner_position']);
 		}
 
-		if(in_array($post->type, ['活动', '课堂']))
+		if(in_array($post->type, ['活动', '课堂', '文章']))
 		{
 			$post->images = $post->images;
 		}
