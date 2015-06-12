@@ -8,39 +8,18 @@ class Input extends \Illuminate\Support\Facades\Input {
 	 */
 	public static function data($field = null)
 	{
-		$raw = static::$app['request']->getContent();
-		
-		if(static::$app['request']->isJson())
+		if(is_null($field))
 		{
-			$data = json_decode($raw, JSON_OBJECT_AS_ARRAY);
+			return array_replace_recursive(static::$app['request']->request->all(), static::$app['request']->files->all());
 		}
-		
-		if(str_contains(static::$app['request']->header('CONTENT_TYPE'), '/x-www-form-urlencoded'))
+		elseif(static::$app['request']->files->get($field))
 		{
-			$data = array();
-			parse_str($raw, $data);
+			return static::$app['request']->files->get($field);
 		}
-		
-		if(!isset($data))
+		else
 		{
-			$data = $raw;
+			return static::$app['request']->request->get($field);
 		}
-		
-		if(isset($field))
-		{
-			if(is_array($data) && array_key_exists($field, $data))
-			{
-				return $data[$field];
-			}
-			else
-			{
-				return;
-			}
-			
-		}
-		
-		return $data;
-		
 	}
 	
 	/**

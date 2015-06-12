@@ -117,6 +117,44 @@ class PostController extends Controller {
 		}
 		
 		$post->save();
+		
+		// upload files and create child posts
+		foreach(['images', 'attachments'] as $file_type)
+		{
+			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0]->isValid())
+			{
+				break;
+			}
+			
+			foreach(Input::data($file_type) as $file)
+			{
+				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+				$file->move(public_path($file_type), $file_store_name);
+				
+				$file_post = new Post();
+				
+				$file_post->fill([
+					'title'=>$file->getClientOriginalName(),
+					'type'=>$file_type === 'images' ? '图片' : '附件',
+					'url'=>url($file_type . '/' . $file_store_name),
+				]);
+				
+				$file_post->parent()->associate($post);
+				$file_post->author()->associate(app()->user);
+				
+				if(app()->user->group)
+				{
+					$file_post->group()->associate(app()->user->group);
+				}
+				
+				$file_post->save();
+			}
+			
+			$post->$file_type = $post->$file_type;
+		}
+		
+		return $post;
+		
 	}
 
 	/**
