@@ -211,7 +211,7 @@ class PostController extends Controller {
 	 */
 	public function display(Post $post)
 	{
-		return $post->content;
+		return view('post', compact('post'));
 	}
 
 	/**
