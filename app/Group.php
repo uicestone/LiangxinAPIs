@@ -46,4 +46,8 @@ class Group extends Model {
 		return $this->followedUsers()->contains(app()->user);
 	}
 
+	public function getAvatarAttribute($url)
+	{
+		return env('QINIU_HOST') . $url;
+	}
 }
