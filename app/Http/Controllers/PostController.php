@@ -245,14 +245,58 @@ class PostController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  Post  $post
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($post = null)
 	{
-		//
-	}
+		if(is_null($post) && Input::query('id'))
+		{
+			$ids = Input::query('id');
+			
+			if(!is_array($ids))
+			{
+				$ids = [$ids];
+			}
+			
+			$posts = Post::whereIn('id', $ids)->get();
+			
+			$posts->each(function($post)
+			{
+				try{
+					$this->destroy($post);
+				}
+				catch(Exception $e)
+				{
+					
+				}
+			});
+			
+			return;
+		}
+		
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法删除该文章', 401);
+		}
 
+		if(!$post->author || app()->user->id !== $post->author->id)
+		{
+			throw new Exception('用户不是文章的作者，无权删除该文章', 403);
+		}
+		
+		try{
+			$post->delete();
+		}
+		catch(\Illuminate\Database\QueryException $e)
+		{
+			if($e->getCode() === '23000')
+			{
+				throw new Exception('该文章是其他文章的上级文章，无法删除', 400);
+			}
+		}
+	}
+	
 	public function like(Post $post)
 	{
 		if(!app()->user)

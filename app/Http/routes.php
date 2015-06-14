@@ -17,6 +17,8 @@ Route::resource('api/v1/group', 'GroupController', ['except' => ['update', 'edit
 Route::resource('api/v1/user', 'UserController', ['except' => ['update', 'edit']]);
 Route::resource('api/v1/post', 'PostController', ['except' => ['update', 'edit']]);
 
+Route::delete('api/v1/post', 'PostController@destroy');
+
 Route::post('api/v1/auth/login', 'UserController@authenticate');
 Route::post('api/v1/auth/user', 'UserController@updateProfile');
 
