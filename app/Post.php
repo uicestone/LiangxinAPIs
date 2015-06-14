@@ -94,4 +94,14 @@ class Post extends Model {
 		return (bool) $this->due_date;
 	}
 	
+	public function getUrlAttribute($url)
+	{
+		if(in_array($this->type, ['图片', '附件']))
+		{
+			return env('QINIU_HOST') . $url;
+		}
+		
+		return $url;
+	}
+	
 }

@@ -44,11 +44,10 @@ class PostController extends Controller {
 			$query->orderBy(Input::query('order_by'), Input::query('order') ? Input::query('order') : 'asc');
 		}
 		
-		if(Input::query('page'))
-		{
-			$per_page = Input::query('per_page') ? Input::query('per_page') : 10;
-			$query->skip((Input::query('page') - 1) * $per_page)->take($per_page);
-		}
+		$page = Input::query('page') ? Input::query('page') : 1;
+		
+		$per_page = Input::query('per_page') ? Input::query('per_page') : 10;
+		$query->skip(($page - 1) * $per_page)->take($per_page);
 		
 		return $query->get()->map(function($post)
 		{
@@ -136,7 +135,7 @@ class PostController extends Controller {
 				$file_post->fill([
 					'title'=>$file->getClientOriginalName(),
 					'type'=>$file_type === 'images' ? '图片' : '附件',
-					'url'=>url($file_type . '/' . $file_store_name),
+					'url'=>$file_type . '/' . $file_store_name,
 				]);
 				
 				$file_post->parent()->associate($post);
