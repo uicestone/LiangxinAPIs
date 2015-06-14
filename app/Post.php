@@ -10,7 +10,7 @@ class Post extends Model {
 	 * @var array
 	 */
 	protected $fillable = ['type', 'title', 'excerpt', 'content', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'url', 'likes'];
-	protected $visible = ['id', 'type', 'title', 'author_id', 'likes', 'updated_at', 'created_at'];
+	protected $visible = ['id', 'type', 'title', 'author_id', 'likes', 'updated_at', 'created_at', 'author', 'comments'];
 	protected $casts = [
 		'likes'=>'integer'
 	];
@@ -64,6 +64,7 @@ class Post extends Model {
 	{
 		return $this->children()->where('type', '图片')->get()->map(function($item)
 		{
+			$item->comments = $item->comments;
 			$item->addVisible('url');
 			return $item;
 		});

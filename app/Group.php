@@ -34,7 +34,28 @@ class Group extends Model {
 	{
 		return $this->belongsToMany('App\User', 'group_follow');
 	}
-
+	
+	public function getNewsAttribute()
+	{
+		return $this->posts()->whereIn('type', ['公告', '文章'])->orderBy('updated_at', 'desc')->take(5)->get()->map(function($post)
+		{
+			$post->load('author');
+			$post->comments = $post->comments;
+			return $post;
+		});
+	}
+	
+	public function getImagesAttribute()
+	{
+		return $this->posts()->where('type', '图片')->orderBy('updated_at', 'desc')->take(2)->get()->map(function($post)
+		{
+			$post->load('author');
+			$post->addVisible('url');
+			$post->comments = $post->comments;
+			return $post;
+		});
+	}
+	
 	public function getHasChildrenAttribute()
 	{
 		return (bool)$this->children()->count();

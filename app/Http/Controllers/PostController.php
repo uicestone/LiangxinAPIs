@@ -194,7 +194,7 @@ class PostController extends Controller {
 	public function show(Post $post)
 	{
 		$post->load('likedUsers', 'author', 'poster', 'parent');
-		$post->addVisible('likedUsers', 'author', 'parent');
+		$post->addVisible('likedUsers', 'author', 'parent', 'comments', 'liked', 'is_favorite');
 		
 		$post->comments = $post->comments;
 		
@@ -233,6 +233,7 @@ class PostController extends Controller {
 		
 		if(in_array($post->type, ['活动', '课堂', '文章']))
 		{
+			$post->addVisible('images');
 			$post->images = $post->images;
 		}
 		
