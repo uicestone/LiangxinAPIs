@@ -167,12 +167,12 @@ class UserController extends Controller {
 		}
 		
 		// reset password
-		if(!app()->user && Input::query('username') && Input::query('contact'))
+		if(!app()->user && Input::query('contact'))
 		{
 			
 			$mobile = (string) Input::query('contact');
 			
-			$user = User::where('name', Input::query('username'))->first();
+			$user = User::where('contact', $mobile)->first();
 			
 			if(!$user)
 			{
