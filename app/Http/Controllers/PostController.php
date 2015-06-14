@@ -74,6 +74,7 @@ class PostController extends Controller {
 			}
 			
 			$post->liked = $post->liked;
+			$post->is_favorite = $post->is_favorite;
 
 			return $post;
 		});
@@ -169,6 +170,7 @@ class PostController extends Controller {
 		$post->comments = $post->comments;
 		
 		$post->liked = $post->liked;
+		$post->is_favorite = $post->is_favorite;
 		
 		if($post->type !== '活动')
 		{
@@ -300,12 +302,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法收藏该文章', 401);
+			throw new Exception('用户没有登录，无法点赞该文章', 401);
 		}
 		
 		if($post->likedUsers->contains(app()->user->id))
 		{
-			throw new Exception('用户已经收藏该文章，无法重复收藏', 409);
+			throw new Exception('用户已经点赞该文章，无法重复点赞', 409);
 		}
 		
 		$post->likes = $post->likedUsers()->count();
@@ -315,6 +317,42 @@ class PostController extends Controller {
 	}
 	
 	public function unLike(Post $post)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法取消点赞该文章', 401);
+		}
+		
+		if(!$post->likedUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户尚未点赞该文章，无法取消点赞', 409);
+		}
+		
+		$post->likes = $post->likedUsers()->count();
+		$post->save();
+		
+		return $post->likedUsers()->detach(app()->user);
+	}
+
+	public function favorite(Post $post)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法收藏该文章', 401);
+		}
+		
+		if($post->favoredUsers->contains(app()->user->id))
+		{
+			throw new Exception('用户已经收藏该文章，无法重复收藏', 409);
+		}
+		
+		$post->likes = $post->favoredUsers()->count();
+		$post->save();
+		
+		return $post->favoredUsers()->attach(app()->user);
+	}
+	
+	public function unFavorite(Post $post)
 	{
 		if(!app()->user)
 		{

@@ -28,6 +28,8 @@ Route::post('api/v1/attend/{post}', 'PostController@attend');
 Route::delete('api/v1/attend/{post}', 'PostController@unAttend');
 Route::post('api/v1/like/{post}', 'PostController@like');
 Route::delete('api/v1/like/{post}', 'PostController@unLike');
+Route::post('api/v1/favorite/{post}', 'PostController@favorite');
+Route::delete('api/v1/favorite/{post}', 'PostController@unFavorite');
 
 Route::model('post', 'App\Post');
 Route::model('group', 'App\Group');

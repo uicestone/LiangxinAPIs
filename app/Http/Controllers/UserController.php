@@ -23,7 +23,14 @@ class UserController extends Controller {
 			$query->where('group_id', Input::query('group_id'));
 		}
 		
-		return $query->get();
+		return $query->get()->map(function($user)
+		{
+			if(!$user->position)
+			{
+				$user->addHidden('position');
+			}
+			return $user;
+		});
 	}
 
 	/**
@@ -44,7 +51,7 @@ class UserController extends Controller {
 	 */
 	public function show(User $user)
 	{
-		$user->load('group', 'followingGroups', 'likedPosts', 'attendingEvents');
+		$user->load('group', 'followingGroups', 'likedPosts', 'attendingEvents', 'favoritePosts');
 		return $user;
 	}
 	

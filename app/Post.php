@@ -46,6 +46,11 @@ class Post extends Model {
 		return $this->belongsToMany('App\User', 'post_like');
 	}
 	
+	public function favoredUsers()
+	{
+		return $this->belongsToMany('App\User', 'post_favorite');
+	}
+	
 	public function getCommentsAttribute()
 	{
 		return $this->children()->where('type', '评论')->get();
@@ -76,7 +81,7 @@ class Post extends Model {
 		{
 			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
 			return $item;
-		});;
+		});
 	}
 	
 	public function getLikedAttribute()
@@ -87,6 +92,16 @@ class Post extends Model {
 		}
 		
 		return $this->likedUsers->contains(app()->user);
+	}
+	
+	public function getIsFavoriteAttribute()
+	{
+		if(!app()->user)
+		{
+			return null;
+		}
+		
+		return $this->favoredUsers->contains(app()->user);
 	}
 	
 	public function getHasDueDateAttribute()
