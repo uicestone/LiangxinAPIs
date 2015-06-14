@@ -39,9 +39,19 @@ class PostController extends Controller {
 			});
 		}
 		
-		if(Input::query('order_by'))
+		if(!Input::query('order_by') && !Input::query('order'))
 		{
-			$query->orderBy(Input::query('order_by'), Input::query('order') ? Input::query('order') : 'asc');
+			$order_by = 'created_at'; $order = 'desc';
+		}
+		else
+		{
+			$order_by = Input::query('order_by');
+			$order = Input::query('order');
+		}
+		
+		if($order_by)
+		{
+			$query->orderBy($order_by, $order ? $order : 'asc');
 		}
 		
 		$page = Input::query('page') ? Input::query('page') : 1;
