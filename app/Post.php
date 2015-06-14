@@ -72,7 +72,11 @@ class Post extends Model {
 	
 	public function getVideosAttribute()
 	{
-		return $this->children()->where('type', '视频')->get();
+		return $this->children()->where('type', '视频')->get()->map(function($item)
+		{
+			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
+			return $item;
+		});
 	}
 	
 	public function getAttachmentsAttribute()
