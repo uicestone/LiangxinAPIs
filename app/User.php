@@ -22,8 +22,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['name', 'email', 'token', 'contact'];
-	
+	protected $fillable = ['name', 'token', 'contact'];
+	protected $visible = ['id', 'name', 'contact', 'group_id', 'department_id'];
+
 	public $timestamps = false;
 
 	/**

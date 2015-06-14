@@ -54,23 +54,31 @@ class PostController extends Controller {
 			
 			$post->addHidden('content', 'likedUsers');
 			
-			if($post->type !== '活动')
+			if($post->type === '活动')
 			{
-				$post->addHidden(['event_date', 'event_address', 'event_type', 'due_date']);
-			}
-			else
-			{
+				$post->addVisible(['event_address', 'event_type', 'has_due_date']);
+				
+				if($post->due_date > 0)
+				{
+					$post->addVisible('due_date');
+				}
+				
+				if($post->event_date > 0)
+				{
+					$post->addVisible('event_date');
+				}
+				
 				$post->has_due_date = $post->has_due_date;
 			}
 			
-			if($post->type !== '课堂')
+			if($post->type === '课堂')
 			{
-				$post->addHidden(['class_type']);
+				$post->addVisible(['class_type']);
 			}
 			
-			if($post->type !== '横幅')
+			if($post->type === '横幅')
 			{
-				$post->addHidden(['banner_position']);
+				$post->addVisible(['banner_position']);
 			}
 			
 			$post->liked = $post->liked;
@@ -172,32 +180,36 @@ class PostController extends Controller {
 		$post->liked = $post->liked;
 		$post->is_favorite = $post->is_favorite;
 		
-		if($post->type !== '活动')
+		if($post->type === '文章')
 		{
-			$post->addHidden(['event_date', 'event_address', 'event_type', 'due_date']);
+			$post->addVisible(['content']);
 		}
-		else
+		
+		if($post->type === '活动')
 		{
+			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees']);
 			$post->load('attendees');
 			$post->has_due_date = $post->has_due_date;
 		}
 
-		if($post->type !== '课堂')
+		if($post->type === '课堂')
 		{
-			$post->addHidden(['class_type']);
-		}
-		else
-		{
+			$post->addVisible(['class_type', 'videos', 'articles', 'attachments']);
 			$post->videos = $post->videos;
 			$post->articles = $post->articles;
 			$post->attachments = $post->attachments;
 		}
 
-		if($post->type !== '横幅')
+		if($post->type === '横幅')
 		{
-			$post->addHidden(['banner_position']);
+			$post->addVisible(['banner_position']);
 		}
 
+		if(in_array($post->type, ['附件', '图片', '视频', '横幅']))
+		{
+			$post->addVisible(['url']);
+		}
+		
 		if(in_array($post->type, ['活动', '课堂', '文章']))
 		{
 			$post->images = $post->images;

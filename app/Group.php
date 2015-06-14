@@ -10,6 +10,10 @@ class Group extends Model {
 	 * @var array
 	 */
 	protected $fillable = ['name', 'members', 'avatar', 'description', 'leader', 'contact', 'address'];
+	protected $visible = ['id', 'name', 'members', 'avatar', 'description', 'leader', 'contact', 'address', 'parent_id'];
+	protected $casts = [
+		'members'=>'integer'
+	];
 	
 	public function parent()
 	{

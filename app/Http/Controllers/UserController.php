@@ -25,9 +25,9 @@ class UserController extends Controller {
 		
 		return $query->get()->map(function($user)
 		{
-			if(!$user->position)
+			if($user->position)
 			{
-				$user->addHidden('position');
+				$user->addVisible('position');
 			}
 			return $user;
 		});
@@ -116,7 +116,7 @@ class UserController extends Controller {
 		
 		$user->save();
 		
-		$user->setHidden(array_diff($user->getHidden(), ['token']));
+		$user->addVisible('token');
 		
 		return Response::json($user)->header('Token', $user->token);
 	}

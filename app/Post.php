@@ -10,7 +10,11 @@ class Post extends Model {
 	 * @var array
 	 */
 	protected $fillable = ['type', 'title', 'excerpt', 'content', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'url', 'likes'];
-	
+	protected $visible = ['id', 'type', 'title', 'author_id', 'likes', 'updated_at', 'created_at'];
+	protected $casts = [
+		'likes'=>'integer'
+	];
+
 	public function parent()
 	{
 		return $this->belongsTo('App\Post');
@@ -60,21 +64,25 @@ class Post extends Model {
 	{
 		return $this->children()->where('type', '图片')->get()->map(function($item)
 		{
-			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
+			$item->addVisible('url');
 			return $item;
 		});
 	}
 	
 	public function getArticlesAttribute()
 	{
-		return $this->children()->where('type', '文章')->get();
+		return $this->children()->where('type', '文章')->get()->map(function($item)
+		{
+			$item->addVisible('content');
+			return $item;
+		});
 	}
 	
 	public function getVideosAttribute()
 	{
 		return $this->children()->where('type', '视频')->get()->map(function($item)
 		{
-			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
+			$item->addVisible('url');
 			return $item;
 		});
 	}
@@ -83,7 +91,7 @@ class Post extends Model {
 	{
 		return $this->children()->where('type', '附件')->get()->map(function($item)
 		{
-			$item->addHidden('class_type', 'event_date', 'event_address', 'event_type', 'due_date', 'banner_position', 'excerpt', 'content');
+			$item->addVisible('url');
 			return $item;
 		});
 	}
