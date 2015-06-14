@@ -31,6 +31,11 @@ class PostController extends Controller {
 			$query->where('title', 'like', '%' . Input::query('keyword') . '%');
 		}
 		
+		if(Input::query('position') && Input::query('type') === '横幅')
+		{
+			$query->where('banner_position', Input::query('position'));
+		}
+		
 		if(Input::query('liked_user_id'))
 		{
 			$query->whereHas('likedUsers', function($query)
@@ -62,7 +67,7 @@ class PostController extends Controller {
 		return $query->get()->map(function($post)
 		{
 			
-			$post->addHidden('content', 'likedUsers');
+			$post->addVisible('group', 'author');
 			
 			if($post->type === '活动')
 			{
@@ -88,7 +93,7 @@ class PostController extends Controller {
 			
 			if($post->type === '横幅')
 			{
-				$post->addVisible(['banner_position']);
+				$post->addVisible(['banner_position', 'poster']);
 			}
 			
 			if(in_array($post->type, ['横幅', '图片', '视频', '附件']))
@@ -189,6 +194,7 @@ class PostController extends Controller {
 	public function show(Post $post)
 	{
 		$post->load('likedUsers', 'author', 'poster', 'parent');
+		$post->addVisible('likedUsers', 'author', 'parent');
 		
 		$post->comments = $post->comments;
 		
@@ -217,7 +223,7 @@ class PostController extends Controller {
 
 		if($post->type === '横幅')
 		{
-			$post->addVisible(['banner_position']);
+			$post->addVisible(['banner_position', 'poster']);
 		}
 
 		if(in_array($post->type, ['附件', '图片', '视频', '横幅']))
