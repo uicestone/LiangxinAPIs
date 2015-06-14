@@ -43,7 +43,7 @@ class Group extends Model {
 			return null;
 		}
 		
-		return $this->followedUsers()->contains(app()->user);
+		return $this->followedUsers->contains(app()->user);
 	}
 
 	public function getAvatarAttribute($url)
