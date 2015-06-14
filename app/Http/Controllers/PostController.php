@@ -91,6 +91,11 @@ class PostController extends Controller {
 				$post->addVisible(['banner_position']);
 			}
 			
+			if(in_array($post->type, ['横幅', '图片', '视频', '附件']))
+			{
+				$post->addVisible(['url']);	
+			}
+			
 			$post->liked = $post->liked;
 			$post->is_favorite = $post->is_favorite;
 
