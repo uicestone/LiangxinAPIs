@@ -160,6 +160,35 @@ class PostController extends Controller {
 		
 		}
 		
+		if(Input::data('poster') && Input::data('poster')->isValid())
+		{
+			
+			$file = Input::data('poster');
+			
+			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+			$file->move('images', $file_store_name);
+
+			$file_post = new Post();
+
+			$file_post->fill([
+				'title'=>$file->getClientOriginalName(),
+				'type'=>'封面',
+				'url'=>'images' . '/' . $file_store_name,
+			]);
+
+			$file_post->author()->associate(app()->user);
+
+			if(app()->user->group)
+			{
+				$file_post->group()->associate(app()->user->group);
+			}
+
+			$file_post->save();
+			
+			$post->poster_id = $file_post->id;
+			
+		}
+
 		$post->save();
 		
 		// upload files and create child posts
