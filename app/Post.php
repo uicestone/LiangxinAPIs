@@ -138,6 +138,10 @@ class Post extends Model {
 		return $url;
 	}
 	
+	public function getExcerptAttribute($excerpt)
+	{
+		if(!$excerpt)
+		{
 			return str_limit($this->content, 140);
 		}
 		

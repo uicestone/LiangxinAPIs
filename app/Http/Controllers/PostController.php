@@ -122,6 +122,7 @@ class PostController extends Controller {
 				$post->addVisible('likes');
 				$post->liked = $post->liked;
 				$post->is_favorite = $post->is_favorite;
+				$post->comments_count = $post->comments_count;
 			}
 
 			if(in_array($post->type, ['横幅', '图片', '视频', '附件']))
