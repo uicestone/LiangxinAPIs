@@ -109,17 +109,36 @@ class PostController extends Controller {
 			
 			if($post->type === '横幅')
 			{
-				$post->addVisible(['banner_position', 'poster']);
+				$post->addVisible('banner_position');
 			}
 			
+			if(in_array($post->type, ['课堂', '活动', '文章']))
+			{
+				$post->addVisible('excerpt');
+			}
+			
+			if(in_array($post->type, ['课堂', '活动', '文章', '图片']))
+			{
+				$post->addVisible('likes');
+				$post->liked = $post->liked;
+				$post->is_favorite = $post->is_favorite;
+			}
+
 			if(in_array($post->type, ['横幅', '图片', '视频', '附件']))
 			{
 				$post->addVisible(['url']);	
 			}
 			
-			$post->liked = $post->liked;
-			$post->is_favorite = $post->is_favorite;
-
+			if(in_array($post->type, ['横幅', '课堂', '视频', '活动']))
+			{
+				$post->addVisible('poster');
+				
+				if($post->poster)
+				{
+					$post->poster->addVisible('url');
+				}
+			}
+			
 			return $post;
 		});
 		
@@ -238,17 +257,11 @@ class PostController extends Controller {
 	 */
 	public function show(Post $post)
 	{
-		$post->load('likedUsers', 'author', 'poster', 'parent');
-		$post->addVisible('likedUsers', 'author', 'parent', 'comments', 'liked', 'is_favorite');
-		
-		$post->comments = $post->comments;
-		
-		$post->liked = $post->liked;
-		$post->is_favorite = $post->is_favorite;
+		$post->load('author', 'group', 'parent');
 		
 		if($post->type === '文章')
 		{
-			$post->addVisible(['content']);
+			$post->addVisible('content');
 		}
 		
 		if($post->type === '活动')
@@ -268,10 +281,34 @@ class PostController extends Controller {
 
 		if($post->type === '横幅')
 		{
-			$post->addVisible(['banner_position', 'poster']);
+			$post->addVisible('banner_position');
+		}
+		
+		if(in_array($post->type, ['课堂', '活动', '文章']))
+		{
+			$post->addVisible('excerpt');
 		}
 
-		if(in_array($post->type, ['附件', '图片', '视频', '横幅']))
+		if(in_array($post->type, ['课堂', '活动', '文章', '图片']))
+		{
+			$post->addVisible('likes');
+			$post->liked = $post->liked;
+			$post->is_favorite = $post->is_favorite;
+			$post->comments = $post->comments;
+		}
+
+		if(in_array($post->type, ['课堂', '活动', '视频', '横幅']))
+		{
+			$post->load('poster');
+			$post->addVisible('poster');
+			
+			if($post->poster)
+			{
+				$post->poster->addVisible('url');
+			}
+		}
+
+		if(in_array($post->type, ['图片', '附件', '视频', '横幅']))
 		{
 			$post->addVisible(['url']);
 		}

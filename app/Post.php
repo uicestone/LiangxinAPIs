@@ -9,8 +9,8 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['type', 'title', 'excerpt', 'content', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'url', 'likes'];
-	protected $visible = ['id', 'type', 'title', 'author_id', 'likes', 'updated_at', 'created_at', 'author', 'comments'];
+	protected $fillable = ['type', 'title', 'excerpt', 'content', 'url', 'likes', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date'];
+	protected $visible = ['id', 'type', 'title', 'updated_at', 'created_at', 'author', 'group', 'comments', 'parent', 'liked', 'is_favorite', 'comments_count'];
 	protected $casts = [
 		'likes'=>'integer'
 	];
@@ -57,7 +57,11 @@ class Post extends Model {
 	
 	public function getCommentsAttribute()
 	{
-		return $this->children()->where('type', '评论')->get();
+		return $this->children()->where('type', '评论')->get()->map(function($item)
+		{
+			$item->load('author');
+			return $item;
+		});
 	}
 	
 	public function getImagesAttribute()
@@ -74,7 +78,7 @@ class Post extends Model {
 	{
 		return $this->children()->where('type', '文章')->get()->map(function($item)
 		{
-			$item->addVisible('content');
+			$item->load('author');
 			return $item;
 		});
 	}
@@ -83,6 +87,7 @@ class Post extends Model {
 	{
 		return $this->children()->where('type', '视频')->get()->map(function($item)
 		{
+			$item->load('author');
 			$item->addVisible('url');
 			return $item;
 		});
@@ -92,6 +97,7 @@ class Post extends Model {
 	{
 		return $this->children()->where('type', '附件')->get()->map(function($item)
 		{
+			$item->load('author');
 			$item->addVisible('url');
 			return $item;
 		});
@@ -130,6 +136,17 @@ class Post extends Model {
 		}
 		
 		return $url;
+	}
+	
+			return str_limit($this->content, 140);
+		}
+		
+		return $excerpt;
+	}
+	
+	public function getCommentsCountAttribute()
+	{
+		return $this->comments->count();
 	}
 	
 }
