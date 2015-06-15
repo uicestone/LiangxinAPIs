@@ -44,6 +44,22 @@ class PostController extends Controller {
 			});
 		}
 		
+		if(Input::query('favored_user_id'))
+		{
+			$query->whereHas('favoredUsers', function($query)
+			{
+				return $query->where('user_id', Input::query('favored_user_id'));
+			});
+		}
+		
+		if(Input::query('attended_user_id'))
+		{
+			$query->whereHas('attendees', function($query)
+			{
+				return $query->where('user_id', Input::query('attended_user_id'));
+			});
+		}
+		
 		if(!Input::query('order_by') && !Input::query('order'))
 		{
 			$order_by = 'created_at'; $order = 'desc';
