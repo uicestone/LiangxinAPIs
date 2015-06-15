@@ -30,6 +30,9 @@
 		<div class="desc"><?=$post->updated_at?> <?=$post->author->name?></div>
 	</head>
 	<section>
+		<?php foreach($post->images as $image){ ?>
+		<img src="<?=$image->url?>">
+		<?php } ?>
 		<?=$post->content?>
 	</section>
 </body>
