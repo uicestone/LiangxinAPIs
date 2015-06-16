@@ -3,7 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Post;
+use App\Post, App\User;
 use Input, Exception;
 
 class PostController extends Controller {
@@ -529,6 +529,22 @@ class PostController extends Controller {
 		
 		$event->attendees()->detach(app()->user);
 		
+		return ['success' => true];
+	}
+	
+	public function attendeeApproval(Post $post, User $user)
+	{
+		if(!app()->user)
+		{
+			throw new Exception('用户没有登录，无法批准活动参与者', 401);
+		}
+		
+		if(app()->user->id !== $post->author->id)
+		{
+			throw new Exception('不是活动发起人，无权批准活动参与者', 403);
+		}
+		
+		$post->attendees()->updateExistingPivot($user->id, ['status'=>Input::data('approved') ? 'approved' : 'rejected']);
 		return ['success' => true];
 	}
 

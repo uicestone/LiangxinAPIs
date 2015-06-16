@@ -30,6 +30,7 @@ Route::post('api/v1/like/{post}', 'PostController@like');
 Route::delete('api/v1/like/{post}', 'PostController@unLike');
 Route::post('api/v1/favorite/{post}', 'PostController@favorite');
 Route::delete('api/v1/favorite/{post}', 'PostController@unFavorite');
+Route::post('api/v1/post/{post}/attendee/{user}', 'PostController@attendeeApproval');
 
 Route::model('post', 'App\Post');
 Route::model('group', 'App\Group');
