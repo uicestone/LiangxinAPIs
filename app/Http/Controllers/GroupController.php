@@ -107,7 +107,9 @@ class GroupController extends Controller {
 			throw new Exception('用户已经关注该群组，无法重复关注', 409);
 		}
 		
-		return $group->followedUsers()->attach(app()->user);
+		$group->followedUsers()->attach(app()->user);
+		
+		return ['success' => true];
 	}
 	
 	public function unFollow(Group $group)
@@ -122,7 +124,9 @@ class GroupController extends Controller {
 			throw new Exception('用户尚未关注该群组，无法取消关注', 409);
 		}
 		
-		return $group->followedUsers()->detach(app()->user);
+		$group->followedUsers()->detach(app()->user);
+		
+		return ['success' => true];
 	}
 
 }

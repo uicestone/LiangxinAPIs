@@ -426,11 +426,12 @@ class PostController extends Controller {
 		{
 			throw new Exception('用户已经点赞该文章，无法重复点赞', 409);
 		}
-		
 		$post->likes = $post->likedUsers()->count();
 		$post->save();
 		
-		return $post->likedUsers()->attach(app()->user);
+		$post->likedUsers()->attach(app()->user);
+		
+		return ['success' => true];
 	}
 	
 	public function unLike(Post $post)
@@ -448,7 +449,9 @@ class PostController extends Controller {
 		$post->likes = $post->likedUsers()->count();
 		$post->save();
 		
-		return $post->likedUsers()->detach(app()->user);
+		$post->likedUsers()->detach(app()->user);
+		
+		return ['success' => true];
 	}
 
 	public function favorite(Post $post)
@@ -466,7 +469,9 @@ class PostController extends Controller {
 		$post->likes = $post->favoredUsers()->count();
 		$post->save();
 		
-		return $post->favoredUsers()->attach(app()->user);
+		$post->favoredUsers()->attach(app()->user);
+		
+		return ['success' => true];
 	}
 	
 	public function unFavorite(Post $post)
@@ -484,7 +489,9 @@ class PostController extends Controller {
 		$post->likes = $post->likedUsers()->count();
 		$post->save();
 		
-		return $post->likedUsers()->detach(app()->user);
+		$post->likedUsers()->detach(app()->user);
+		
+		return ['success' => true];
 	}
 
 	public function attend(Post $event)
@@ -499,7 +506,9 @@ class PostController extends Controller {
 			throw new Exception('用户已经参与该活动，无法重复参与', 409);
 		}
 		
-		return $event->attendees()->attach(app()->user);
+		$event->attendees()->attach(app()->user);
+		
+		return ['success' => true];
 	}
 	
 	public function unAttend(Post $event)
@@ -514,7 +523,9 @@ class PostController extends Controller {
 			throw new Exception('用户尚未参与该活动，无法取消参与', 409);
 		}
 		
-		return $event->attendees()->detach(app()->user);
+		$event->attendees()->detach(app()->user);
+		
+		return ['success' => true];
 	}
 
 }
