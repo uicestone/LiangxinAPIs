@@ -329,7 +329,7 @@ class PostController extends Controller {
 		
 		if($post->type === '活动')
 		{
-			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status']);
+			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status', 'articles', 'images']);
 			$post->load('attendees');
 			$post->attendees->map(function($item)
 			{
@@ -338,6 +338,8 @@ class PostController extends Controller {
 				$item->attend_status = $item->pivot->status;
 				return $item;
 			});
+			$post->articles = $post->articles;
+			$post->images = $post->images;
 			$post->has_due_date = $post->has_due_date;
 			$post->attended = $post->attended;
 		}
