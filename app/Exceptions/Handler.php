@@ -2,6 +2,7 @@
 
 use Exception, Request;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler {
 
@@ -38,7 +39,14 @@ class Handler extends ExceptionHandler {
 	{
 		if(!env('APP_DEBUG') && Request::wantsJson())
 		{
-			return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], $e->getCode());
+			if($this->isHttpException($e))
+			{
+				return response()->json(['message'=>$e->getMessage() ? $e->getMessage() : Response::$statusTexts[$e->getStatusCode()], 'code'=>$e->getStatusCode()], $e->getStatusCode());
+			}
+			else
+			{
+				return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], $e->getCode());
+			}
 		}
 		
 		return parent::render($request, $e);
