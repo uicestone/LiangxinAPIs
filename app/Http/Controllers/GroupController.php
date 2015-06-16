@@ -65,8 +65,9 @@ class GroupController extends Controller {
 	public function show(Group $group)
 	{
 		$group->load('parent', 'posts');
-		$group->addVisible('description', 'parent', 'has_children', 'images', 'news');
+		$group->addVisible('description', 'parent', 'has_children', 'following', 'images', 'news');
 		$group->has_children = $group->has_children;
+		$group->following = $group->following;
 		$group->news = $group->news;
 		$group->images = $group->images;
 		return $group;
