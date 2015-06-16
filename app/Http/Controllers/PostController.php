@@ -273,6 +273,7 @@ class PostController extends Controller {
 			$post->load('attendees');
 			$post->attendees->map(function($item)
 			{
+				$item->load('group');
 				$item->addVisible('attend_status');
 				$item->attend_status = $item->pivot->status;
 				return $item;

@@ -51,7 +51,12 @@ class UserController extends Controller {
 	 */
 	public function show(User $user)
 	{
-		$user->load('group', 'followingGroups', 'likedPosts', 'attendingEvents', 'favoritePosts');
+		$user->load('group', 'department', 'followingGroups', 'likedPosts', 'attendingEvents', 'favoritePosts');
+		$user->likedPosts->map(function($post)
+		{
+			$post->addVisible('excerpt');
+			return $post;
+		});
 		return $user;
 	}
 	
@@ -117,6 +122,7 @@ class UserController extends Controller {
 		$user->save();
 		
 		$user->addVisible('token');
+		$user->load('group');
 		
 		return Response::json($user)->header('Token', $user->token);
 	}

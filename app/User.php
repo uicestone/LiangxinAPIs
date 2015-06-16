@@ -22,8 +22,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $visible = ['id', 'name', 'contact', 'avatar', 'role', 'group_id', 'department_id'];
 	protected $fillable = ['name', 'token', 'contact', 'avatar', 'role', 'last_ip'];
+	protected $visible = ['id', 'name', 'contact', 'avatar', 'role', 'group', 'department', 'followingGroups', 'likedPosts', 'attendingEvents', 'favoritePosts'];
 
 	public $timestamps = false;
 
@@ -35,6 +35,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	protected $hidden = ['password', 'token'];
 	
 	public function group()
+	{
+		return $this->belongsTo('App\Group');
+	}
+	
+	public function department()
 	{
 		return $this->belongsTo('App\Group');
 	}
