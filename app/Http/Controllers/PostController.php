@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post, App\User;
 use Input, Exception;
+use Illuminate\Database\Eloquent\Collection;
 
 class PostController extends Controller {
 
@@ -157,6 +158,65 @@ class PostController extends Controller {
 		if(!app()->user)
 		{
 			throw new Exception('Authentication is required for this action.', 401);
+		}
+		
+		if(!Input::data('type'))
+		{
+			throw new Exception('请指定文章类型', 400);
+		}
+		
+		if(!Input::data('title'))
+		{
+			throw new Exception('请指定文章标题', 400);
+		}
+		
+		if(Input::data('type') === '图片')
+		{
+			if(is_array(Input::data('images')) && Input::data('images')[0]->isValid())
+			{
+				$posts = new Collection;
+				foreach(Input::data('images') as $file)
+				{
+					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+					$file->move('images', $file_store_name);
+
+					$file_post = new Post();
+
+					$file_post->fill([
+						'title'=>Input::data('title'),
+						'type'=>'图片',
+						'url'=>'images' . '/' . $file_store_name,
+					]);
+
+					$file_post->author()->associate(app()->user);
+
+					if(app()->user->group)
+					{
+						$file_post->group()->associate(app()->user->group);
+					}
+
+					if(Input::data('parent_id'))
+					{
+						$parent_post = Post::find(Input::data('parent_id'));
+
+						if(!$parent_post)
+						{
+							throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
+						}
+
+						$file_post->parent()->associate($parent_post);
+
+					}
+					
+					$file_post->save();
+					
+					$file_post->addVisible('url');
+					
+					$posts->push($file_post);
+				}
+				
+				return $posts;
+			}
 		}
 		
 		$post = new Post();
