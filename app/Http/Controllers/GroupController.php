@@ -28,6 +28,14 @@ class GroupController extends Controller {
 			$query->where('name', 'like', '%' . Input::query('keyword') . '%');
 		}
 		
+		if(Input::query('followed_by_user_id'))
+		{
+			$query->whereHas('followedUsers', function($query)
+			{
+				$query->where('user_id', Input::query('followed_by_user_id'));
+			});
+		}
+		
 		return $query->get(['id', 'name', 'members', 'avatar', 'leader', 'contact', 'address', 'parent_id'])->map(function($item)
 		{
 			$item->addVisible('has_children', 'following');
