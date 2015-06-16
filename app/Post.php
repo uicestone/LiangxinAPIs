@@ -42,7 +42,7 @@ class Post extends Model {
 	
 	public function attendees()
 	{
-		return $this->belongsToMany('App\User', 'event_attend');
+		return $this->belongsToMany('App\User', 'event_attend')->withPivot('status');
 	}
 	
 	public function likedUsers()
@@ -121,6 +121,30 @@ class Post extends Model {
 		}
 		
 		return $this->favoredUsers->contains(app()->user);
+	}
+	
+	public function getAttendedAttribute()
+	{
+		if(!app()->user)
+		{
+			return null;
+		}
+		
+		$attend_status = null;
+		$attended = false;
+		
+		$this->attendees->each(function($attendee) use (&$attended, &$attend_status)
+		{
+			if($attendee->id === app()->user->id)
+			{
+				$attended = true;
+				$attend_status = $attendee->pivot->status;
+			}
+		});
+		
+		$this->attend_status = $attend_status;
+		
+		return $attended;
 	}
 	
 	public function getHasDueDateAttribute()

@@ -87,7 +87,7 @@ class PostController extends Controller {
 			
 			if($post->type === '活动')
 			{
-				$post->addVisible(['event_address', 'event_type', 'has_due_date']);
+				$post->addVisible(['event_address', 'event_type', 'has_due_date', 'attended', 'attend_status', 'attendee_count']);
 				
 				if($post->due_date > 0)
 				{
@@ -100,6 +100,8 @@ class PostController extends Controller {
 				}
 				
 				$post->has_due_date = $post->has_due_date;
+				$post->attended = $post->attended;
+				$post->attendee_count = $post->attendees()->count();
 			}
 			
 			if($post->type === '课堂')
@@ -267,9 +269,16 @@ class PostController extends Controller {
 		
 		if($post->type === '活动')
 		{
-			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees']);
+			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status']);
 			$post->load('attendees');
+			$post->attendees->map(function($item)
+			{
+				$item->addVisible('attend_status');
+				$item->attend_status = $item->pivot->status;
+				return $item;
+			});
 			$post->has_due_date = $post->has_due_date;
+			$post->attended = $post->attended;
 		}
 
 		if($post->type === '课堂')
@@ -501,7 +510,7 @@ class PostController extends Controller {
 			throw new Exception('用户已经参与该活动，无法重复参与', 409);
 		}
 		
-		$event->attendees()->attach(app()->user);
+		$event->attendees()->attach(app()->user, ['status'=>'pending']);
 		
 		return ['success' => true];
 	}
