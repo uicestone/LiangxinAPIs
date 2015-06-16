@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\Config;
+
 class WelcomeController extends Controller {
 
 	/*
@@ -31,6 +33,11 @@ class WelcomeController extends Controller {
 	public function index()
 	{
 		return view('welcome');
+	}
+	
+	public function creditPolicy()
+	{
+		return view('credit_policy', ['site_name'=>Config::where('key', 'site_name')->first()->value, 'credit_policy'=>Config::where('key', 'credit_policy')->first()->value]);
 	}
 
 }
