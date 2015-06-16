@@ -25,6 +25,12 @@ abstract class Controller extends BaseController {
 			}
 			
 			app()->user = $user;
+			
+			if(Input::ip() !== $user->last_ip)
+			{
+				$user->last_ip = Input::ip();
+				$user->save();
+			}
 		}
 		
 	}
