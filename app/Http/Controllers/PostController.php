@@ -426,10 +426,11 @@ class PostController extends Controller {
 		{
 			throw new Exception('用户已经点赞该文章，无法重复点赞', 409);
 		}
+
+		$post->likedUsers()->attach(app()->user);
+		
 		$post->likes = $post->likedUsers()->count();
 		$post->save();
-		
-		$post->likedUsers()->attach(app()->user);
 		
 		return ['success' => true];
 	}
@@ -446,10 +447,10 @@ class PostController extends Controller {
 			throw new Exception('用户尚未点赞该文章，无法取消点赞', 409);
 		}
 		
+		$post->likedUsers()->detach(app()->user);
+		
 		$post->likes = $post->likedUsers()->count();
 		$post->save();
-		
-		$post->likedUsers()->detach(app()->user);
 		
 		return ['success' => true];
 	}
@@ -465,9 +466,6 @@ class PostController extends Controller {
 		{
 			throw new Exception('用户已经收藏该文章，无法重复收藏', 409);
 		}
-		
-		$post->likes = $post->favoredUsers()->count();
-		$post->save();
 		
 		$post->favoredUsers()->attach(app()->user);
 		
@@ -485,9 +483,6 @@ class PostController extends Controller {
 		{
 			throw new Exception('用户尚未收藏该文章，无法取消收藏', 409);
 		}
-		
-		$post->likes = $post->likedUsers()->count();
-		$post->save();
 		
 		$post->likedUsers()->detach(app()->user);
 		
