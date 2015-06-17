@@ -22,18 +22,27 @@
 			text-indent: 2em;
 			font-size: 10px
 		}
+
+		section p{
+			margin: 10px 0;
+		}
+
+		img{
+			display: block;
+			max-width: 100%;
+		}
 	</style>
 </head>
 <body>
 	<head>
 		<div class="title"><?=$post->title?></div>
-		<div class="desc"><?=$post->updated_at?> <?=$post->author->name?></div>
+		<div class="desc"><?=$post->updated_at?>  <?=$post->author->name?></div>
 	</head>
 	<section>
 		<?php foreach($post->images as $image){ ?>
 		<img src="<?=$image->url?>">
 		<?php } ?>
-		<?=$post->content?>
+		<p><?=nl2br($post->content)?></p>
 	</section>
 </body>
 </html>
