@@ -61,14 +61,15 @@ class PostController extends Controller {
 			});
 		}
 		
-		if(!Input::query('order_by') && !Input::query('order'))
+		$order_by = Input::query('order_by') ? Input::query('order_by') : 'created_at';
+
+		if(Input::query('ordrer'))
 		{
-			$order_by = 'created_at'; $order = 'desc';
-		}
-		else
-		{
-			$order_by = Input::query('order_by');
 			$order = Input::query('order');
+		}
+		elseif(in_array($order_by, ['likes', 'created_at']))
+		{
+			$order = 'desc';
 		}
 		
 		if($order_by)
