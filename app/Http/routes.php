@@ -13,7 +13,7 @@
 
 Route::get('/', 'WelcomeController@index');
 
-Route::resource('api/v1/group', 'GroupController', ['except' => ['update', 'edit']]);
+Route::resource('api/v1/group', 'GroupController', ['except' => ['edit']]);
 Route::resource('api/v1/user', 'UserController', ['except' => ['update', 'edit']]);
 Route::resource('api/v1/post', 'PostController', ['except' => ['update', 'edit']]);
 

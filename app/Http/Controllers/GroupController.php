@@ -53,7 +53,8 @@ class GroupController extends Controller {
 	 */
 	public function store()
 	{
-		//
+		$group = new Group();
+		$this->update($group);
 	}
 
 	/**
@@ -81,7 +82,18 @@ class GroupController extends Controller {
 	 */
 	public function update(Group $group)
 	{
-		//
+		$group->fill(Input::data());
+		
+		if(Input::data('avatar') && Input::data('avatar')->isValid())
+		{
+			$file = Input::data('avatar');
+			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+			$file->move('images', $file_store_name);
+			
+			$group->avatar = 'images' . '/' . $file_store_name;
+		}
+		
+		$group->save();
 	}
 
 	/**
