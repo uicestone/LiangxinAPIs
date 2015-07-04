@@ -154,7 +154,7 @@ class Post extends Model {
 	
 	public function getUrlAttribute($url)
 	{
-		if(in_array($this->type, ['图片', '附件', '封面']))
+		if(in_array($this->type, ['图片', '附件', '封面']) && $url)
 		{
 			return env('QINIU_HOST') . $url;
 		}

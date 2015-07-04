@@ -73,6 +73,6 @@ class Group extends Model {
 
 	public function getAvatarAttribute($url)
 	{
-		return env('QINIU_HOST') . $url;
+		return $url ? env('QINIU_HOST') . $url : $url;
 	}
 }
