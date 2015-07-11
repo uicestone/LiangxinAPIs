@@ -23,7 +23,14 @@ class PostController extends Controller {
 		{
 			if(Input::query($field))
 			{
-				$query->where($field, Input::query($field));
+				if(is_array(Input::query($field)))
+				{
+					$query->whereIn($field, Input::query($field));
+				}
+				else
+				{
+					$query->where($field, Input::query($field));
+				}
 			}
 		}
 		
