@@ -70,18 +70,18 @@ class PostController extends Controller {
 		
 		$order_by = Input::query('order_by') ? Input::query('order_by') : 'created_at';
 
-		if(Input::query('ordrer'))
+		if(Input::query('order'))
 		{
 			$order = Input::query('order');
 		}
-		elseif(in_array($order_by, ['likes', 'created_at']))
+		elseif(in_array($order_by, ['likes', 'created_at', 'updated_at']))
 		{
 			$order = 'desc';
 		}
 		
 		if($order_by)
 		{
-			$query->orderBy($order_by, $order ? $order : 'asc');
+			$query->orderBy($order_by, isset($order) ? $order : 'asc');
 		}
 		
 		$page = Input::query('page') ? Input::query('page') : 1;
