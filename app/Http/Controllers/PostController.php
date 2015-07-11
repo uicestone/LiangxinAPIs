@@ -39,9 +39,9 @@ class PostController extends Controller {
 			$query->where('title', 'like', '%' . Input::query('keyword') . '%');
 		}
 		
-		if(Input::query('position') && Input::query('type') === '横幅')
+		if(Input::query('banner_position') && Input::query('type') === '横幅')
 		{
-			$query->where('banner_position', Input::query('position'));
+			$query->where('banner_position', Input::query('banner_position'));
 		}
 		
 		if(Input::query('liked_user_id'))
