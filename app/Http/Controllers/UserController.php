@@ -65,10 +65,37 @@ class UserController extends Controller {
 	 *
 	 * @param  User $user
 	 * @return Response
+	 * @todo Need to check user permission
 	 */
 	public function update(User $user)
 	{
-		//
+		$user->fill(Input::data());
+		
+		if(Input::data('avatar'))
+		{
+			if(Input::data('avatar')->isValid())
+			{
+				$file = Input::data('avatar');
+
+				$extension = $file->getClientOriginalExtension();
+
+				if(!$extension){
+					throw new Exception('file extended name not resolved', 400);
+				}
+
+				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
+
+				$file->move('images', $file_store_name);
+
+				$user->avatar = 'images' . '/' . $file_store_name;
+			}
+			else
+			{
+				throw new Exception('Invalid image file', 400);
+			}
+		}
+		
+		$user->save();
 	}
 
 	/**
@@ -133,41 +160,69 @@ class UserController extends Controller {
 	public function updateProfile()
 	{
 		// update profile
-		if(app()->user && Input::data('contact'))
+		if(app()->user)
 		{
-			$mobile = Input::data('contact');
+			if(Input::data('contact'))
+			{
+				$mobile = Input::data('contact');
+
+				if(!Input::query('verification_code'))
+				{
+					// write sms code to db, and send
+					$code = floor(rand(1E5, 1E6-1));
+					Config::create([
+						'key'=>'mobile_code_' . $mobile . '_' . $code,
+						'value'=>json_encode(['expires_at'=>time() + 600])
+					]);
+
+					Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
+				}
+				else
+				{
+					$code = Input::query('verification_code');
+					$config_item = Config::where('key', 'mobile_code_' . $mobile . '_' . $code)->first();
+
+					if(!$config_item)
+					{
+						throw new Exception('短信验证码错误', 401);
+					}
+
+					if(json_decode($config_item->value)->expires_at < time())
+					{
+						throw new Exception('短信验证码已过期', 401);
+					}
+
+					app()->user->contact = $mobile;
+
+					$config_item->delete();
+				}				
+			}
 			
-			if(!Input::query('verification_code'))
+			if(Input::data('avatar'))
 			{
-				// write sms code to db, and send
-				$code = floor(rand(1E5, 1E6-1));
-				Config::create([
-					'key'=>'mobile_code_' . $mobile . '_' . $code,
-					'value'=>json_encode(['expires_at'=>time() + 600])
-				]);
-				
-				Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
-			}
-			else
-			{
-				$code = Input::query('verification_code');
-				$config_item = Config::where('key', 'mobile_code_' . $mobile . '_' . $code)->first();
-				
-				if(!$config_item)
+				if(Input::data('avatar')->isValid())
 				{
-					throw new Exception('短信验证码错误', 401);
+					$file = Input::data('avatar');
+
+					$extension = $file->getClientOriginalExtension();
+
+					if(!$extension){
+						throw new Exception('file extended name not resolved', 400);
+					}
+
+					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
+
+					$file->move('images', $file_store_name);
+
+					app()->user->avatar = 'images' . '/' . $file_store_name;
 				}
-				
-				if(json_decode($config_item->value)->expires_at < time())
+				else
 				{
-					throw new Exception('短信验证码已过期', 401);
+					throw new Exception('Invalid image file', 400);
 				}
-				
-				app()->user->contact = $mobile;
-				app()->user->save();
-				
-				$config_item->delete();
 			}
+			
+			app()->user->save();
 			
 			return app()->user;
 		}
