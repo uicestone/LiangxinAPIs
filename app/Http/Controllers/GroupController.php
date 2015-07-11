@@ -79,18 +79,34 @@ class GroupController extends Controller {
 	 *
 	 * @param  Group $group
 	 * @return Response
+	 * @todo Need to check user permission
 	 */
 	public function update(Group $group)
 	{
 		$group->fill(Input::data());
 		
-		if(Input::data('avatar') && Input::data('avatar')->isValid())
+		if(Input::data('avatar'))
 		{
-			$file = Input::data('avatar');
-			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
-			$file->move('images', $file_store_name);
-			
-			$group->avatar = 'images' . '/' . $file_store_name;
+			if(Input::data('avatar')->isValid())
+			{
+				$file = Input::data('avatar');
+
+				$extension = $file->getClientOriginalExtension();
+
+				if(!$extension){
+					throw new Exception('file extended name not resolved', 400);
+				}
+
+				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
+
+				$file->move('images', $file_store_name);
+
+				$group->avatar = 'images' . '/' . $file_store_name;
+			}
+			else
+			{
+				throw new Exception('Invalid image file', 400);
+			}
 		}
 		
 		$group->save();

@@ -183,9 +183,16 @@ class PostController extends Controller {
 			if(is_array(Input::data('images')) && Input::data('images')[0]->isValid())
 			{
 				$posts = new Collection;
+				
 				foreach(Input::data('images') as $file)
 				{
-					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+					$extension = $file->getClientOriginalExtension();
+					
+					if(!$extension){
+						throw new Exception('file extended name not resolved', 400);
+					}
+					
+					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
 					$file->move('images', $file_store_name);
 
 					$file_post = new Post();
@@ -224,6 +231,10 @@ class PostController extends Controller {
 				}
 				
 				return $posts;
+			}
+			else
+			{
+				throw new Exception('Invalid image file', 400);
 			}
 		}
 		
