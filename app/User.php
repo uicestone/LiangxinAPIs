@@ -63,4 +63,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	{
 		return $this->belongsToMany('App\Post', 'post_favorite');
 	}
+	
+	public function getAvatarAttribute($url)
+	{
+		return $url ? env('QINIU_HOST') . $url : $url;
+	}
+	
 }
