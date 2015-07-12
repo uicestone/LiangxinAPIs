@@ -88,7 +88,7 @@ class Post extends Model {
 		return $this->children()->where('type', '视频')->get()->map(function($item)
 		{
 			$item->load('author');
-			$item->addVisible('url');
+			$item->addVisible('url', 'excerpt');
 			return $item;
 		});
 	}
@@ -164,6 +164,11 @@ class Post extends Model {
 	
 	public function getExcerptAttribute($excerpt)
 	{
+		if($this->type === '视频')
+		{
+			return json_decode($excerpt);
+		}
+		
 		if(!$excerpt)
 		{
 			return str_limit($this->content, 140);
