@@ -123,7 +123,7 @@ class PostController extends Controller {
 				$post->addVisible('banner_position');
 			}
 			
-			if(in_array($post->type, ['课堂', '活动', '文章']))
+			if(in_array($post->type, ['课堂', '活动', '文章', '服务']))
 			{
 				$post->addVisible('excerpt');
 			}
@@ -341,7 +341,7 @@ class PostController extends Controller {
 	{
 		$post->load('author', 'group', 'parent');
 		
-		if($post->type === '文章')
+		if(in_array($post->type, ['文章', '服务']))
 		{
 			$post->addVisible('content');
 		}
@@ -376,7 +376,7 @@ class PostController extends Controller {
 			$post->addVisible('banner_position');
 		}
 		
-		if(in_array($post->type, ['课堂', '活动', '文章']))
+		if(in_array($post->type, ['课堂', '活动', '文章', '服务']))
 		{
 			$post->addVisible('excerpt');
 		}
