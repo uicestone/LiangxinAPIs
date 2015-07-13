@@ -4,7 +4,7 @@ use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\User;
-use Input, Exception;
+use Input;
 
 abstract class Controller extends BaseController {
 
@@ -15,17 +15,10 @@ abstract class Controller extends BaseController {
 		
 		app()->user = null;
 		
-		if(Input::header('Authorization'))
+		if(Input::header('Authorization') && $user = User::where('token', Input::header('Authorization'))->first())
 		{
-			$user = User::where('token', Input::header('Authorization'))->first();
-			
-			if(!$user)
-			{
-				throw new Exception('Authorization key not found.', 403);
-			}
-			
 			app()->user = $user;
-			
+
 			if(Input::ip() !== $user->last_ip)
 			{
 				$user->last_ip = Input::ip();
