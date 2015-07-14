@@ -3,8 +3,8 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use File, Exception;
-use App\Post;
+use File;
+use App\Post, App\Group;
 
 class CreateImagePosts extends Command {
 
@@ -20,7 +20,7 @@ class CreateImagePosts extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Create posts from files under public image & attachment folder.';
+	protected $description = 'Create posts from files under public image & attachment folder and attach them to Classes.';
 
 	/**
 	 * Create a new command instance.
@@ -44,13 +44,19 @@ class CreateImagePosts extends Command {
 			$matches = [];
 			preg_match('/(^.*\/)(.*?)-(.*)\.(.*)/', $file, $matches);
 			
+			if(!$matches)
+			{
+				continue;
+			}
+			
 			$post = Post::firstOrCreate(['title'=>$matches[3], 'type'=>'附件']);
 			$post->url='attachments/' . $matches[2] . '-' . $matches[3] . '.' . $matches[4];
 			$parent = Post::where('title', $matches[2])->where('type', '课堂')->first();
 			
 			if(!$parent)
 			{
-				throw new Exception($matches[2] . ' not found');
+				$this->error($matches[2] . ' not found');
+				continue;
 			}
 			$post->parent()->associate($parent);
 			
@@ -65,6 +71,44 @@ class CreateImagePosts extends Command {
 			}
 			
 			$post->save();
+//			$this->info('post ' . $post->title . ' saved');
+		}
+		
+		// save image files to image post
+		foreach(File::files(public_path('images')) as $file)
+		{
+			$matches = [];
+			preg_match('/(^.*\/)(.*?)-(.*)\.(.*)/', $file, $matches);
+			
+			if(!$matches)
+			{
+				continue;
+			}
+			
+			$post = Post::firstOrNew(['title'=>$matches[2] . '-' . $matches[3], 'type'=>'图片']);
+			$post->url='images/' . $matches[2] . '-' . $matches[3] . '.' . $matches[4];
+			
+			$group = Group::where('name', $matches[2])->first();
+			$article = Post::where('title', $matches[2])->first();
+			
+			if($article)
+			{
+				$post->parent()->associate($article);
+				$article->group && $post->group()->associate($article->group);
+				$article->author && $post->author()->associate($article->author);
+			}
+			elseif($group)
+			{
+				$post->group()->associate($group);
+			}
+			else
+			{
+				$this->error($matches[2] . ' is neither a post nor a group');
+				continue;
+			}
+			
+			$post->save();
+//			$this->info('image ' . $post->title . ' saved');
 		}
 	}
 
@@ -76,7 +120,7 @@ class CreateImagePosts extends Command {
 	protected function getArguments()
 	{
 		return [
-			['example', InputArgument::REQUIRED, 'An example argument.'],
+//			['example', InputArgument::REQUIRED, 'An example argument.'],
 		];
 	}
 
@@ -88,7 +132,7 @@ class CreateImagePosts extends Command {
 	protected function getOptions()
 	{
 		return [
-			['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
+//			['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
 		];
 	}
 
