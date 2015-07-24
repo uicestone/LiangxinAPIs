@@ -42,12 +42,6 @@ class ParseVideoUrl extends Command {
 		
 		foreach($video_posts as $video_post)
 		{
-			
-			if($video_post->excerpt)
-			{
-				continue;
-			}
-			
 			$data = Youku::parse($video_post->url);
 			$video_post->excerpt = json_encode($data);
 			
