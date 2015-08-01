@@ -3,6 +3,7 @@
 use Exception, Request;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler {
 
@@ -50,6 +51,24 @@ class Handler extends ExceptionHandler {
 		}
 		
 		return parent::render($request, $e);
+	}
+
+	/**
+	 * Render the given HttpException.
+	 *
+	 * @param  \Symfony\Component\HttpKernel\Exception\HttpException  $e
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	protected function renderHttpException(HttpException $e)
+	{
+		$status = $e->getStatusCode();
+
+		if (view()->exists("errors.{$status}"))
+		{
+			return response()->view("errors.{$status}", ['message' => $e->getMessage()], $status);
+		}
+		
+		return parent::renderHttpException($e);
 	}
 
 }

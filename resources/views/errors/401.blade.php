@@ -11,7 +11,7 @@
 				color: #B0BEC5;
 				display: table;
 				font-weight: 100;
-				font-family: 'Lato';
+				font-family: 'Lato', STHeiTi, 'Microsoft Yahei';
 			}
 
 			.container {
@@ -26,7 +26,7 @@
 			}
 
 			.title {
-				font-size: 72px;
+				font-size: 36px;
 				margin-bottom: 40px;
 			}
 		</style>
@@ -34,7 +34,7 @@
 	<body>
 		<div class="container">
 			<div class="content">
-				<div class="title">Be right back.</div>
+				<div class="title">{{$message}}</div>
 			</div>
 		</div>
 	</body>
