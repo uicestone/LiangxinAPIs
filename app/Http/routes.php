@@ -13,6 +13,9 @@
 
 Route::get('/', 'WelcomeController@index');
 Route::get('admin', 'WelcomeController@admin');
+Route::get('login', 'WelcomeController@login');
+Route::post('login', 'UserController@authenticate');
+Route::get('logout', 'UserController@logout');
 
 Route::resource('api/v1/group', 'GroupController', ['except' => ['edit']]);
 Route::resource('api/v1/user', 'UserController', ['except' => ['edit']]);

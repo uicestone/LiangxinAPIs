@@ -23,6 +23,16 @@ class UserController extends Controller {
 			$query->where('group_id', Input::query('group_id'));
 		}
 		
+		if(Input::query('keyword'))
+		{
+			$query->where('name', 'like', '%' . Input::query('keyword') . '%');
+		}
+		
+		if(Input::query('with_group'))
+		{
+			$query->with('group');
+		}
+		
 		$page = Input::query('page') ? Input::query('page') : 1;
 		
 		$per_page = Input::query('per_page') ? Input::query('per_page') : false;
@@ -138,7 +148,6 @@ class UserController extends Controller {
 	 */
 	public function authenticate()
 	{
-		
 		if(!Input::data('username'))
 		{
 			throw new HttpException(400, '请输入用户名');
@@ -165,17 +174,29 @@ class UserController extends Controller {
 		{
 			throw new HttpException(403, '密码错误');
 		}
-		
-		$token = Hash::make($user->name . $user->password . microtime(true));
-		
-		$user->token = $token;
-		
-		$user->save();
-		
-		$user->addVisible('token');
-		$user->load('group');
-		
-		return Response::json($user)->header('Token', $user->token);
+
+		if(\Route::current()->uri() === 'login')
+		{	
+			return redirect('admin')->withCookie(cookie('user_id', $user->id));
+		}
+		else
+		{
+			$token = Hash::make($user->name . $user->password . microtime(true));
+
+			$user->token = $token;
+
+			$user->save();
+
+			$user->addVisible('token');
+			$user->load('group');
+
+			return Response::json($user)->header('Token', $user->token);
+		}
+	}
+	
+	public function logout()
+	{
+		return redirect('login')->withCookie(cookie('user_id', null));
 	}
 	
 	/**

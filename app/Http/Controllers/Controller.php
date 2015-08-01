@@ -26,6 +26,17 @@ abstract class Controller extends BaseController {
 			}
 		}
 		
+		if(Input::cookie('user_id') && $user = User::where('id', Input::cookie('user_id'))->first())
+		{
+			app()->user = $user;
+			
+			if(Input::ip() !== $user->last_ip)
+			{
+				$user->last_ip = Input::ip();
+				$user->save();
+			}
+		}
+		
 	}
 
 }

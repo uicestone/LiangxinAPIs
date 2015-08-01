@@ -16,16 +16,6 @@ class WelcomeController extends Controller {
 	*/
 
 	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->middleware('guest');
-	}
-
-	/**
 	 * Show the application welcome screen to the user.
 	 *
 	 * @return Response
@@ -42,7 +32,16 @@ class WelcomeController extends Controller {
 	
 	public function admin()
 	{
+		if(!app()->user)
+		{
+			return redirect('login');
+		}
+		
 		return view('admin');
 	}
 
+	public function login()
+	{
+		return view('login');
+	}
 }

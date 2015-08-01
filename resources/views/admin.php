@@ -59,10 +59,10 @@
 				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown" dropdown>
 						<a href="" class="dropdown-toggle" dropdown-toggle>
-							<i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+							<i class="fa fa-user fa-fw"></i> <?=app()->user->name?> <i class="fa fa-caret-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-user" dropdown-menu>
-							<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+							<li><a href="<?=url('logout')?>"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
 							</li>
 						</ul>
 						<!-- /.dropdown-user -->
@@ -134,7 +134,7 @@
 		<script src="<?=url('packages')?>/metisMenu/dist/metisMenu.min.js"></script>
 
 		<!-- Custom Theme JavaScript -->
-		<script src="<?=url()?>/js/sb-admin-2.js"></script>
+		<script src="<?=url('js')?>/sb-admin-2.js"></script>
 
 		<div class="alert-container" ng-controller="AlertCtrl">
 			<alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-mouseenter="toggleCloseButton($index)" ng-mouseleave="toggleCloseButton($index)">
