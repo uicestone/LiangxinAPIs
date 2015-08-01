@@ -12,10 +12,11 @@
 */
 
 Route::get('/', 'WelcomeController@index');
+Route::get('admin', 'WelcomeController@admin');
 
 Route::resource('api/v1/group', 'GroupController', ['except' => ['edit']]);
-Route::resource('api/v1/user', 'UserController', ['except' => ['update', 'edit']]);
-Route::resource('api/v1/post', 'PostController', ['except' => ['update', 'edit']]);
+Route::resource('api/v1/user', 'UserController', ['except' => ['edit']]);
+Route::resource('api/v1/post', 'PostController', ['except' => ['edit']]);
 
 Route::delete('api/v1/post', 'PostController@destroy');
 

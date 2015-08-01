@@ -1,0 +1,91 @@
+<div class="row">
+	<div class="col-sm-12">
+		<br>
+		<form class="form form-horizontal" ng-submit="save(post)">
+			<div class="form-group">
+				<label class="control-label col-sm-2">类型</label>
+				<div class="col-sm-6">
+					<select class="form-control" ng-model="post.type" ng-options="type for type in ['文章', '课堂', '活动', '图片', '视频', '附件', '服务', '横幅']"></select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">标题</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.title">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">作者</label>
+				<div class="col-sm-6">
+					
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">群组</label>
+				<div class="col-sm-6">
+					
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">简介</label>
+				<div class="col-sm-6">
+					<textarea class="form-control" ng-model="post.excerpt"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">内容</label>
+				<div class="col-sm-6">
+					<textarea class="form-control" rows="8" ng-model="post.content"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">链接</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.url">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">活动日期</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.event_date">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">截止日期</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.due_date">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">活动地点</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.event_address">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">活动类型</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.event_type">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">课堂 / 服务类型</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.event_type">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">横幅位置</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" ng-model="post.banner_position">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2">所属课堂 / 活动 / 文章</label>
+				<div class="col-sm-6">
+					
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

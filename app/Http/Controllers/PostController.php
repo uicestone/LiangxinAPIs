@@ -87,9 +87,25 @@ class PostController extends Controller {
 		$page = Input::query('page') ? Input::query('page') : 1;
 		
 		$per_page = Input::query('per_page') ? Input::query('per_page') : 10;
-		$query->skip(($page - 1) * $per_page)->take($per_page);
 		
-		return $query->get()->map(function($post)
+		$list_total = $query->count();
+		
+		if($per_page)
+		{
+			$query->skip(($page - 1) * $per_page)->take($per_page);
+			$list_start = ($page - 1) * $per_page + 1;
+			$list_end = ($page - 1) * $per_page + $per_page;
+			if($list_end > $list_total)
+			{
+				$list_end = $list_total;
+			}
+		}
+		else
+		{
+			$list_start = 1; $list_end = $list_total;
+		}
+		
+		$results = $query->get()->map(function($post)
 		{
 			
 			$post->addVisible('group', 'author');
@@ -154,6 +170,8 @@ class PostController extends Controller {
 			return $post;
 		});
 		
+		return response($results)->header('Items-Total', $list_total)->header('Items-Start', $list_start)->header('Items-End', $list_end);
+		
 	}
 
 	/**
@@ -180,7 +198,7 @@ class PostController extends Controller {
 		
 		if(Input::data('type') === '图片')
 		{
-			if(is_array(Input::data('images')) && Input::data('images')[0]->isValid())
+			if(is_array(Input::data('images')) && Input::data('images')[0]  instanceof Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('images')[0]->isValid())
 			{
 				$posts = new Collection;
 				
@@ -261,7 +279,7 @@ class PostController extends Controller {
 		
 		}
 		
-		if(Input::data('poster') && Input::data('poster')->isValid())
+		if(Input::data('poster') instanceof Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('poster')->isValid())
 		{
 			
 			$file = Input::data('poster');
@@ -295,7 +313,7 @@ class PostController extends Controller {
 		// upload files and create child posts
 		foreach(['images', 'attachments'] as $file_type)
 		{
-			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0]->isValid())
+			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0] instanceof Symfony\Component\HttpFoundation\File\UploadedFile || !Input::data($file_type)[0]->isValid())
 			{
 				break;
 			}

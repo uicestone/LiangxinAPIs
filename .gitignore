@@ -3,3 +3,4 @@
 .env
 /nbproject/
 /public/images
+/public/packages
