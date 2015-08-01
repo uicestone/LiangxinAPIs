@@ -3,7 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Post, App\User;
+use App\Post, App\User, App\Group;
 use Input, Exception;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -450,16 +450,41 @@ class PostController extends Controller {
 	{
 		$post->fill(Input::data());
 		
-		$post->author()->associate(app()->user);
-		$post->group()->associate(app()->user->group);
+		if(app()->user->role === 'app_admin')
+		{
+			if(Input::data('author') && $user = User::find(Input::data('author')['id']))
+			{
+				$post->author()->associate($user);
+			}
+			
+			if(Input::data('group') && $group = Group::find(Input::data('group')['id']))
+			{
+				$post->group()->associate($group);
+			}
+		}
 		
+		if(!$post->author)
+		{
+			$post->author()->associate(app()->user);
+			$post->group()->associate(app()->user->group);
+		}
+		
+		if(Input::data('parent'))
+		{
+			$parent_id = Input::data('parent')['id'];
+		}
 		if(Input::data('parent_id'))
 		{
-			$parent_post = Post::find(Input::data('parent_id'));
+			$parent_id = Input::data('parent_id');
+		}
+		
+		if(isset($parent_id))
+		{
+			$parent_post = Post::find($parent_id);
 			
 			if(!$parent_post)
 			{
-				throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
+				throw new Exception('Parent post id: ' . $parent_id . ' not found', 400);
 			}
 			
 			$post->parent()->associate($parent_post);

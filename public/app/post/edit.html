@@ -17,13 +17,13 @@
 			<div class="form-group">
 				<label class="control-label col-sm-2">作者</label>
 				<div class="col-sm-6">
-					
+					<input type="text" class="form-control" ng-model="post.author" typeahead="author as author.name for author in searchUser($viewValue)" typeahead-template-url="app/user/autocomplete.html">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2">群组</label>
 				<div class="col-sm-6">
-					
+					<input type="text" class="form-control" ng-model="post.group" typeahead="group as group.name for group in searchGroup($viewValue)">
 				</div>
 			</div>
 			<div class="form-group">
@@ -83,8 +83,11 @@
 			<div class="form-group">
 				<label class="control-label col-sm-2">所属课堂 / 活动 / 文章</label>
 				<div class="col-sm-6">
-					
+					<input type="text" class="form-control" ng-model="post.parent" typeahead="post as post.title for post in searchPost($viewValue)">
 				</div>
+			</div>
+			<div class="col-sm-offset-2">
+				<button type="submit" class="btn btn-primary">保存</button>
 			</div>
 		</form>
 	</div>

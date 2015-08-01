@@ -172,12 +172,21 @@ angular.module('liangxin.posts', []).controller('PostController', ['$scope', '$l
 		$location.url('post/' + post.id);
 	}
 }])
-.controller('PostEditController', ['$scope', 'post', 'Alert', function($scope, post, Alert){
+.controller('PostEditController', ['$scope', 'post', 'Alert', 'Group', 'User', 'Post', function($scope, post, Alert, Group, User, Post){
 	$scope.post = post;
 	$scope.save = function(post){
 		post.$update({}, function(){
 			Alert.add('文章已更新', 'success');
 		});
+	}
+	$scope.searchGroup = function(name){
+		return Group.query({keyword: name}).$promise;
+	}
+	$scope.searchUser = function(name){
+		return User.query({keyword: name, with_group: true}).$promise;
+	}
+	$scope.searchPost = function(name){
+		return Post.query({keyword: name}).$promise;
 	}
 }]);
 
