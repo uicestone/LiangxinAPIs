@@ -33,6 +33,7 @@
 		<script type="text/javascript" src="<?=url('packages')?>/angular-route/angular-route.min.js"></script>
 		<script type="text/javascript" src="<?=url('packages')?>/angular-resource/angular-resource.min.js"></script>
 		<script type="text/javascript" src="<?=url('packages')?>/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+		<script type="text/javascript" src="<?=url('packages')?>/ng-file-upload/ng-file-upload.min.js"></script>
 		
 		<script type="text/javascript" src="<?=url('app')?>/services.js"></script>
 		<script type="text/javascript" src="<?=url('app')?>/app.js"></script>

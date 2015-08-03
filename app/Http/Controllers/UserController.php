@@ -2,7 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\User, App\Config, App\Sms;
+use App\User, App\Group, App\Config, App\Sms;
 use Input, Hash, Exception, Symfony\Component\HttpKernel\Exception\HttpException, Response;
 
 use Illuminate\Http\Request;
@@ -104,6 +104,18 @@ class UserController extends Controller {
 	public function update(User $user)
 	{
 		$user->fill(Input::data());
+		
+		if(app()->user->role === 'app_admin')
+		{
+			if(Input::data('group') && $group = Group::find(Input::data('group')['id']))
+			{
+				$user->group()->associate($group);
+			}
+			if(Input::data('department') && $department = Group::find(Input::data('department')['id']))
+			{
+				$user->department()->associate($department);
+			}
+		}
 		
 		if(Input::data('avatar') instanceof Symfony\Component\HttpFoundation\File\UploadedFile)
 		{

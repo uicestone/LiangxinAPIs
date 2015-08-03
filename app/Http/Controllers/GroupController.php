@@ -108,6 +108,14 @@ class GroupController extends Controller {
 	{	
 		$group->fill(Input::data());
 		
+		if(app()->user->role === 'app_admin')
+		{
+			if(Input::data('parent') && $parent = Group::find(Input::data('parent')['id']))
+			{
+				$group->parent()->associate($parent);
+			}
+		}
+		
 		if(Input::data('avatar') instanceof Symfony\Component\HttpFoundation\File\UploadedFile)
 		{
 			if(Input::data('avatar')->isValid())

@@ -108,12 +108,15 @@ angular.module('liangxin.groups', [])
 		$location.url('group/' + group.id);
 	}
 }])
-.controller('GroupEditController', ['$scope', 'group', 'Alert', function($scope, group, Alert){
+.controller('GroupEditController', ['$scope', 'group', 'Alert', 'Group', function($scope, group, Alert, Group){
 	$scope.group = group;
 	$scope.save = function(group){
 		group.$update({}, function(){
 			Alert.add('群组已更新', 'success');
 		});
+	}
+	$scope.searchGroup = function(name){
+		return Group.query({keyword: name}).$promise;
 	}
 }]);
 
@@ -140,16 +143,19 @@ angular.module('liangxin.users', []).controller('UserController', ['$scope', '$l
 		$location.url('user/' + user.id);
 	}
 }])
-.controller('UserEditController', ['$scope', 'user', 'Alert', function($scope, user, Alert){
+.controller('UserEditController', ['$scope', 'user', 'Alert', 'Group', function($scope, user, Alert, Group){
 	$scope.user = user;
 	$scope.save = function(user){
 		user.$update({}, function(){
 			Alert.add('用户已更新', 'success');
 		});
 	}
+	$scope.searchGroup = function(name){
+		return Group.query({keyword: name}).$promise;
+	}
 }]);
 
-angular.module('liangxin.posts', []).controller('PostController', ['$scope', '$location', 'posts', function($scope, $location, posts){
+angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', ['$scope', '$location', 'posts', function($scope, $location, posts){
 	$scope.posts = posts;
 	$scope.currentPage = $location.search().page || 1;
 	
