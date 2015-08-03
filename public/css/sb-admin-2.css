@@ -389,3 +389,9 @@ table.dataTable thead .sorting:after {
 	right: 2px;
 	top: 0;
 }
+
+.input-group .input-group-addon .btn {
+	background: none;
+    border: none;
+    margin: -6px -12px;
+}

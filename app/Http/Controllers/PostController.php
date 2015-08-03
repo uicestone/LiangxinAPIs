@@ -505,13 +505,11 @@ class PostController extends Controller {
 			$file->move(public_path($path), $file_store_name);
 
 			$post->url = $path . '/' . $file_store_name;
-			
-			$post->addVisible('url');
 		}
 		
 		$post->save();
 		
-		return $post;
+		return $this->show($post);
 	}
 
 	/**
