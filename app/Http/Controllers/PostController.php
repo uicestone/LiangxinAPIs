@@ -211,7 +211,7 @@ class PostController extends Controller {
 					}
 					
 					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
-					$file->move('images', $file_store_name);
+					$file->move(public_path('images'), $file_store_name);
 
 					$file_post = new Post();
 
@@ -285,7 +285,7 @@ class PostController extends Controller {
 			$file = Input::data('poster');
 			
 			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
-			$file->move('images', $file_store_name);
+			$file->move(public_path('images'), $file_store_name);
 
 			$file_post = new Post();
 
@@ -488,10 +488,30 @@ class PostController extends Controller {
 			}
 			
 			$post->parent()->associate($parent_post);
+		}
 		
+		if(Input::data('file') && Input::data('file') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('file')->isValid())
+		{
+			$file = Input::data('file');
+			$path = preg_match('/^image\//', $file->getMimeType()) ? 'images' : 'attachments';
+			
+			$extension = $file->getClientOriginalExtension();
+
+			if(!$extension){
+				throw new Exception('file extended name not resolved', 400);
+			}
+			
+			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
+			$file->move(public_path($path), $file_store_name);
+
+			$post->url = $path . '/' . $file_store_name;
+			
+			$post->addVisible('url');
 		}
 		
 		$post->save();
+		
+		return $post;
 	}
 
 	/**

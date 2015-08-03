@@ -130,7 +130,7 @@ class GroupController extends Controller {
 
 				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
 
-				$file->move('images', $file_store_name);
+				$file->move(public_path('images'), $file_store_name);
 
 				$group->avatar = 'images' . '/' . $file_store_name;
 			}

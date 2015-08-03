@@ -131,7 +131,7 @@ class UserController extends Controller {
 
 				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
 
-				$file->move('images', $file_store_name);
+				$file->move(public_path('images'), $file_store_name);
 
 				$user->avatar = 'images' . '/' . $file_store_name;
 			}
@@ -269,7 +269,7 @@ class UserController extends Controller {
 
 					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
 
-					$file->move('images', $file_store_name);
+					$file->move(public_path('images'), $file_store_name);
 
 					app()->user->avatar = 'images' . '/' . $file_store_name;
 				}

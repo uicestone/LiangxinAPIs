@@ -32,55 +32,55 @@
 					<textarea class="form-control" ng-model="post.excerpt"></textarea>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '文章' || post.type === '活动' || post.type === '服务'">
 				<label class="control-label col-sm-2">内容</label>
 				<div class="col-sm-6">
 					<textarea class="form-control" rows="8" ng-model="post.content"></textarea>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '视频'">
 				<label class="control-label col-sm-2">链接</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.url">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">活动日期</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.event_date">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">截止日期</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.due_date">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">活动地点</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.event_address">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">活动类型</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.event_type">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '课堂' || post.type === '服务'">
 				<label class="control-label col-sm-2">课堂 / 服务类型</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.event_type">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type === '横幅'">
 				<label class="control-label col-sm-2">横幅位置</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.banner_position">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type !== '课堂' && post.type !== '活动' && post.type !== '横幅'">
 				<label class="control-label col-sm-2">所属课堂 / 活动 / 文章</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.parent" typeahead="post as post.title for post in searchPost($viewValue)">
