@@ -117,7 +117,7 @@ class UserController extends Controller {
 			}
 		}
 		
-		if(Input::data('avatar') instanceof Symfony\Component\HttpFoundation\File\UploadedFile)
+		if(Input::data('avatar') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile)
 		{
 			if(Input::data('avatar')->isValid())
 			{
@@ -255,7 +255,7 @@ class UserController extends Controller {
 				}				
 			}
 			
-			if(Input::data('avatar') instanceof Symfony\Component\HttpFoundation\File\UploadedFile)
+			if(Input::data('avatar') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile)
 			{
 				if(Input::data('avatar')->isValid())
 				{

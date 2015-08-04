@@ -198,7 +198,7 @@ class PostController extends Controller {
 		
 		if(Input::data('type') === '图片')
 		{
-			if(is_array(Input::data('images')) && Input::data('images')[0]  instanceof Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('images')[0]->isValid())
+			if(is_array(Input::data('images')) && Input::data('images')[0]  instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('images')[0]->isValid())
 			{
 				$posts = new Collection;
 				
@@ -279,7 +279,7 @@ class PostController extends Controller {
 		
 		}
 		
-		if(Input::data('poster') instanceof Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('poster')->isValid())
+		if(Input::data('poster') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('poster')->isValid())
 		{
 			
 			$file = Input::data('poster');
@@ -313,7 +313,7 @@ class PostController extends Controller {
 		// upload files and create child posts
 		foreach(['images', 'attachments'] as $file_type)
 		{
-			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0] instanceof Symfony\Component\HttpFoundation\File\UploadedFile || !Input::data($file_type)[0]->isValid())
+			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0] instanceof \Symfony\Component\HttpFoundation\File\UploadedFile || !Input::data($file_type)[0]->isValid())
 			{
 				break;
 			}
@@ -507,6 +507,47 @@ class PostController extends Controller {
 			$post->url = $path . '/' . $file_store_name;
 		}
 		
+		if(Input::data('poster') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('poster')->isValid())
+		{
+			
+			$file = Input::data('poster');
+			
+			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+			$file->move(public_path('images'), $file_store_name);
+
+			if(!$post->poster)
+			{
+				$file_post = new Post();
+
+				$file_post->fill([
+					'title'=>$file->getClientOriginalName(),
+					'type'=>'封面',
+					'url'=>'images' . '/' . $file_store_name,
+				]);
+
+				$file_post->author()->associate(app()->user);
+
+				if(app()->user->group)
+				{
+					$file_post->group()->associate(app()->user->group);
+				}
+
+				$file_post->save();
+				
+				$post->poster_id = $file_post->id;
+			}
+			else
+			{
+				$post->poster->fill([
+					'title'=>$file->getClientOriginalName(),
+					'url'=>'images' . '/' . $file_store_name,
+				]);
+				
+				$post->poster->save();
+			}
+			
+		}
+
 		$post->save();
 		
 		return $this->show($post);

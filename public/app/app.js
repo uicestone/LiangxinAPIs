@@ -199,14 +199,18 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
         $scope.upload($scope.file);
     });
 	
-    $scope.upload = function (file) {
-		
+	$scope.$watch('poster', function(){
+		$scope.upload($scope.poster, 'poster');
+	})
+	
+    $scope.upload = function (file, key) {
 		if(!file) return;
 		
 		Upload.upload({
 			url: 'api/v1/post/' + post.id,
 			fields: {'_method': 'put'},
-			file: file
+			file: file,
+			fileFormDataName: key || 'file'
 		})
 //		.progress(function (evt) {
 //			var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -215,6 +219,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 		.success(function (data, status, headers, config) {
 			Alert.add('文件上传成功', 'success');
 			$scope.post.url = data.url;
+			$scope.post.poster = data.poster;
 		})
 //		.error(function (data, status, headers, config) {
 //			console.log('error status: ' + status);
