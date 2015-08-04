@@ -54,7 +54,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="index.html">新城e家 - 管理后台</a>
+					<span class="navbar-brand">新城e家 - 管理后台</span>
 				</div>
 				<!-- /.navbar-header -->
 
