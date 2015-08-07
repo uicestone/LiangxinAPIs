@@ -181,21 +181,7 @@ class PostController extends Controller {
 	 */
 	public function store()
 	{
-		if(!app()->user)
-		{
-			throw new Exception('Authentication is required for this action.', 401);
-		}
-		
-		if(!Input::data('type'))
-		{
-			throw new Exception('请指定文章类型', 400);
-		}
-		
-		if(!Input::data('title'))
-		{
-			throw new Exception('请指定文章标题', 400);
-		}
-		
+		// 对于图片类型，一个请求可以创建多个图片
 		if(Input::data('type') === '图片')
 		{
 			if(is_array(Input::data('images')) && Input::data('images')[0]  instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('images')[0]->isValid())
@@ -257,96 +243,8 @@ class PostController extends Controller {
 		}
 		
 		$post = new Post();
-		$post->fill(Input::data());
 		
-		$post->author()->associate(app()->user);
-		
-		if(app()->user->group)
-		{
-			$post->group()->associate(app()->user->group);
-		}
-		
-		if(Input::data('parent_id'))
-		{
-			$parent_post = Post::find(Input::data('parent_id'));
-			
-			if(!$parent_post)
-			{
-				throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
-			}
-			
-			$post->parent()->associate($parent_post);
-		
-		}
-		
-		if(Input::data('poster') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('poster')->isValid())
-		{
-			
-			$file = Input::data('poster');
-			
-			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
-			$file->move(public_path('images'), $file_store_name);
-
-			$file_post = new Post();
-
-			$file_post->fill([
-				'title'=>$file->getClientOriginalName(),
-				'type'=>'封面',
-				'url'=>'images' . '/' . $file_store_name,
-			]);
-
-			$file_post->author()->associate(app()->user);
-
-			if(app()->user->group)
-			{
-				$file_post->group()->associate(app()->user->group);
-			}
-
-			$file_post->save();
-			
-			$post->poster_id = $file_post->id;
-			
-		}
-
-		$post->save();
-		
-		// upload files and create child posts
-		foreach(['images', 'attachments'] as $file_type)
-		{
-			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0] instanceof \Symfony\Component\HttpFoundation\File\UploadedFile || !Input::data($file_type)[0]->isValid())
-			{
-				break;
-			}
-			
-			foreach(Input::data($file_type) as $file)
-			{
-				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
-				$file->move(public_path($file_type), $file_store_name);
-				
-				$file_post = new Post();
-				
-				$file_post->fill([
-					'title'=>$file->getClientOriginalName(),
-					'type'=>$file_type === 'images' ? '图片' : '附件',
-					'url'=>$file_type . '/' . $file_store_name,
-				]);
-				
-				$file_post->parent()->associate($post);
-				$file_post->author()->associate(app()->user);
-				
-				if(app()->user->group)
-				{
-					$file_post->group()->associate(app()->user->group);
-				}
-				
-				$file_post->save();
-			}
-			
-			$post->$file_type = $post->$file_type;
-		}
-		
-		return $post;
-		
+		return $this->update($post);
 	}
 
 	/**
@@ -448,6 +346,21 @@ class PostController extends Controller {
 	 */
 	public function update(Post $post)
 	{
+		if(!app()->user)
+		{
+			throw new Exception('Authentication is required for this action.', 401);
+		}
+		
+		if(!Input::data('type'))
+		{
+			throw new Exception('请指定文章类型', 400);
+		}
+		
+		if(!Input::data('title'))
+		{
+			throw new Exception('请指定文章标题', 400);
+		}
+		
 		$post->fill(Input::data());
 		
 		if(app()->user->role === 'app_admin')
@@ -466,13 +379,17 @@ class PostController extends Controller {
 		if(!$post->author)
 		{
 			$post->author()->associate(app()->user);
-			$post->group()->associate(app()->user->group);
+			if(app()->user->group)
+			{
+				$post->group()->associate(app()->user->group);
+			}
 		}
 		
 		if(Input::data('parent'))
 		{
 			$parent_id = Input::data('parent')['id'];
 		}
+		
 		if(Input::data('parent_id'))
 		{
 			$parent_id = Input::data('parent_id');
@@ -488,6 +405,41 @@ class PostController extends Controller {
 			}
 			
 			$post->parent()->associate($parent_post);
+		}
+		
+		// upload files and create child posts
+		foreach(['images', 'attachments'] as $file_type)
+		{
+			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0] instanceof \Symfony\Component\HttpFoundation\File\UploadedFile || !Input::data($file_type)[0]->isValid())
+			{
+				break;
+			}
+			
+			foreach(Input::data($file_type) as $file)
+			{
+				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+				$file->move(public_path($file_type), $file_store_name);
+				
+				$file_post = new Post();
+				
+				$file_post->fill([
+					'title'=>$file->getClientOriginalName(),
+					'type'=>$file_type === 'images' ? '图片' : '附件',
+					'url'=>$file_type . '/' . $file_store_name,
+				]);
+				
+				$file_post->parent()->associate($post);
+				$file_post->author()->associate(app()->user);
+				
+				if(app()->user->group)
+				{
+					$file_post->group()->associate(app()->user->group);
+				}
+				
+				$file_post->save();
+			}
+			
+			$post->$file_type = $post->$file_type;
 		}
 		
 		if(Input::data('file') && Input::data('file') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('file')->isValid())

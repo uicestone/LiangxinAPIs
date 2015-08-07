@@ -8,24 +8,60 @@ var responseInterceptor = function(response){
 angular.module('liangxin.services', ['ngResource'])
 
 .service('User', ['$resource', function($resource){
-	return $resource('api/v1/user/:id', {id: '@id'}, {
+	var user = $resource('api/v1/user/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
+		create: {method: 'POST'},
 		update: {method: 'PUT'}
 	});
+	
+	user.prototype.$save = function(a, b, c, d){
+		if(this.id){
+			return this.$update(a, b, c, d);
+		}
+		else{
+			return this.$create(a, b, c, d);
+		}
+	}
+	
+	return user;
 }])
 
 .service('Group', ['$resource', function($resource){
-	return $resource('api/v1/group/:id', {id: '@id'}, {
+	var group = $resource('api/v1/group/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
+		create: {method: 'POST'},
 		update: {method: 'PUT'}
 	});
+	
+	group.prototype.$save = function(a, b, c, d){
+		if(this.id){
+			return this.$update(a, b, c, d);
+		}
+		else{
+			return this.$create(a, b, c, d);
+		}
+	}
+	
+	return group;
 }])
 
 .service('Post', ['$resource', function($resource){
-	return $resource('api/v1/post/:id', {id: '@id'}, {
+	var post = $resource('api/v1/post/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
+		create: {method: 'POST'},
 		update: {method: 'PUT'}
 	});
+	
+	post.prototype.$save = function(a, b, c, d){
+		if(this.id){
+			return this.$update(a, b, c, d);
+		}
+		else{
+			return this.$create(a, b, c, d);
+		}
+	}
+	
+	return post;
 }])
 
 .service('HttpInterceptor', ['$q', '$timeout', 'Alert', function($q, $timeout, Alert) {

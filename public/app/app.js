@@ -25,6 +25,9 @@ angular.module('liangxin', [
 			templateUrl: 'app/user/edit.html',
 			resolve: {
 				user: ['$route', 'User', function($route, User){
+					if($route.current.params.id === 'new'){
+						return new User();
+					}
 					return User.get({id: $route.current.params.id}).$promise;
 				}]
 			}
@@ -43,6 +46,9 @@ angular.module('liangxin', [
 			templateUrl: 'app/group/edit.html',
 			resolve: {
 				group: ['$route', 'Group', function($route, Group){
+					if($route.current.params.id === 'new'){
+						return new Group();
+					}
 					return Group.get({id: $route.current.params.id}).$promise;
 				}]
 			}
@@ -61,6 +67,9 @@ angular.module('liangxin', [
 			templateUrl: 'app/post/edit.html',
 			resolve: {
 				post: ['$route', 'Post', function($route, Post){
+					if($route.current.params.id === 'new'){
+						return new Post();
+					}
 					return Post.get({id: $route.current.params.id}).$promise;
 				}]
 			}
@@ -111,8 +120,8 @@ angular.module('liangxin.groups', [])
 .controller('GroupEditController', ['$scope', 'group', 'Alert', 'Group', function($scope, group, Alert, Group){
 	$scope.group = group;
 	$scope.save = function(group){
-		group.$update({}, function(){
-			Alert.add('群组已更新', 'success');
+		group.$save({}, function(){
+			Alert.add('群组已保存', 'success');
 		});
 	}
 	$scope.searchGroup = function(name){
@@ -146,8 +155,8 @@ angular.module('liangxin.users', []).controller('UserController', ['$scope', '$l
 .controller('UserEditController', ['$scope', 'user', 'Alert', 'Group', function($scope, user, Alert, Group){
 	$scope.user = user;
 	$scope.save = function(user){
-		user.$update({}, function(){
-			Alert.add('用户已更新', 'success');
+		user.$save({}, function(){
+			Alert.add('用户已保存', 'success');
 		});
 	}
 	$scope.searchGroup = function(name){
@@ -178,11 +187,12 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 		$location.url('post/' + post.id);
 	}
 }])
-.controller('PostEditController', ['$scope', 'post', 'Alert', 'Group', 'User', 'Post', 'Upload', function($scope, post, Alert, Group, User, Post, Upload){
+.controller('PostEditController', ['$scope', '$location', 'post', 'Alert', 'Group', 'User', 'Post', 'Upload', function($scope, $location, post, Alert, Group, User, Post, Upload){
 	$scope.post = post;
 	$scope.save = function(post){
-		post.$update({}, function(){
-			Alert.add('文章已更新', 'success');
+		post.$save({}, function(post){
+			Alert.add('文章已保存' , 'success');
+			$location.url('post/' + post.id);
 		});
 	}
 	$scope.searchGroup = function(name){
