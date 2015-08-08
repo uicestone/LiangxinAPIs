@@ -77,7 +77,7 @@ class GroupController extends Controller {
 	public function store()
 	{
 		$group = new Group();
-		$this->update($group);
+		return $this->update($group);
 	}
 
 	/**
@@ -141,6 +141,8 @@ class GroupController extends Controller {
 		}
 		
 		$group->save();
+		
+		return $group;
 	}
 
 	/**
