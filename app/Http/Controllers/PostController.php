@@ -244,6 +244,16 @@ class PostController extends Controller {
 		
 		$post = new Post();
 		
+		if(!Input::data('type'))
+		{
+			throw new Exception('请指定文章类型', 400);
+		}
+		
+		if(!Input::data('title'))
+		{
+			throw new Exception('请指定文章标题', 400);
+		}
+		
 		return $this->update($post);
 	}
 
@@ -349,16 +359,6 @@ class PostController extends Controller {
 		if(!app()->user)
 		{
 			throw new Exception('Authentication is required for this action.', 401);
-		}
-		
-		if(!Input::data('type'))
-		{
-			throw new Exception('请指定文章类型', 400);
-		}
-		
-		if(!Input::data('title'))
-		{
-			throw new Exception('请指定文章标题', 400);
 		}
 		
 		$post->fill(Input::data());
