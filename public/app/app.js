@@ -117,11 +117,12 @@ angular.module('liangxin.groups', [])
 		$location.url('group/' + group.id);
 	}
 }])
-.controller('GroupEditController', ['$scope', 'group', 'Alert', 'Group', function($scope, group, Alert, Group){
+.controller('GroupEditController', ['$scope', '$location', 'group', 'Alert', 'Group', function($scope, $location, group, Alert, Group){
 	$scope.group = group;
 	$scope.save = function(group){
 		group.$save({}, function(){
 			Alert.add('群组已保存', 'success');
+			$location.url('group/' + group.id);
 		});
 	}
 	$scope.searchGroup = function(name){
@@ -152,11 +153,12 @@ angular.module('liangxin.users', []).controller('UserController', ['$scope', '$l
 		$location.url('user/' + user.id);
 	}
 }])
-.controller('UserEditController', ['$scope', 'user', 'Alert', 'Group', function($scope, user, Alert, Group){
+.controller('UserEditController', ['$scope', '$location', 'user', 'Alert', 'Group', function($scope, $location, user, Alert, Group){
 	$scope.user = user;
 	$scope.save = function(user){
 		user.$save({}, function(){
 			Alert.add('用户已保存', 'success');
+			$location.url('user/' + user.id);
 		});
 	}
 	$scope.searchGroup = function(name){
