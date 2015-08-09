@@ -122,7 +122,7 @@ angular.module('liangxin.groups', [])
 	$scope.save = function(group){
 		group.$save({}, function(){
 			Alert.add('群组已保存', 'success');
-			$location.url('group/' + group.id);
+			$location.replace().url('group/' + group.id);
 		});
 	}
 	$scope.searchGroup = function(name){
@@ -158,7 +158,7 @@ angular.module('liangxin.users', []).controller('UserController', ['$scope', '$l
 	$scope.save = function(user){
 		user.$save({}, function(){
 			Alert.add('用户已保存', 'success');
-			$location.url('user/' + user.id);
+			$location.replace().url('user/' + user.id);
 		});
 	}
 	$scope.searchGroup = function(name){
@@ -196,7 +196,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 	$scope.save = function(post){
 		post.$save({}, function(post){
 			Alert.add('文章已保存' , 'success');
-			$location.url('post/' + post.id);
+			$location.replace().url('post/' + post.id);
 		});
 	}
 	
@@ -218,7 +218,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 	
 	$scope.remove = function(post){
 		post.$remove({}, function(){
-			$location.url('post?type=' + $scope.post.type);
+			$location.replace().url('post?type=' + $scope.post.type);
 		});
 	}
 	
@@ -251,7 +251,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 				post = post[0];
 			}
 			
-			$location.url('post/' + post.id);
+			$location.replace().url('post/' + post.id);
 			
 			$scope.post.url = post.url;
 			$scope.post.poster = post.poster;

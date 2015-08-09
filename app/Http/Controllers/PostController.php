@@ -214,10 +214,20 @@ class PostController extends Controller {
 						$file_post->group()->associate(app()->user->group);
 					}
 
+					if(Input::data('parent'))
+					{
+						$parent_id = Input::data('parent')['id'];
+					}
+
 					if(Input::data('parent_id'))
 					{
-						$parent_post = Post::find(Input::data('parent_id'));
+						$parent_id = Input::data('parent_id');
+					}
 
+					if(isset($parent_id))
+					{
+						$parent_post = Post::find($parent_id);
+						
 						if(!$parent_post)
 						{
 							throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
