@@ -315,7 +315,7 @@ class PostController extends Controller {
 			$post->comments = $post->comments;
 		}
 
-		if(in_array($post->type, ['课堂', '活动', '视频', '横幅']))
+		if(in_array($post->type, ['课堂', '活动', '视频', '横幅', '服务']))
 		{
 			$post->load('poster');
 			$post->addVisible('poster');
@@ -335,6 +335,11 @@ class PostController extends Controller {
 		{
 			$post->addVisible('images');
 			$post->images = $post->images;
+		}
+		
+		if($post->type === '服务')
+		{
+			$post->addVisible('class_type');
 		}
 		
 		return $post;
