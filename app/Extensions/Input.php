@@ -18,7 +18,19 @@ class Input extends \Illuminate\Support\Facades\Input {
 		}
 		else
 		{
-			return static::$app['request']->request->get($field);
+			$value = static::$app['request']->request->get($field);
+			
+			if(is_array($value))
+			{
+				return $value;
+			}
+			
+			if(strtolower($value) === 'null')
+			{
+				return;
+			}
+			
+			return json_decode($value) ? json_decode($value, JSON_OBJECT_AS_ARRAY) : $value;
 		}
 	}
 	

@@ -14,7 +14,7 @@
 					<input type="text" class="form-control" ng-model="post.title">
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group" ng-show="post.type !== '图片' && post.type !== '封面'">
 				<label class="control-label col-sm-2">封面</label>
 				<div class="col-sm-6" ng-model="poster" ngf-drop ngf-select ngf-accept="'image/*'" ngf-drag-over-class="has-success">
 					<img ng-show="post.poster" ng-src="{{ post.poster.url }}" ngf-src="poster" style="max-width:100%">
@@ -52,6 +52,7 @@
 						<input type="text" ng-model="post.url" class="form-control">
 						<div class="input-group-addon"><button class="btn btn-default" ngf-select ng-model="file">上传</button></div>
 					</div>
+					<img ng-src="{{ post.url }}" ngf-src="file" style="max-width:100%" ngf-select>
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '活动'">

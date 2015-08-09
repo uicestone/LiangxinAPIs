@@ -202,7 +202,7 @@ class PostController extends Controller {
 					$file_post = new Post();
 
 					$file_post->fill([
-						'title'=>Input::data('title'),
+						'title'=>Input::data('title') ?  Input::data('title'): $file->getClientOriginalName(),
 						'type'=>'图片',
 						'url'=>'images' . '/' . $file_store_name,
 					]);

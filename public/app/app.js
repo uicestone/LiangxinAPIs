@@ -176,6 +176,8 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 	$scope.itemsStart = Number(headers['items-start']);
 	$scope.itemsEnd = Number(headers['items-end']);
 	
+	$scope.search = $location.search();
+	
 	$scope.nextPage = function(){
 		$location.search('page', ++$scope.currentPage);
 	}
@@ -197,6 +199,13 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 			$location.url('post/' + post.id);
 		});
 	}
+	
+	$scope.search = $location.search();
+	
+	if($scope.search.type){
+		$scope.post.type = $scope.search.type;
+	}
+	
 	$scope.searchGroup = function(name){
 		return Group.query({keyword: name}).$promise;
 	}
@@ -216,22 +225,30 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 	})
 	
     $scope.upload = function (file, key) {
+		
 		if(!file) return;
 		
 		Upload.upload({
-			url: 'api/v1/post/' + post.id,
-			fields: {'_method': 'put'},
+			url: 'api/v1/post' + ($scope.post.id ? '/' + $scope.post.id : ''),
+			fields: angular.extend({_method: $scope.post.id ? 'put' : 'post'}, $scope.post),
 			file: file,
-			fileFormDataName: key || 'file'
+			fileFormDataName: key || $scope.post.type === '图片' ? 'images[]' : 'file'
 		})
 //		.progress(function (evt) {
 //			var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
 //			console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
 //		})
-		.success(function (data, status, headers, config) {
+		.success(function (post, status, headers, config) {
 			Alert.add('文件上传成功', 'success');
-			$scope.post.url = data.url;
-			$scope.post.poster = data.poster;
+			
+			if(post[0]){
+				post = post[0];
+			}
+			
+			$location.url('post/' + post.id);
+			
+			$scope.post.url = post.url;
+			$scope.post.poster = post.poster;
 		})
 //		.error(function (data, status, headers, config) {
 //			console.log('error status: ' + status);
