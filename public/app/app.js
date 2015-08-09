@@ -216,6 +216,12 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 		return Post.query({keyword: name}).$promise;
 	}
 	
+	$scope.remove = function(post){
+		post.$remove({}, function(){
+			$location.url('post?type=' + $scope.post.type);
+		});
+	}
+	
 	$scope.$watch('file', function () {
         $scope.upload($scope.file);
     });
@@ -232,7 +238,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 			url: 'api/v1/post' + ($scope.post.id ? '/' + $scope.post.id : ''),
 			fields: angular.extend({_method: $scope.post.id ? 'put' : 'post'}, $scope.post),
 			file: file,
-			fileFormDataName: key || $scope.post.type === '图片' ? 'images[]' : 'file'
+			fileFormDataName: key || ($scope.post.type === '图片' ? 'images[]' : 'file')
 		})
 //		.progress(function (evt) {
 //			var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
