@@ -325,7 +325,7 @@ class PostController extends Controller {
 			$post->comments = $post->comments;
 		}
 
-		if(in_array($post->type, ['课堂', '活动', '视频', '横幅', '服务']))
+		if(in_array($post->type, ['文章', '课堂', '活动', '视频', '横幅', '服务']))
 		{
 			$post->load('poster');
 			$post->addVisible('poster');
@@ -424,8 +424,8 @@ class PostController extends Controller {
 		
 		// upload files and create child posts
 		foreach(['images', 'attachments'] as $file_type)
-		{
-			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0] instanceof \Symfony\Component\HttpFoundation\File\UploadedFile || !Input::data($file_type)[0]->isValid())
+		{print_r(Input::data($file_type)[0]);exit;
+			if(!is_array(Input::data($file_type)) || !Input::data($file_type)[0]->isValid())
 			{
 				break;
 			}
@@ -453,8 +453,6 @@ class PostController extends Controller {
 				
 				$file_post->save();
 			}
-			
-			$post->$file_type = $post->$file_type;
 		}
 		
 		if(Input::data('file') && Input::data('file') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('file')->isValid())

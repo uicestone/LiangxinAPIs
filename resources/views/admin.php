@@ -10,6 +10,8 @@
 		<meta name="renderer" content="webkit">
 
 		<title>新城e家 - 管理后台</title>
+		
+		<base href="<?=url('admin')?>/">
 
 		<!-- Bootstrap Core CSS -->
 		<link href="<?=url('packages')?>/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -88,34 +90,34 @@
 								<!-- /input-group -->
 							</li>
 							<li>
-								<a href="#post?type=文章"><i class="fa fa-edit fa-fw"></i> 文章</a>
+								<a href="post?type=文章"><i class="fa fa-edit fa-fw"></i> 文章</a>
 							</li>
 							<li>
-								<a href="#post?type=课堂"><i class="fa fa-book fa-fw"></i> 课堂</a>
+								<a href="post?type=课堂"><i class="fa fa-book fa-fw"></i> 课堂</a>
 							</li>
 							<li>
-								<a href="#post?type=活动"><i class="fa fa-calendar fa-fw"></i> 活动</a>
+								<a href="post?type=活动"><i class="fa fa-calendar fa-fw"></i> 活动</a>
 							</li>
 							<li>
-								<a href="#post?type=图片"><i class="fa fa-image fa-fw"></i> 图片</a>
+								<a href="post?type=图片"><i class="fa fa-image fa-fw"></i> 图片</a>
 							</li>
 							<li>
-								<a href="#post?type=视频"><i class="fa fa-video-camera fa-fw"></i> 视频</a>
+								<a href="post?type=视频"><i class="fa fa-video-camera fa-fw"></i> 视频</a>
 							</li>
 							<li>
-								<a href="#post?type=附件"><i class="fa fa-paperclip fa-fw"></i> 附件</a>
+								<a href="post?type=附件"><i class="fa fa-paperclip fa-fw"></i> 附件</a>
 							</li>
 							<li>
-								<a href="#post?type=服务"><i class="fa fa-glass fa-fw"></i> 服务</a>
+								<a href="post?type=服务"><i class="fa fa-glass fa-fw"></i> 服务</a>
 							</li>
 							<li>
-								<a href="#post?type=横幅"><i class="fa fa-bookmark fa-fw"></i> 横幅</a>
+								<a href="post?type=横幅"><i class="fa fa-bookmark fa-fw"></i> 横幅</a>
 							</li>
 							<li>
-								<a href="#group"><i class="fa fa-sitemap fa-fw"></i> 群组</a>
+								<a href="group"><i class="fa fa-sitemap fa-fw"></i> 群组</a>
 							</li>
 							<li>
-								<a href="#user"><i class="fa fa-user fa-fw"></i> 用户</a>
+								<a href="user"><i class="fa fa-user fa-fw"></i> 用户</a>
 							</li>
 						</ul>
 					</div>

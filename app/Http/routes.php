@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'WelcomeController@index');
-Route::get('admin', 'WelcomeController@admin');
+Route::get('admin/{item?}/{id?}', 'WelcomeController@admin');
 Route::get('login', 'WelcomeController@login');
 Route::post('login', 'UserController@authenticate');
 Route::get('logout', 'UserController@logout');

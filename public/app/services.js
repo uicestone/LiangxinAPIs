@@ -8,7 +8,7 @@ var responseInterceptor = function(response){
 angular.module('liangxin.services', ['ngResource'])
 
 .service('User', ['$resource', function($resource){
-	var user = $resource('api/v1/user/:id', {id: '@id'}, {
+	var user = $resource('../api/v1/user/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
 		create: {method: 'POST'},
 		update: {method: 'PUT'}
@@ -27,7 +27,7 @@ angular.module('liangxin.services', ['ngResource'])
 }])
 
 .service('Group', ['$resource', function($resource){
-	var group = $resource('api/v1/group/:id', {id: '@id'}, {
+	var group = $resource('../api/v1/group/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
 		create: {method: 'POST'},
 		update: {method: 'PUT'}
@@ -46,7 +46,7 @@ angular.module('liangxin.services', ['ngResource'])
 }])
 
 .service('Post', ['$resource', function($resource){
-	var post = $resource('api/v1/post/:id', {id: '@id'}, {
+	var post = $resource('../api/v1/post/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
 		create: {method: 'POST'},
 		update: {method: 'PUT'}
@@ -108,7 +108,10 @@ angular.module('liangxin.services', ['ngResource'])
 			Alert.close(rejection.config.alert.normal.id);
 			Alert.close(rejection.config.alert.slow.id);
 			
-			if(rejection.status > 0){
+			if(rejection.data.message){
+				Alert.add(rejection.data.message, 'danger', true);
+			}
+			else if(rejection.status > 0){
 				Alert.add(rejection.statusText, 'danger', true);
 			}
 			
@@ -131,7 +134,7 @@ angular.module('liangxin.services', ['ngResource'])
 		return id;
 	},
 
-	this.close = function(id) {
+	this.close = function(id){
 		if(id === undefined){
 			return;
 		}
@@ -142,5 +145,9 @@ angular.module('liangxin.services', ['ngResource'])
 		}
 		items.splice(index, 1);
 	}
-		
+	
+	this.clear = function(){
+		items.splice(0, items.length);
+	}
+	
 }]);

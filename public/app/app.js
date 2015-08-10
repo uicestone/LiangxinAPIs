@@ -9,11 +9,11 @@ angular.module('liangxin', [
 	'liangxin.groups',
 	'liangxin.users'
 ])
-.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
+.config(['$routeProvider', '$httpProvider', '$locationProvider', function($routeProvider, $httpProvider, $locationProvider) {
 	$routeProvider
 		.when('/user', {
 			controller: 'UserController',
-			templateUrl: 'app/user/list.html',
+			templateUrl: '../app/user/list.html',
 			resolve: {
 				users: ['$route', 'User', function($route, User){
 					return User.query(angular.extend({per_page: 20}, $route.current.params)).$promise;
@@ -22,7 +22,7 @@ angular.module('liangxin', [
 		})
 		.when('/user/:id', {
 			controller: 'UserEditController',
-			templateUrl: 'app/user/edit.html',
+			templateUrl: '../app/user/edit.html',
 			resolve: {
 				user: ['$route', 'User', function($route, User){
 					if($route.current.params.id === 'new'){
@@ -34,7 +34,7 @@ angular.module('liangxin', [
 		})
 		.when('/group', {
 			controller: 'GroupController',
-			templateUrl: 'app/group/list.html',
+			templateUrl: '../app/group/list.html',
 			resolve: {
 				groups: ['$route', 'Group', function($route, Group){
 					return Group.query(angular.extend({per_page: 20}, $route.current.params)).$promise;
@@ -43,7 +43,7 @@ angular.module('liangxin', [
 		})
 		.when('/group/:id', {
 			controller: 'GroupEditController',
-			templateUrl: 'app/group/edit.html',
+			templateUrl: '../app/group/edit.html',
 			resolve: {
 				group: ['$route', 'Group', function($route, Group){
 					if($route.current.params.id === 'new'){
@@ -55,7 +55,7 @@ angular.module('liangxin', [
 		})
 		.when('/post', {
 			controller: 'PostController',
-			templateUrl: 'app/post/list.html',
+			templateUrl: '../app/post/list.html',
 			resolve: {
 				posts: ['$route', 'Post', function($route, Post){
 					return Post.query(angular.extend({per_page: 20}, $route.current.params)).$promise;
@@ -64,7 +64,7 @@ angular.module('liangxin', [
 		})
 		.when('/post/:id', {
 			controller: 'PostEditController',
-			templateUrl: 'app/post/edit.html',
+			templateUrl: '../app/post/edit.html',
 			resolve: {
 				post: ['$route', 'Post', function($route, Post){
 					if($route.current.params.id === 'new'){
@@ -77,11 +77,13 @@ angular.module('liangxin', [
 		.otherwise({redirectTo: '/group'});
 
 	$httpProvider.interceptors.push('HttpInterceptor');
+	
+	$locationProvider.html5Mode(true);
 
 }])
 
-.controller('AlertCtrl', ['$scope', 'Alert',
-	function($scope, Alert){
+.controller('AlertCtrl', ['$scope', '$rootScope', 'Alert',
+	function($scope, $rootScope, Alert){
 		$scope.alerts = Alert.get();
 		$scope.close = Alert.close;
 		$scope.previous = function(){};
@@ -90,8 +92,12 @@ angular.module('liangxin', [
 		$scope.toggleCloseButton = function(index){
 			$scope.alerts[index].closeable = !$scope.alerts[index].closeable;
 		};
+	
+		$rootScope.$on('$routeChangeSuccess', function(){
+			Alert.clear();
+		});
 	}
-]);
+])
 
 angular.module('liangxin.groups', [])
 .controller('GroupController', ['$scope', '$location', 'groups', function($scope, $location, groups){
@@ -235,10 +241,10 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 		if(!file) return;
 		
 		Upload.upload({
-			url: 'api/v1/post' + ($scope.post.id ? '/' + $scope.post.id : ''),
+			url: '../api/v1/post' + ($scope.post.id ? '/' + $scope.post.id : ''),
 			fields: angular.extend({_method: $scope.post.id ? 'put' : 'post'}, $scope.post),
 			file: file,
-			fileFormDataName: key || ($scope.post.type === '图片' ? 'images[]' : 'file')
+			fileFormDataName: key || (!$scope.post.id && $scope.post.type === '图片' ? 'images[]' : 'file')
 		})
 //		.progress(function (evt) {
 //			var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);

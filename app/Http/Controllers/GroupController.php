@@ -142,7 +142,7 @@ class GroupController extends Controller {
 		
 		$group->save();
 		
-		return $group;
+		return $this->show($group);
 	}
 
 	/**
