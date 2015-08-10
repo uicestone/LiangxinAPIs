@@ -105,7 +105,7 @@ class UserController extends Controller {
 	{
 		$user->fill(Input::data());
 		
-		if(app()->user->role === 'app_admin')
+		if(app()->user && app()->user->role === 'app_admin')
 		{
 			if(Input::data('group') && $group = Group::find(Input::data('group')['id']))
 			{

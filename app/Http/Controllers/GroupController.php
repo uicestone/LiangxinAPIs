@@ -108,7 +108,7 @@ class GroupController extends Controller {
 	{	
 		$group->fill(Input::data());
 		
-		if(app()->user->role === 'app_admin')
+		if(app()->user && app()->user->role === 'app_admin')
 		{
 			if(Input::data('parent') && $parent = Group::find(Input::data('parent')['id']))
 			{

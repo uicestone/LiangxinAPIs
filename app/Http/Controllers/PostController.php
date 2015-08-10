@@ -157,7 +157,7 @@ class PostController extends Controller {
 				$post->addVisible(['url']);	
 			}
 			
-			if(in_array($post->type, ['横幅', '课堂', '视频', '活动']))
+			if(in_array($post->type, ['横幅', '课堂', '视频', '活动', '服务']))
 			{
 				$post->addVisible('poster');
 				
@@ -378,7 +378,7 @@ class PostController extends Controller {
 		
 		$post->fill(Input::data());
 		
-		if(app()->user->role === 'app_admin')
+		if(app()->user && app()->user->role === 'app_admin')
 		{
 			if(Input::data('author') && $user = User::find(Input::data('author')['id']))
 			{
