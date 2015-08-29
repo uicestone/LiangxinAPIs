@@ -86,7 +86,7 @@ class PostController extends Controller {
 		
 		$page = Input::query('page') ? Input::query('page') : 1;
 		
-		$per_page = Input::query('per_page') ? Input::query('per_page') : 10;
+		$per_page = Input::query('per_page') ? Input::query('per_page') : (Input::query('type') === '服务' ? false : 10);
 		
 		$list_total = $query->count();
 		
@@ -294,7 +294,6 @@ class PostController extends Controller {
 				return $item;
 			});
 			$post->articles = $post->articles;
-			$post->images = $post->images;
 			$post->has_due_date = $post->has_due_date;
 			$post->attended = $post->attended;
 		}
@@ -341,7 +340,7 @@ class PostController extends Controller {
 			$post->addVisible(['url']);
 		}
 		
-		if(in_array($post->type, ['活动', '课堂', '文章']))
+		if(in_array($post->type, ['活动', '课堂', '文章', '服务']))
 		{
 			$post->addVisible('images');
 			$post->images = $post->images;
