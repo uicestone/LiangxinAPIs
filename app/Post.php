@@ -156,10 +156,10 @@ class Post extends Model {
 	{
 		if(in_array($this->type, ['图片', '附件', '封面']) && $url && !(app()->user && app()->user->role === 'app_admin'))
 		{
-			return env('QINIU_HOST') . $url;
+			return wholeurlencode(env('QINIU_HOST') . $url);
 		}
 		
-		return $url;
+		return wholeurlencode($url);
 	}
 	
 	public function getExcerptAttribute($excerpt)

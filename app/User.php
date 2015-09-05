@@ -66,7 +66,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	
 	public function getAvatarAttribute($url)
 	{
-		return $url ? env('QINIU_HOST') . $url : $url;
+		return wholeurlencode($url ? env('QINIU_HOST') . $url : $url);
 	}
 	
 }
