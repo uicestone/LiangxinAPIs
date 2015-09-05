@@ -82,6 +82,8 @@ angular.module('liangxin.services', ['ngResource'])
 					config.alert.slow.id = Alert.add('仍在继续...');
 				}, 5000);
 				
+				config.headers['Liangxin-Request-From'] = 'admin';
+				
 				return config;
 			}
 			

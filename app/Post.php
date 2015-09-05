@@ -154,7 +154,7 @@ class Post extends Model {
 	
 	public function getUrlAttribute($url)
 	{
-		if(in_array($this->type, ['图片', '附件', '封面']) && $url && !(app()->user && app()->user->role === 'app_admin'))
+		if(in_array($this->type, ['图片', '附件', '封面']) && $url && !(\Request::header('Liangxin-Request-From') === 'admin' && app()->user && app()->user->role === 'app_admin'))
 		{
 			return wholeurlencode(env('QINIU_HOST') . $url);
 		}
