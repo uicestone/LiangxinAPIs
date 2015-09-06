@@ -692,7 +692,16 @@ class PostController extends Controller {
 			throw new Exception('不是活动发起人，无权批准活动参与者', 403);
 		}
 		
-		$post->attendees()->updateExistingPivot($user->id, ['status'=>Input::data('approved') ? 'approved' : 'rejected']);
+		if(Input::data('status'))
+		{
+			$status = Input::data('status');
+		}
+		else
+		{
+			$status = Input::data('approved') ? 'approved' : 'rejected';
+		}
+		
+		$post->attendees()->updateExistingPivot($user->id, ['status'=>$status]);
 		return ['success' => true];
 	}
 
