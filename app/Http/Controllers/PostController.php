@@ -335,7 +335,7 @@ class PostController extends Controller {
 			}
 		}
 
-		if(in_array($post->type, ['图片', '附件', '视频', '横幅']))
+		if(in_array($post->type, ['图片', '附件', '视频', '横幅', '活动']))
 		{
 			$post->addVisible(['url']);
 		}
