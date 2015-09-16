@@ -155,7 +155,7 @@ class Post extends Model {
 	public function getUrlAttribute($url)
 	{
 		
-		if($this->type === '活动')
+		if($this->type === '活动' && isset($this->poster))
 		{
 			return $this->poster->url;
 		}
