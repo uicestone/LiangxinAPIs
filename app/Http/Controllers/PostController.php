@@ -184,7 +184,7 @@ class PostController extends Controller {
 		// 对于图片类型，一个请求可以创建多个图片
 		if(Input::data('type') === '图片')
 		{
-			if(is_array(Input::data('images')) && Input::data('images')[0]  instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('images')[0]->isValid())
+			if(Input::data('images') && is_array(Input::data('images')) && Input::data('images')[0] instanceof \Symfony\Component\HttpFoundation\File\UploadedFile && Input::data('images')[0]->isValid())
 			{
 				$posts = new Collection;
 				
@@ -196,9 +196,13 @@ class PostController extends Controller {
 						throw new Exception('file extended name not resolved', 400);
 					}
 					
-					$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
+					\Log::info('上传了文件 ' . $file->getClientOriginalName());
+					
+					$file_store_name = md5($file->getClientOriginalName() . time() . rand(10000, 99999) . env('APP_KEY')) . '.' . $extension;
 					$file->move(public_path('images'), $file_store_name);
 
+					\Log::info('上传的文件被移至 ' . public_path('images') . '/' . $file_store_name);
+					
 					$file_post = new Post();
 
 					$file_post->fill([

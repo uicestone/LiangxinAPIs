@@ -294,7 +294,7 @@ class UserController extends Controller {
 			
 			if(!$user)
 			{
-				throw new Exception('用户名不存在', 401);
+				throw new Exception('用户名 ' . $mobile . ' 不存在', 401);
 			}
 			
 			if($user->contact !== $mobile)
