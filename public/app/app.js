@@ -146,6 +146,13 @@ angular.module('liangxin.users', []).controller('UserController', ['$scope', '$l
 	$scope.itemsStart = Number(headers['items-start']);
 	$scope.itemsEnd = Number(headers['items-end']);
 	
+	$scope.search = function(keyword){
+		keyword = keyword || null;
+		$location.search('keyword', keyword);
+	};
+	
+	$scope.queryArgs = $location.search();
+	
 	$scope.nextPage = function(){
 		$location.search('page', ++$scope.currentPage);
 	}
