@@ -555,7 +555,7 @@ class PostController extends Controller {
 			throw new Exception('用户没有登录，无法删除该文章', 401);
 		}
 
-		if(!$post->author || app()->user->id !== $post->author->id)
+		if(!app()->user->role == 'app_admin' && !($post->author && app()->user->id === $post->author->id))
 		{
 			throw new Exception('用户不是文章的作者，无权删除该文章', 403);
 		}
