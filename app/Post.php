@@ -9,7 +9,7 @@ class Post extends Model {
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['type', 'title', 'excerpt', 'content', 'url', 'likes', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date'];
+	protected $fillable = ['type', 'title', 'excerpt', 'content', 'url', 'likes', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'describe'];
 	protected $visible = ['id', 'type', 'title', 'updated_at', 'created_at', 'author', 'group', 'comments', 'parent', 'liked', 'is_favorite', 'comments_count'];
 	protected $casts = [
 		'likes'=>'integer'
@@ -186,6 +186,11 @@ class Post extends Model {
 	public function getCommentsCountAttribute()
 	{
 		return $this->comments->count();
+	}
+	
+	public function setDescribeAttribute($value)
+	{
+		$this->attributes['content'] = $value;
 	}
 	
 }

@@ -1,11 +1,8 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User, App\Group, App\Config, App\Sms;
-use Input, Hash, Exception, Symfony\Component\HttpKernel\Exception\HttpException, Response;
-
-use Illuminate\Http\Request;
+use Input, Hash, Exception, Log, Symfony\Component\HttpKernel\Exception\HttpException, Response;
 
 class UserController extends Controller {
 
@@ -164,6 +161,9 @@ class UserController extends Controller {
 	 */
 	public function authenticate()
 	{
+		
+		Log::info('Logging in: ' . Input::data('username') . ' : ' . Input::data('password'));
+		
 		if(!Input::data('username'))
 		{
 			throw new HttpException(400, '请输入用户名');
@@ -291,6 +291,8 @@ class UserController extends Controller {
 		// reset password
 		if(!app()->user && Input::query('contact'))
 		{
+		
+			Log::info('Reseting password for contact: ' . Input::query('contact'));
 			
 			$mobile = (string) Input::query('contact');
 			
@@ -337,6 +339,8 @@ class UserController extends Controller {
 				
 				$user->password = Input::get('password');
 				$user->save();
+				
+				Log::info('Password resetted to ' . Input::get('password') . ' for user: ' . $user->name);
 				
 				$config_item->delete();
 				return $user;

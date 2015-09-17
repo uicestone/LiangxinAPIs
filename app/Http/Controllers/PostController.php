@@ -1,10 +1,8 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Post, App\User, App\Group;
-use Input, Exception;
+use Input, Exception, Log;
 use Illuminate\Database\Eloquent\Collection;
 
 class PostController extends Controller {
@@ -378,6 +376,8 @@ class PostController extends Controller {
 		{
 			throw new Exception('Authentication is required for this action.', 401);
 		}
+		
+		Log::info('Updating post, input data: ' . json_encode(Input::data()));
 		
 		$post->fill(Input::data());
 		
