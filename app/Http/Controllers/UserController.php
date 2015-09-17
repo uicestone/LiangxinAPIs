@@ -115,6 +115,10 @@ class UserController extends Controller {
 			{
 				$user->department()->associate($department);
 			}
+			if(Input::data('password'))
+			{
+				$user->password = Input::data('password');
+			}
 		}
 		
 		if(Input::data('avatar') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile)
