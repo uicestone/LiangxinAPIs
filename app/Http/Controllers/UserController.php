@@ -197,12 +197,13 @@ class UserController extends Controller {
 		}
 		else
 		{
-			$token = Hash::make($user->name . $user->password . microtime(true));
-
-			$user->token = $token;
-
-			$user->save();
-
+			if(!$user->token)
+			{
+				$token = Hash::make($user->name . $user->password . microtime(true));
+				$user->token = $token;
+				$user->save();
+			}
+			
 			$user->addVisible('token');
 			$user->load('group');
 
