@@ -1,9 +1,10 @@
 <?php namespace App\Http\Controllers;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Database\Eloquent\Collection;
 use App\Http\Controllers\Controller;
 use App\Post, App\User, App\Group;
-use Input, Exception, Log;
-use Illuminate\Database\Eloquent\Collection;
+use Input, Log;
 
 class PostController extends Controller {
 
@@ -191,7 +192,7 @@ class PostController extends Controller {
 					$extension = $file->getClientOriginalExtension();
 					
 					if(!$extension){
-						throw new Exception('file extended name not resolved', 400);
+						throw new HttpException(400, 'file extended name not resolved');
 					}
 					
 					\Log::info('上传了文件 ' . $file->getClientOriginalName());
@@ -232,7 +233,7 @@ class PostController extends Controller {
 						
 						if(!$parent_post)
 						{
-							throw new Exception('Parent post id: ' . Input::data('parent_id') . ' not found', 400);
+							throw new HttpException(400, 'Parent post id: ' . Input::data('parent_id') . ' not found');
 						}
 
 						$file_post->parent()->associate($parent_post);
@@ -250,7 +251,7 @@ class PostController extends Controller {
 			}
 			else
 			{
-				throw new Exception('Invalid image file', 400);
+				throw new HttpException(400, 'Invalid image file');
 			}
 		}
 		
@@ -258,12 +259,12 @@ class PostController extends Controller {
 		
 		if(!Input::data('type'))
 		{
-			throw new Exception('请指定文章类型', 400);
+			throw new HttpException(400, '请指定文章类型');
 		}
 		
 		if(!Input::data('title'))
 		{
-			throw new Exception('请指定文章标题', 400);
+			throw new HttpException(400, '请指定文章标题');
 		}
 		
 		return $this->update($post);
@@ -374,7 +375,7 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('Authentication is required for this action.', 401);
+			throw new HttpException(401, '您需要登录后才能进行此操作');
 		}
 		
 		Log::info('Updating post, input data: ' . json_encode(Input::data()));
@@ -419,7 +420,7 @@ class PostController extends Controller {
 			
 			if(!$parent_post)
 			{
-				throw new Exception('Parent post id: ' . $parent_id . ' not found', 400);
+				throw new HttpException(400, 'Parent post id: ' . $parent_id . ' not found');
 			}
 			
 			$post->parent()->associate($parent_post);
@@ -466,7 +467,7 @@ class PostController extends Controller {
 			$extension = $file->getClientOriginalExtension();
 
 			if(!$extension){
-				throw new Exception('file extended name not resolved', 400);
+				throw new HttpException(400, 'file extended name not resolved');
 			}
 			
 			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
@@ -556,12 +557,12 @@ class PostController extends Controller {
 		
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法删除该文章', 401);
+			throw new HttpException(401, '用户没有登录，无法删除该文章');
 		}
 
 		if(!app()->user->role == 'app_admin' && !($post->author && app()->user->id === $post->author->id))
 		{
-			throw new Exception('用户不是文章的作者，无权删除该文章', 403);
+			throw new HttpException(403, '用户不是文章的作者，无权删除该文章');
 		}
 		
 		try{
@@ -571,7 +572,7 @@ class PostController extends Controller {
 		{
 			if($e->getCode() === '23000')
 			{
-				throw new Exception('该文章是其他文章的上级文章，无法删除', 400);
+				throw new HttpException(400, '该文章是其他文章的上级文章，无法删除');
 			}
 		}
 	}
@@ -580,12 +581,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法点赞该文章', 401);
+			throw new HttpException(401, '用户没有登录，无法点赞该文章');
 		}
 		
 		if($post->likedUsers->contains(app()->user->id))
 		{
-			throw new Exception('用户已经点赞该文章，无法重复点赞', 409);
+			throw new HttpException(409, '用户已经点赞该文章，无法重复点赞');
 		}
 
 		$post->likedUsers()->attach(app()->user);
@@ -600,12 +601,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法取消点赞该文章', 401);
+			throw new HttpException(401, '用户没有登录，无法取消点赞该文章');
 		}
 		
 		if(!$post->likedUsers->contains(app()->user->id))
 		{
-			throw new Exception('用户尚未点赞该文章，无法取消点赞', 409);
+			throw new HttpException(409, '用户尚未点赞该文章，无法取消点赞');
 		}
 		
 		$post->likedUsers()->detach(app()->user);
@@ -620,12 +621,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法收藏该文章', 401);
+			throw new HttpException(401, '用户没有登录，无法收藏该文章');
 		}
 		
 		if($post->favoredUsers->contains(app()->user->id))
 		{
-			throw new Exception('用户已经收藏该文章，无法重复收藏', 409);
+			throw new HttpException(409, '用户已经收藏该文章，无法重复收藏');
 		}
 		
 		$post->favoredUsers()->attach(app()->user);
@@ -637,12 +638,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法取消收藏该文章', 401);
+			throw new HttpException(401, '用户没有登录，无法取消收藏该文章');
 		}
 		
 		if(!$post->likedUsers->contains(app()->user->id))
 		{
-			throw new Exception('用户尚未收藏该文章，无法取消收藏', 409);
+			throw new HttpException(409, '用户尚未收藏该文章，无法取消收藏');
 		}
 		
 		$post->likedUsers()->detach(app()->user);
@@ -654,12 +655,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法参与该活动', 401);
+			throw new HttpException(401, '用户没有登录，无法参与该活动');
 		}
 		
 		if($event->attendees->contains(app()->user->id))
 		{
-			throw new Exception('用户已经参与该活动，无法重复参与', 409);
+			throw new HttpException(409, '用户已经参与该活动，无法重复参与');
 		}
 		
 		$event->attendees()->attach(app()->user, ['status'=>'pending']);
@@ -671,12 +672,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法取消参与该活动', 401);
+			throw new HttpException(401, '用户没有登录，无法取消参与该活动');
 		}
 		
 		if(!$event->attendees->contains(app()->user->id))
 		{
-			throw new Exception('用户尚未参与该活动，无法取消参与', 409);
+			throw new HttpException(409, '用户尚未参与该活动，无法取消参与');
 		}
 		
 		$event->attendees()->detach(app()->user);
@@ -688,12 +689,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new Exception('用户没有登录，无法批准活动参与者', 401);
+			throw new HttpException(401, '用户没有登录，无法批准活动参与者');
 		}
 		
 		if(app()->user->id !== $post->author->id)
 		{
-			throw new Exception('不是活动发起人，无权批准活动参与者', 403);
+			throw new HttpException(403, '不是活动发起人，无权批准活动参与者');
 		}
 		
 		if(Input::data('status'))
