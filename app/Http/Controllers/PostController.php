@@ -426,6 +426,8 @@ class PostController extends Controller {
 			$post->parent()->associate($parent_post);
 		}
 		
+		$post->save();
+		
 		// upload files and create child posts
 		foreach(['images', 'attachments'] as $file_type)
 		{
