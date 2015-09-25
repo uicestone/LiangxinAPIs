@@ -71,7 +71,8 @@ class UserController extends Controller {
 	 */
 	public function store()
 	{
-		//
+		$user = new User();
+		return $this->update($user);
 	}
 
 	/**
@@ -143,6 +144,8 @@ class UserController extends Controller {
 		}
 		
 		$user->save();
+		
+		return $this->show($user);
 	}
 
 	/**
