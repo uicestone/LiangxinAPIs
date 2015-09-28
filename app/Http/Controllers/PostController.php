@@ -472,8 +472,12 @@ class PostController extends Controller {
 				throw new HttpException(400, 'file extended name not resolved');
 			}
 			
-			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $extension;
+			\Log::info('上传了文件 ' . $file->getClientOriginalName());
+
+			$file_store_name = md5($file->getClientOriginalName() . time() . rand(10000, 99999) . env('APP_KEY')) . '.' . $extension;
 			$file->move(public_path($path), $file_store_name);
+
+			\Log::info('上传的文件被移至 ' . public_path($path) . '/' . $file_store_name);
 
 			$post->url = $path . '/' . $file_store_name;
 		}
@@ -483,8 +487,18 @@ class PostController extends Controller {
 			
 			$file = Input::data('poster');
 			
-			$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+			$extension = $file->getClientOriginalExtension();
+
+			if(!$extension){
+				throw new HttpException(400, 'file extended name not resolved');
+			}
+			
+			\Log::info('上传了文件 ' . $file->getClientOriginalName());
+
+			$file_store_name = md5($file->getClientOriginalName() . time() . rand(10000, 99999) . env('APP_KEY')) . '.' . $extension;
 			$file->move(public_path('images'), $file_store_name);
+
+			\Log::info('上传的文件被移至 ' . public_path('images') . '/' . $file_store_name);
 
 			if(!$post->poster)
 			{
