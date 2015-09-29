@@ -280,7 +280,7 @@ class PostController extends Controller {
 	{
 		$post->load('author', 'group', 'parent');
 		
-		if(in_array($post->type, ['文章', '服务']))
+		if(in_array($post->type, ['文章', '服务', '课堂']))
 		{
 			$post->addVisible('content');
 		}
