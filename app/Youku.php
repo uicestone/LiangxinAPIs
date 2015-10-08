@@ -21,7 +21,13 @@ class Youku {
 				return false;
 		}
 		//根据you vid 获取相应的视频地址
-		return self::_getYouku(trim($matches[1]));
+		try{
+			return self::_getYouku(trim($matches[1]));
+		}
+		catch(Exception $e)
+		{
+			return;
+		}
 	}
 
 	/**
