@@ -1,6 +1,7 @@
 /vendor
 /node_modules
 .env
+/.idea
 /nbproject/
 /public/images
 /public/packages
