@@ -233,7 +233,7 @@ class Youku {
 		if ($retval) {
 			$rs = json_decode($retval, true);
 			$brs = json_decode($bretval, true);
-			if (!empty($rs['data'][0]['error'])) {
+			if (empty($rs['data'][0]) || !empty($rs['data'][0]['error'])) {
 				return false;  //有错误返回false
 			}
 			$data = array();
