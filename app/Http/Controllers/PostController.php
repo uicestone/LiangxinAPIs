@@ -431,7 +431,7 @@ class PostController extends Controller {
 		// upload files and create child posts
 		foreach(['images', 'attachments'] as $file_type)
 		{
-			if(!Input::data($file_type) || !is_array(Input::data($file_type)) || !Input::data($file_type)[0]->isValid())
+			if(!Input::data($file_type) || !is_array(Input::data($file_type)) || is_array(Input::data($file_type)[0]) || !Input::data($file_type)[0]->isValid())
 			{
 				break;
 			}
