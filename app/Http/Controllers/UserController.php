@@ -117,6 +117,10 @@ class UserController extends Controller {
 			{
 				$user->password = Input::data('password');
 			}
+			if(!$user->contact)
+			{
+				$user->contact = null;
+			}
 		}
 		
 		if(Input::data('avatar') instanceof \Symfony\Component\HttpFoundation\File\UploadedFile)
