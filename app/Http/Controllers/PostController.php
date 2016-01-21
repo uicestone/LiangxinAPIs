@@ -438,7 +438,7 @@ class PostController extends Controller {
 			
 			foreach(Input::data($file_type) as $file)
 			{
-				$file_store_name = md5($file->getClientOriginalName() . time() . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
+				$file_store_name = md5($file->getClientOriginalName() . time() . rand(10000, 99999) . env('APP_KEY')) . '.' . $file->getClientOriginalExtension();
 				$file->move(public_path($file_type), $file_store_name);
 				
 				$file_post = new Post();
