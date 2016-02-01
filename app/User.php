@@ -66,7 +66,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	
 	public function getAvatarAttribute($url)
 	{
-		return wholeurlencode($url ? env('QINIU_HOST') . $url : $url);
+		if(preg_match('/^http:\/\/|^https:\/\//', $url))
+		{
+			return $url;
+		}
+
+		if($url && \Input::header('Liangxin-Request-From') !== 'admin')
+		{
+			return (env('QINIU_HOST') ? env('QINIU_HOST') : url() . '/') . $url;
+		}
+
+		return $url;
 	}
 	
 }
