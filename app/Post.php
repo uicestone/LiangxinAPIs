@@ -177,7 +177,7 @@ class Post extends Model {
 		
 		if(!$excerpt)
 		{
-			return str_limit($this->content, 140);
+			return str_limit($this->content, 64);
 		}
 		
 		return $excerpt;
