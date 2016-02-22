@@ -69,6 +69,11 @@ class Input extends \Illuminate\Support\Facades\Input {
 			{
 				$arg = explode(',', $arg);
 			}
+			elseif(strtolower($arg) === 'null')
+			{
+				$arg = null;
+			}
+
 		}
 		
 		return $arg;

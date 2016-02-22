@@ -90,6 +90,9 @@
 								<!-- /input-group -->
 							</li>
 							<li>
+								<a href="post?type=公告"><i class="fa fa-volume-off fa-fw"></i> 公告</a>
+							</li>
+							<li>
 								<a href="post?type=文章"><i class="fa fa-edit fa-fw"></i> 文章</a>
 							</li>
 							<li>

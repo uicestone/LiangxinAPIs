@@ -5,7 +5,7 @@
 			<div class="form-group">
 				<label class="control-label col-sm-2">类型</label>
 				<div class="col-sm-6">
-					<select class="form-control" ng-model="post.type" ng-options="type for type in ['文章', '课堂', '活动', '图片', '视频', '附件', '服务', '横幅']"></select>
+					<select class="form-control" ng-model="post.type" ng-options="type for type in ['公告', '文章', '课堂', '活动', '图片', '视频', '附件', '服务', '横幅']"></select>
 				</div>
 			</div>
 			<div class="form-group">
@@ -39,7 +39,7 @@
 					<textarea class="form-control" ng-model="post.excerpt"></textarea>
 				</div>
 			</div>
-			<div class="form-group" ng-show="post.type === '文章' || post.type === '活动' || post.type === '服务'">
+			<div class="form-group" ng-show="post.type === '文章' || post.type === '活动' || post.type === '服务' || post.type === '公告'">
 				<label class="control-label col-sm-2">内容</label>
 				<div class="col-sm-6">
 					<textarea class="form-control" rows="8" ng-model="post.content"></textarea>
@@ -91,7 +91,7 @@
 					<input type="text" class="form-control" ng-model="post.banner_position">
 				</div>
 			</div>
-			<div class="form-group" ng-show="post.type !== '课堂' && post.type !== '活动' && post.type !== '横幅'">
+			<div class="form-group" ng-show="post.type !== '课堂' && post.type !== '活动' && post.type !== '横幅' && post.type !== '公告'">
 				<label class="control-label col-sm-2">所属课堂 / 活动 / 文章</label>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" ng-model="post.parent" typeahead="post as post.title for post in searchPost($viewValue)">
