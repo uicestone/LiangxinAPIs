@@ -165,14 +165,21 @@ class Post extends Model {
 			return wholeurlencode(env('QINIU_HOST') . $url);
 		}
 		
-		return wholeurlencode($url);
+		return str_contains($url, '%') ? $url : wholeurlencode($url);
 	}
 	
 	public function getExcerptAttribute($excerpt)
 	{
 		if($this->type === '视频')
 		{
-			return json_decode($excerpt);
+			if(json_decode($excerpt))
+			{
+				return json_decode($excerpt);
+			}
+			else
+			{
+				return (object)['high'=>[$this->url], 'normal'=>[$this->url]];
+			}
 		}
 		
 		if(!$excerpt)
@@ -181,6 +188,15 @@ class Post extends Model {
 		}
 		
 		return $excerpt;
+	}
+
+	public function setExcerptAttribute($excerpt)
+	{
+		if(!is_string($excerpt))
+		{
+			$excerpt = json_encode($excerpt);
+		}
+		$this->attributes['excerpt'] = $excerpt;
 	}
 	
 	public function getCommentsCountAttribute()
