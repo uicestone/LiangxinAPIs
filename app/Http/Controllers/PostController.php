@@ -2,7 +2,6 @@
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Database\Eloquent\Collection;
-use App\Http\Controllers\Controller;
 use App\Post, App\User, App\Group;
 use Input, Log;
 
@@ -573,12 +572,12 @@ class PostController extends Controller {
 		
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法删除该文章');
+			throw new HttpException(401, '您没有登录，无法删除该文章');
 		}
 
 		if(!app()->user->role == 'app_admin' && !($post->author && app()->user->id === $post->author->id))
 		{
-			throw new HttpException(403, '用户不是文章的作者，无权删除该文章');
+			throw new HttpException(403, '您不是文章的作者，无权删除该文章');
 		}
 		
 		try{
@@ -597,12 +596,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法点赞该文章');
+			throw new HttpException(401, '您没有登录，无法点赞该文章');
 		}
 		
 		if($post->likedUsers->contains(app()->user->id))
 		{
-			throw new HttpException(409, '用户已经点赞该文章，无法重复点赞');
+			throw new HttpException(409, '您已经点赞该文章，无法重复点赞');
 		}
 
 		$post->likedUsers()->attach(app()->user);
@@ -617,12 +616,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法取消点赞该文章');
+			throw new HttpException(401, '您没有登录，无法取消点赞该文章');
 		}
 		
 		if(!$post->likedUsers->contains(app()->user->id))
 		{
-			throw new HttpException(409, '用户尚未点赞该文章，无法取消点赞');
+			throw new HttpException(409, '您尚未点赞该文章，无法取消点赞');
 		}
 		
 		$post->likedUsers()->detach(app()->user);
@@ -637,12 +636,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法收藏该文章');
+			throw new HttpException(401, '您没有登录，无法收藏该文章');
 		}
 		
 		if($post->favoredUsers->contains(app()->user->id))
 		{
-			throw new HttpException(409, '用户已经收藏该文章，无法重复收藏');
+			throw new HttpException(409, '您已经收藏该文章，无法重复收藏');
 		}
 		
 		$post->favoredUsers()->attach(app()->user);
@@ -654,12 +653,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法取消收藏该文章');
+			throw new HttpException(401, '您没有登录，无法取消收藏该文章');
 		}
 		
 		if(!$post->likedUsers->contains(app()->user->id))
 		{
-			throw new HttpException(409, '用户尚未收藏该文章，无法取消收藏');
+			throw new HttpException(409, '您尚未收藏该文章，无法取消收藏');
 		}
 		
 		$post->likedUsers()->detach(app()->user);
@@ -671,12 +670,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法参与该活动');
+			throw new HttpException(401, '您没有登录，无法参与该活动');
 		}
 		
 		if($event->attendees->contains(app()->user->id))
 		{
-			throw new HttpException(409, '用户已经参与该活动，无法重复参与');
+			throw new HttpException(409, '您已经参与该活动，无法重复参与');
 		}
 		
 		$event->attendees()->attach(app()->user, ['status'=>'pending']);
@@ -688,12 +687,12 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法取消参与该活动');
+			throw new HttpException(401, '您没有登录，无法取消参与该活动');
 		}
 		
 		if(!$event->attendees->contains(app()->user->id))
 		{
-			throw new HttpException(409, '用户尚未参与该活动，无法取消参与');
+			throw new HttpException(409, '您尚未参与该活动，无法取消参与');
 		}
 		
 		$event->attendees()->detach(app()->user);
@@ -705,7 +704,7 @@ class PostController extends Controller {
 	{
 		if(!app()->user)
 		{
-			throw new HttpException(401, '用户没有登录，无法批准活动参与者');
+			throw new HttpException(401, '您没有登录，无法批准活动参与者');
 		}
 		
 		if(app()->user->id !== $post->author->id)

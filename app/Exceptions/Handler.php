@@ -63,12 +63,15 @@ class Handler extends ExceptionHandler {
 	{
 		$status = $e->getStatusCode();
 
-		if (view()->exists("errors.{$status}"))
+		if(env('APP_DEBUG'))
 		{
-			return response()->view("errors.{$status}", ['message' => $e->getMessage()], $status);
+			return parent::renderHttpException($e);
+		}
+		else
+		{
+			return response(['code'=>$status, 'message'=>$e->getMessage()]);
 		}
 		
-		return parent::renderHttpException($e);
 	}
 
 }
