@@ -666,7 +666,7 @@ class PostController extends Controller {
 		return ['success' => true];
 	}
 
-	public function attend(Post $event)
+	public function attend(Post $event, $token = null)
 	{
 		if(!app()->user)
 		{
@@ -677,10 +677,19 @@ class PostController extends Controller {
 		{
 			throw new HttpException(409, '您已经参与该活动，无法重复参与');
 		}
-		
-		$event->attendees()->attach(app()->user, ['status'=>'pending']);
-		
-		return ['success' => true];
+
+		if(!is_null($token) && $event->meta && isset($event->meta->token) && $event->meta->token === $token)
+		{
+			$event->attendees()->attach(app()->user, ['status'=>'approved']);
+			$event->points = 10;
+			$event->addVisible('points');
+		}
+		else
+		{
+			$event->attendees()->attach(app()->user, ['status'=>'pending']);
+		}
+
+		return $event;
 	}
 	
 	public function unAttend(Post $event)

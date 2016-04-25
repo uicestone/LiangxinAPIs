@@ -28,7 +28,7 @@ Route::post('api/v1/auth/user', 'UserController@updateProfile');
 
 Route::post('api/v1/follow/{group}', 'GroupController@follow');
 Route::delete('api/v1/follow/{group}', 'GroupController@unFollow');
-Route::post('api/v1/attend/{post}', 'PostController@attend');
+Route::post('api/v1/attend/{post}/{token?}', 'PostController@attend');
 Route::delete('api/v1/attend/{post}', 'PostController@unAttend');
 Route::post('api/v1/like/{post}', 'PostController@like');
 Route::delete('api/v1/like/{post}', 'PostController@unLike');
