@@ -12,7 +12,8 @@ class Post extends Model {
 	protected $fillable = ['type', 'title', 'excerpt', 'content', 'url', 'likes', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'describe'];
 	protected $visible = ['id', 'type', 'title', 'updated_at', 'created_at', 'author', 'group', 'comments', 'parent', 'liked', 'is_favorite', 'comments_count'];
 	protected $casts = [
-		'likes'=>'integer'
+		'likes'=>'integer',
+		'meta'=>'object'
 	];
 
 	public function parent()
