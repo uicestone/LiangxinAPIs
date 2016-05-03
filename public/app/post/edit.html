@@ -1,53 +1,53 @@
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-9">
 		<br>
 		<form class="form form-horizontal" ng-submit="save(post)">
 			<div class="form-group">
 				<label class="control-label col-sm-2">类型</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<select class="form-control" ng-model="post.type" ng-options="type for type in ['公告', '文章', '课堂', '活动', '图片', '视频', '附件', '服务', '横幅']"></select>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2">标题</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.title">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type !== '图片' && post.type !== '封面'">
 				<label class="control-label col-sm-2">封面</label>
-				<div class="col-sm-6" ng-model="poster" ngf-drop ngf-select ngf-accept="'image/*'" ngf-drag-over-class="has-success">
+				<div class="col-sm-10" ng-model="poster" ngf-drop ngf-select ngf-accept="'image/*'" ngf-drag-over-class="has-success">
 					<img ng-show="post.poster" ng-src="../{{ post.poster.url }}" ngf-src="poster" style="max-width:100%">
 					<button ng-show="!post.poster" ng-model="poster" ngf-select ngf-accept="'image/*'" class="btn btn-default">上传</button>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2">作者</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.author" typeahead="author as author.name for author in searchUser($viewValue)" typeahead-template-url="../app/user/autocomplete.html">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2">群组</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.group" typeahead="group as group.name for group in searchGroup($viewValue)">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2">简介</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<textarea class="form-control" ng-model="post.excerpt"></textarea>
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '文章' || post.type === '活动' || post.type === '服务' || post.type === '公告'">
 				<label class="control-label col-sm-2">内容</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<textarea class="form-control" rows="8" ng-model="post.content"></textarea>
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '视频' || post.type === '图片' || post.type === '附件' || post.type === '横幅' || post.type === '封面'">
 				<label class="control-label col-sm-2">链接</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<div class="input-group">
 						<input type="text" ng-model="post.url" class="form-control">
 						<div class="input-group-addon" ngf-drop ng-model="file" ngf-drag-over-class="has-success"><button class="btn btn-default" ngf-select ng-model="file">上传</button></div>
@@ -57,43 +57,43 @@
 			</div>
 			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">活动日期</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.event_date">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">截止日期</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.due_date">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">活动地点</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.event_address">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '活动'">
 				<label class="control-label col-sm-2">活动类型</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.event_type">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '课堂' || post.type === '服务'">
 				<label class="control-label col-sm-2">课堂 / 服务类型</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.class_type">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type === '横幅'">
 				<label class="control-label col-sm-2">横幅位置</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.banner_position">
 				</div>
 			</div>
 			<div class="form-group" ng-show="post.type !== '课堂' && post.type !== '活动' && post.type !== '横幅' && post.type !== '公告'">
 				<label class="control-label col-sm-2">所属课堂 / 活动 / 文章</label>
-				<div class="col-sm-6">
+				<div class="col-sm-10">
 					<input type="text" class="form-control" ng-model="post.parent" typeahead="post as post.title for post in searchPost($viewValue)">
 				</div>
 			</div>
@@ -103,5 +103,12 @@
 				<button type="button" class="btn btn-danger" ng-click="remove(post)" ng-show="post.id">删除</button>
 			</div>
 		</form>
+	</div>
+	<div class="col-sm-3 form-horizontal form">
+		<br>
+		<div class="form-group">
+			<label class="control-label">签到二维码</label>
+			<img ng-src="{{ post.qrcode }}" style="width:100%" />
+		</div>
 	</div>
 </div>

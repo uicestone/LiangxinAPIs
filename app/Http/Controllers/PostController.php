@@ -286,26 +286,22 @@ class PostController extends Controller {
 		
 		if($post->type === '活动')
 		{
-			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status', 'articles', 'images']);
+			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status', 'articles', 'images', 'qrcode']);
 			$post->load('attendees');
 			$post->attendees->map(function($item)
 			{
 				$item->load('group');
 				$item->addVisible('attend_status');
-				$item->attend_status = $item->pivot->status;
+				$item->append('attend_status');
 				return $item;
 			});
-			$post->articles = $post->articles;
-			$post->has_due_date = $post->has_due_date;
-			$post->attended = $post->attended;
+			$post->append(['articles', 'has_due_date', 'attended', 'qrcode']);
 		}
 
 		if($post->type === '课堂')
 		{
 			$post->addVisible(['class_type', 'videos', 'articles', 'attachments']);
-			$post->videos = $post->videos;
-			$post->articles = $post->articles;
-			$post->attachments = $post->attachments;
+			$post->append(['videos', 'article', 'attachments']);
 		}
 
 		if($post->type === '横幅')
@@ -321,9 +317,7 @@ class PostController extends Controller {
 		if(in_array($post->type, ['课堂', '活动', '文章', '图片']))
 		{
 			$post->addVisible('likes');
-			$post->liked = $post->liked;
-			$post->is_favorite = $post->is_favorite;
-			$post->comments = $post->comments;
+			$post->append(['liked', 'is_favorite', 'comments']);
 		}
 
 		if(in_array($post->type, ['文章', '课堂', '活动', '视频', '横幅', '服务']))
@@ -345,7 +339,7 @@ class PostController extends Controller {
 		if(in_array($post->type, ['活动', '课堂', '文章', '服务']))
 		{
 			$post->addVisible('images');
-			$post->images = $post->images;
+			$post->append('images');
 		}
 		
 		if($post->type === '服务')

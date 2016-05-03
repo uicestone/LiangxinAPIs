@@ -1,15 +1,35 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use QrCode, Hash, File;
 
 class Post extends Model {
+
+	/**
+	 * Append attributes to query when building a query.
+	 *
+	 * @param  array|string  $attributes
+	 * @return $this
+	 */
+	public function append($attributes)
+	{
+		if (is_string($attributes)) {
+			$attributes = func_get_args();
+		}
+
+		$this->appends = array_unique(
+			array_merge($this->appends, $attributes)
+		);
+
+		return $this;
+	}
 
 	/**
 	 * The attributes that are mass assignable.
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['type', 'title', 'excerpt', 'content', 'url', 'likes', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'describe'];
+	protected $fillable = ['type', 'title', 'excerpt', 'meta', 'content', 'url', 'likes', 'event_date', 'event_address', 'event_type', 'class_type', 'banner_position', 'due_date', 'describe'];
 	protected $visible = ['id', 'type', 'title', 'updated_at', 'created_at', 'author', 'group', 'comments', 'parent', 'liked', 'is_favorite', 'comments_count'];
 	protected $casts = [
 		'likes'=>'integer',
@@ -143,7 +163,7 @@ class Post extends Model {
 			}
 		});
 		
-		$this->attend_status = $attend_status;
+		$this->append('attend_status');;
 		
 		return $attended;
 	}
@@ -208,6 +228,35 @@ class Post extends Model {
 	public function setDescribeAttribute($value)
 	{
 		$this->attributes['content'] = $value;
+	}
+	
+	public function getQrcodeAttribute()
+	{
+		if(!isset($this->meta->token))
+		{
+			$meta = $this->meta ? (array) $this->meta : [];
+			$meta['token'] = Hash::make($this->id . ' event_attend');
+			$this->meta = (object) $meta;
+			$this->save();
+		}
+
+		if(!File::exists(public_path('images/event_attend_qr_' . $this->id . '.png')))
+		{
+			Qrcode::format('png')->size(300)->margin(2)->generate('liangxin://attend/' . $this->id . '/' . $this->meta->token, public_path('images/event_attend_qr_' . $this->id . '.png'));
+		}
+		
+		return url('images/event_attend_qr_' . $this->id . '.png');
+		
+	}
+
+	public function getAttendStatusAttribute()
+	{
+		if(!isset($this->pivot))
+		{
+			return null;
+		}
+
+		return $this->pivot->status;
 	}
 	
 }

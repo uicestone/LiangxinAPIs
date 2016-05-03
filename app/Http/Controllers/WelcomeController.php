@@ -44,4 +44,5 @@ class WelcomeController extends Controller {
 	{
 		return view('login');
 	}
+	
 }

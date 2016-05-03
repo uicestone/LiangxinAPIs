@@ -40,7 +40,7 @@
 	"angular": "~1.*",
 	"angular-resource": "~1.*",
 	"angular-route": "~1.*",
-	"angular-bootstrap": "*",
+	"angular-bootstrap": "^0.13.0",
 	"ng-file-upload": "*"
   }
 }
