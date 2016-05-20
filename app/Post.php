@@ -205,7 +205,7 @@ class Post extends Model {
 		
 		if(!$excerpt)
 		{
-			return str_limit($this->content, 64);
+			return str_limit(strip_tags($this->content), 64);
 		}
 		
 		return $excerpt;

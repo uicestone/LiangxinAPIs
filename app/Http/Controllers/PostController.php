@@ -301,7 +301,7 @@ class PostController extends Controller {
 		if($post->type === '课堂')
 		{
 			$post->addVisible(['class_type', 'videos', 'articles', 'attachments']);
-			$post->append(['videos', 'article', 'attachments']);
+			$post->append(['videos', 'articles', 'attachments']);
 		}
 
 		if($post->type === '横幅')
