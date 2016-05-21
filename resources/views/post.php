@@ -25,6 +25,13 @@
 
 		section p{
 			margin: 10px 0;
+			font-size: 20px;
+			word-wrap: break-word;
+		}
+		
+		.title{
+			font-weight: bold;
+			font-size: 24px;
 		}
 
 		img{
@@ -34,10 +41,10 @@
 	</style>
 </head>
 <body>
-	<head>
+	<header>
 		<div class="title"><?=$post->title?></div>
-		<div class="desc"><?=$post->updated_at?>  <?=$post->author->name?></div>
-	</head>
+	</header>
+	<hr />
 	<section>
 		<?php foreach($post->images as $image){ ?>
 		<img src="<?=$image->url?>">
