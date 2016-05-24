@@ -6657,7 +6657,7 @@ footer#footer.footer-style-2 {
 }
 .score-sb ul,
 .score-criteria ul {
-  padding-bottom: ;
+  padding-bottom: auto;
 }
 .score-sb ul li,
 .score-criteria ul li {

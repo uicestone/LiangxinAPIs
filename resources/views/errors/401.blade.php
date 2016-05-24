@@ -25,8 +25,8 @@
 			display: inline-block;
 		}
 		.title {
-			font-size: 72px;
-			margin-bottom: 40px;
+			font-size: 20px;
+			margin: 40px;
 		}
 	</style>
 </head>
