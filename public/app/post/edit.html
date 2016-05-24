@@ -106,7 +106,7 @@
 	</div>
 	<div class="col-sm-3 form-horizontal form">
 		<br>
-		<div class="form-group">
+		<div class="form-group" ng-show="post.type === '活动'">
 			<label class="control-label">签到二维码</label>
 			<img ng-src="{{ post.qrcode }}" style="width:100%" />
 		</div>

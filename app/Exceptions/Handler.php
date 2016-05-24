@@ -42,14 +42,15 @@ class Handler extends ExceptionHandler {
 		{
 			if($this->isHttpException($e))
 			{
-				return response()->json(['message'=>$e->getMessage() ? $e->getMessage() : Response::$statusTexts[$e->getStatusCode()], 'code'=>$e->getStatusCode()], $e->getStatusCode());
+				return response()->json(['message'=>$e->getMessage() ? $e->getMessage() : Response::$statusTexts[$e->getStatusCode()], 'code'=>$e->getStatusCode()], $e->getStatusCode())
+					->setStatusCode($e->getStatusCode(), json_encode($e->getMessage()));
 			}
 			else
 			{
 				return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], $e->getCode());
 			}
 		}
-		
+
 		return parent::render($request, $e);
 	}
 

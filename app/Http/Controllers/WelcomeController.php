@@ -25,6 +25,18 @@ class WelcomeController extends Controller {
 		return view('welcome');
 	}
 	
+	public function quiz()
+	{
+		$user = app()->user;
+
+		if($user && $user->exists)
+		{
+			$token = $user->token;
+		}
+		
+		return view('quiz', compact('user', 'token'));
+	}
+	
 	public function creditPolicy()
 	{
 		return view('credit_policy', ['site_name'=>Config::where('key', 'site_name')->first()->value, 'credit_policy'=>Config::where('key', 'credit_policy')->first()->value]);

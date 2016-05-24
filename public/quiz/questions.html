@@ -1,0 +1,92 @@
+<!-- PAGE WRAP -->
+<div id="page-wrap">
+    
+    <div class="top-nav">
+
+        <h4 class="sm black bold">
+            新城党建 达人挑战赛
+            <small>第{{ quiz.round }}轮 {{ quiz.attempts}}/{{ quiz.attempts_allowed}}次</small>
+        </h4>
+
+        <ul class="top-nav-list">
+            <li class="pull-left" style="position:relative;z-index:0">
+                <a ng-show="quiz.score === null">时间: {{ timeLeft | date:'mm:ss' }}</a>
+                <a ng-show="quiz.score !== null">用时: {{ quiz.duration * 1000 | date:'mm:ss' }}</a>
+            </li>
+            <li class="prev-course" ng-show="currentQuestion > 0"><a ng-click="goToQuestion(currentQuestion - 1)"><i class="icon md-angle-left"></i><span class="tooltip">上一题</span></a></li>
+            <li class="next-course" ng-show="currentQuestion < quiz.questions.length - 1 && currentQuestion !== null"><a ng-click="goToQuestion(currentQuestion + 1)"><i class="icon md-angle-right"></i><span class="tooltip">下一题</span></a></li>
+            <li class="outline-learn" ng-class="{active:showingOutline}" ng-click="toggleOutline()">
+                <a href="#"><i class="icon md-list"></i></a>
+                <div class="list-item-body outline-learn-body">
+                    <div class="section-learn-outline">
+                        <h5 class="section-title">题目列表</h5>
+                        <ul class="section-list">
+                            <li ng-repeat="question in quiz.questions">
+                                <div class="list-body">
+                                    <a ng-click="goToQuestion($index)">
+                                        <h6>第{{ $index + 1 }}题</h6>
+                                        <p>{{ question.title}} </p>
+                                    </a>
+                                </div>
+                                <div class="download">
+                                    <a href="#"><i class="icon md-angle-right"></i></a>
+                                </div>
+                                <div class="div-x"><i class="icon md-check-2"></i></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        
+    </div>
+    <section id="quizz-intro-section" class="quizz-intro-section learn-section">
+        <div class="container">
+
+            <div class="question-content-wrap">
+                <div class="row">
+                    <div class="col-md-8" ng-show="currentQuestion !== null">
+                        <div class="question-content">
+                            <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选 {{ quiz.questions[currentQuestion].answer }}</h4>
+                            <p>{{ quiz.questions[currentQuestion].title }}</p>
+                            <div class="answer">
+                                <h4 class="sm">选项</h4>
+                                <ul class="answer-list">
+                                   <li ng-repeat="choice in quiz.questions[currentQuestion].choices">
+                                        <input type="radio" id="answer{{$index}}" ng-model="$parent.quiz.questions[currentQuestion].user_answer" ng-value="$index">
+                                        <label for="answer{{$index}}">
+                                            <i class="icon icon_radio"></i>
+                                            {{ choice }}
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <span ng-show="quiz.questions[currentQuestion].user_answer !== undefined && !submitting">
+                                <a class="mc-btn btn-style-6" ng-click="submit()">
+                                    <span ng-show="currentQuestion < quiz.questions.length - 1">提交, 下一题</span>
+                                    <span ng-show="currentQuestion === quiz.questions.length - 1">交卷</span>
+                                </a>
+                            </span>
+                            <span ng-show="submitting">
+                                提交中...
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <aside class="question-sidebar">
+                            <div class="score-sb">
+                                <h4 class="title-sb sm bold">总分<span>{{ quiz.score }}</span></h4>
+                                <ul>
+                                    <li ng-repeat="question in quiz.questions" ng-class="{active:$index===currentQuestion}"><i class="icon"></i>第{{$index+1}}题 <i class="fa" ng-class="{'fa-check':question.user_answer_correct===true,'fa-close':question.user_answer_correct===false}"></i></li>
+                                </ul>
+                            </div>
+                            <input type="submit" value="完成" class="submit mc-btn btn-style-1" ng-click="finish()">
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- END / PAGE WRAP -->

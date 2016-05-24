@@ -17,9 +17,11 @@ Route::get('login', 'WelcomeController@login');
 Route::post('login', 'UserController@authenticate');
 Route::get('logout', 'UserController@logout');
 
-Route::resource('api/v1/group', 'GroupController', ['except' => ['edit']]);
-Route::resource('api/v1/user', 'UserController', ['except' => ['edit']]);
-Route::resource('api/v1/post', 'PostController', ['except' => ['edit']]);
+Route::resource('api/v1/group', 'GroupController', ['except' => ['edit', 'create']]);
+Route::resource('api/v1/user', 'UserController', ['except' => ['edit', 'create']]);
+Route::resource('api/v1/post', 'PostController', ['except' => ['edit', 'create']]);
+Route::resource('api/v1/question', 'QuestionController', ['except' => ['edit', 'create']]);
+Route::resource('api/v1/quiz', 'QuizController', ['except' => ['edit', 'create']]);
 
 Route::delete('api/v1/post', 'PostController@destroy');
 
@@ -39,6 +41,9 @@ Route::post('api/v1/post/{post}/attendee/{user}', 'PostController@attendeeApprov
 Route::model('post', 'App\Post');
 Route::model('group', 'App\Group');
 Route::model('user', 'App\User');
+Route::model('question', 'App\Question');
+Route::model('quiz', 'App\Quiz');
 
 Route::get('post/{post}', 'PostController@display');
+Route::get('quizzes/{section?}', 'WelcomeController@quiz');
 Route::get('credit-policy', 'WelcomeController@creditPolicy');

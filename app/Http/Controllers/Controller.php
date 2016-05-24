@@ -14,8 +14,10 @@ abstract class Controller extends BaseController {
 	{
 		
 		app()->user = null;
-		
-		if(Input::header('Authorization') && $user = User::where('token', Input::header('Authorization'))->first())
+
+		$token = Input::header('Authorization') ?: Input::query('authorization');
+
+		if($token && $user = User::where('token', $token)->first())
 		{
 			app()->user = $user;
 
