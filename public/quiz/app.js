@@ -9,7 +9,7 @@ angular.module('liangxin-quiz', [
 ])
 .config(['$routeProvider', '$httpProvider', '$locationProvider', function($routeProvider, $httpProvider, $locationProvider) {
 	$routeProvider
-		.when('/', {
+		.when('/welcome', {
 			controller: 'WelcomeController',
 			templateUrl: '../quiz/welcome.html'
 		})
@@ -26,8 +26,7 @@ angular.module('liangxin-quiz', [
 		.when('/result', {
 			controller: 'ResultController',
 			templateUrl: '../quiz/result'
-		})
-		.otherwise({redirectTo: '/'});
+		});
 
 	$httpProvider.interceptors.push('HttpInterceptor');
 	$locationProvider.html5Mode(true);
