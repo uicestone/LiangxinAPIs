@@ -1,8 +1,9 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\User, App\Group, App\Config, App\Sms;
-use Input, Hash, Exception, Log, Symfony\Component\HttpKernel\Exception\HttpException, Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Commands\SendSms;
+use App\User, App\Group, App\Config;
+use Input, Hash, Exception, Log, Response, Queue;
 
 class UserController extends Controller {
 
@@ -244,7 +245,7 @@ class UserController extends Controller {
 						'value'=>json_encode(['expires_at'=>time() + 600])
 					]);
 
-					Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
+					Queue::push(new SendSms($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信'));
 				}
 				else
 				{
@@ -256,7 +257,7 @@ class UserController extends Controller {
 						throw new Exception('短信验证码错误', 401);
 					}
 
-					if(json_decode($config_item->value)->expires_at < time())
+					if($config_item->value->expires_at < time())
 					{
 						throw new Exception('短信验证码已过期', 401);
 					}
@@ -325,7 +326,7 @@ class UserController extends Controller {
 					'value'=>json_encode(['expires_at'=>time() + 600])
 				]);
 				
-				Sms::send($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信');
+				Queue::push(new SendSms($mobile, '【新城党群】您的验证码是' . $code . '。如非本人操作，请忽略本短信'));
 			}
 			elseif(Input::get('password'))
 			{
@@ -338,7 +339,7 @@ class UserController extends Controller {
 					throw new Exception('短信验证码错误', 401);
 				}
 				
-				if(json_decode($config_item->value)->expires_at < time())
+				if($config_item->value->expires_at < time())
 				{
 					throw new Exception('短信验证码已过期', 401);
 				}
