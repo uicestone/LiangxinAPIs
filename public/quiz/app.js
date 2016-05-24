@@ -40,6 +40,7 @@ angular.module('liangxin-quiz.controllers', [])
 	$scope.showingRules = false;
 	
 	$scope.showRule = function() {
+		document.body.scrollTop = 0;
 		$scope.showingRules = true;
 	};
 	$scope.startQuiz = function() {
@@ -49,6 +50,8 @@ angular.module('liangxin-quiz.controllers', [])
 
 .controller('QuestionsController', ['$scope', '$location', '$interval', 'quiz', function($scope, $location, $interval, quiz){
 
+	document.body.scrollTop = 0;
+	
 	$scope.quiz = quiz;
 	$scope.showingOutline = false;
 	$scope.currentQuestion = 0;
