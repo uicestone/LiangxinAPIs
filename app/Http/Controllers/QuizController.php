@@ -57,19 +57,31 @@ class QuizController extends Controller {
 
 		$round = Config::get('quiz_round');
 		$round_time_limit = Config::get('quiz_round_time_limit')->$round;
+		$round_attempt_limit = Config::get('quiz_round_attempt_limit')->$round;
 
 		// check if there's an unfinished quiz of this user
 		$quizzes_existed = Quiz::where('user_id', app()->user->id)->get();
 
 		foreach($quizzes_existed as $quiz_existed)
 		{
-			if(is_null($quiz_existed->score) && $quiz_existed->created_at->diffInSeconds(null, false) <= $round_time_limit)
+			if(is_null($quiz_existed->score))
 			{
-				$quiz_unfinished = $quiz_existed;
-				break;
+				if($quiz_existed->created_at->diffInSeconds(null, false) <= $round_time_limit)
+				{
+					$quiz_unfinished = $quiz_existed;
+					break;
+				}
+				
+				$quiz_existed->score = 0;
+				$quiz_existed->save();
 			}
 		}
-
+		
+		if($quizzes_existed->count() >= $round_attempt_limit)
+		{
+			return $this->show($quizzes_existed->last());
+		}
+		
 		if(isset($quiz_unfinished))
 		{
 			$quiz = $quiz_unfinished;

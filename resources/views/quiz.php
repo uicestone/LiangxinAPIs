@@ -16,7 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="<?=url('packages/bootstrap/dist/css/bootstrap.min.css')?>">
 		<link rel="stylesheet" type="text/css" href="<?=url('packages/font-awesome/css/font-awesome.min.css')?>">
 		<link rel="stylesheet" type="text/css" href="<?=url('css/md-font.css')?>">
-		<link rel="stylesheet" type="text/css" href="<?=url('css/quiz.css')?>">
+		<link rel="stylesheet" type="text/css" href="<?=url('css/quiz.css?v=2')?>">
 		
 		<script type="text/javascript" src="<?=url('packages/angular/angular.min.js')?>"></script>
 		<script type="text/javascript" src="<?=url('packages/angular-route/angular-route.min.js')?>"></script>

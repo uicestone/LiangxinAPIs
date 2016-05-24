@@ -14,14 +14,14 @@
                 <a ng-show="quiz.score !== null">用时: {{ quiz.duration * 1000 | date:'mm:ss' }}</a>
             </li>
             <li class="prev-course" ng-show="currentQuestion > 0"><a ng-click="goToQuestion(currentQuestion - 1)"><i class="icon md-angle-left"></i></a></li>
-            <li class="next-course" ng-show="currentQuestion < quiz.questions.length - 1 && currentQuestion !== null"><a ng-click="goToQuestion(currentQuestion + 1)"><i class="icon md-angle-right"></i></a></li>
+            <li class="next-course" ng-show="currentQuestion < quiz.questions.length - 1"><a ng-click="goToQuestion(currentQuestion + 1)"><i class="icon md-angle-right"></i></a></li>
             <li class="outline-learn" ng-class="{active:showingOutline}" ng-click="toggleOutline()">
                 <a href="#"><i class="icon md-list"></i></a>
                 <div class="list-item-body outline-learn-body">
                     <div class="section-learn-outline">
                         <h5 class="section-title">题目列表</h5>
                         <ul class="section-list">
-                            <li ng-repeat="question in quiz.questions">
+                            <li ng-repeat="question in quiz.questions" ng-class="{'o-view':question.user_answer_correct !== undefined}">
                                 <div class="list-body">
                                     <a ng-click="goToQuestion($index)">
                                         <h6>第{{ $index + 1 }}题</h6>
@@ -31,7 +31,8 @@
                                 <div class="download">
                                     <a href="#"><i class="icon md-angle-right"></i></a>
                                 </div>
-                                <div class="div-x"><i class="icon md-check-2"></i></div>
+                                <div class="div-x" ng-show="question.user_answer_correct !== false"><i class="icon md-check-2"></i></div>
+                                <div class="div-x wrong" ng-show="question.user_answer_correct === false"><i class="icon md-close-2"></i></div>
                             </li>
                         </ul>
                     </div>
@@ -45,30 +46,32 @@
 
             <div class="question-content-wrap">
                 <div class="row">
-                    <div class="col-md-8" ng-show="currentQuestion !== null">
+                    <div class="col-md-8">
                         <div class="question-content">
-                            <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选 {{ quiz.questions[currentQuestion].answer }}</h4>
-                            <p>{{ quiz.questions[currentQuestion].title }}</p>
-                            <h4 class="sm correct answer-hint" ng-show="quiz.questions[currentQuestion].user_answer_correct === true">正确</h4>
-                            <h4 class="sm wrong answer-hint" ng-show="quiz.questions[currentQuestion].user_answer_correct === false">错误, 答案为{{ quiz.questions[currentQuestion].answer }}</h4>
+                            <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选 {{ question.answer }}</h4>
+                            <p>{{ question.title }}</p>
+                            <h4 class="sm correct answer-hint" ng-show="question.user_answer_correct === true">正确</h4>
+                            <h4 class="sm wrong answer-hint" ng-show="question.user_answer_correct === false">错误, 答案为{{ question.answer }}</h4>
                             <div class="answer">
                                 <h4 class="sm">选项</h4>
                                 <ul class="answer-list">
-                                   <li ng-repeat="choice in quiz.questions[currentQuestion].choices">
-                                        <input type="radio" id="answer{{$index}}" ng-model="$parent.quiz.questions[currentQuestion].user_answer" ng-value="$index | choiceLabel">
+                                   <li ng-repeat="choice in question.choices">
+                                        <input type="radio" id="answer{{$index}}" ng-model="$parent.question.user_answer" ng-value="$index | choiceLabel" ng-disabled="question.user_answer_correct !== undefined">
                                         <label for="answer{{$index}}">
                                             <i class="icon icon_radio"></i>
-                                            {{ choice }}
+                                            {{ $index | choiceLabel }}. {{ choice }}
                                         </label>
                                     </li>
                                 </ul>
                             </div>
-                            <span ng-show="quiz.questions[currentQuestion].user_answer !== undefined && !submitting">
-                                <a class="mc-btn btn-style-6" ng-click="submit()" ng-show="quiz.questions[currentQuestion].user_answer_correct === undefined">提交</a>
-                                <a class="mc-btn btn-style-6" ng-click="goToQuestion(currentQuestion + 1)" ng-show="quiz.questions[currentQuestion].user_answer_correct !== undefined && currentQuestion < quiz.questions.length - 1">下一题</a>
-                                <a class="mc-btn btn-style-6" ng-click="finish()" ng-show="quiz.questions[currentQuestion].user_answer_correct !== undefined && currentQuestion === quiz.questions.length - 1">交卷</a>
+                            <span ng-show="quiz.score === null && question.user_answer !== undefined && !submitting">
+                                <a class="mc-btn btn-style-1" ng-click="submit()" ng-show="quiz.score === null && question.user_answer_correct === undefined">提交</a>
+                                <a class="mc-btn btn-style-6" ng-click="goToQuestion(currentQuestion + 1)" ng-show="question.user_answer_correct !== undefined && currentQuestion < quiz.questions.length - 1">下一题</a>
                             </span>
-                            <span ng-show="submitting">
+
+                            <a class="mc-btn btn-style-6" ng-click="scrollToScore()" ng-show="quiz.score !== null">查看结果</a>
+
+                            <span class="mc-btn" ng-show="submitting">
                                 提交中...
                             </span>
                         </div>
@@ -76,13 +79,14 @@
 
                     <div class="col-md-4">
                         <aside class="question-sidebar">
-                            <div class="score-sb">
-                                <h4 class="title-sb sm bold">总分<span>{{ quiz.score }}</span></h4>
+                            <div id="score-sb" class="score-sb">
+                                <h4 class="title-sb bold" ng-show="quiz.score > 0">本次通关成功</h4>
+                                <h4 class="title-sb fail bold" ng-show="quiz.score === 0">本次通关失败</h4>
+                                <h4 class="title-sb sm bold" ng-click="scrollToScore()">得分<span>{{ quiz.score }}</span></h4>
                                 <ul>
                                     <li ng-repeat="question in quiz.questions" ng-class="{active:$index===currentQuestion}"><i class="icon"></i>第{{$index+1}}题 <i class="fa" ng-class="{'fa-check':question.user_answer_correct===true,'fa-close':question.user_answer_correct===false}"></i></li>
                                 </ul>
                             </div>
-                            <input type="submit" value="完成" class="submit mc-btn btn-style-1" ng-click="finish()">
                         </aside>
                     </div>
                 </div>

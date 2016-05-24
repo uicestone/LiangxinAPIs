@@ -48,15 +48,16 @@ angular.module('liangxin-quiz.controllers', [])
 	}
 }])
 
-.controller('QuestionsController', ['$scope', '$location', '$interval', 'quiz', function($scope, $location, $interval, quiz){
+.controller('QuestionsController', ['$scope', '$location', '$interval', '$timeout', '$anchorScroll', 'quiz', function($scope, $location, $interval, $timeout, $anchorScroll, quiz){
 
 	document.body.scrollTop = 0;
 	
 	$scope.quiz = quiz;
 	$scope.showingOutline = false;
 	$scope.currentQuestion = 0;
+	$scope.question = $scope.quiz.questions[0];
 
-	$interval(function() {
+	var countdown = $interval(function() {
 		$scope.timeLeft = new Date(quiz.timeout_at) - new Date();
 	}, 1000);
 
@@ -66,6 +67,7 @@ angular.module('liangxin-quiz.controllers', [])
 
 	$scope.goToQuestion = function(index) {
 		$scope.currentQuestion = index;
+		$scope.question = $scope.quiz.questions[index];
 	};
 
 	$scope.submit = function() {
@@ -76,22 +78,29 @@ angular.module('liangxin-quiz.controllers', [])
 			finish: $scope.currentQuestion === $scope.quiz.questions.length - 1
 		}, function() {
 			$scope.submitting = false;
+			$scope.question = $scope.quiz.questions[$scope.currentQuestion];
+			
+			// 不是最后一题
 			if($scope.currentQuestion < $scope.quiz.questions.length - 1) {
 				// $scope.goToQuestion($scope.currentQuestion + 1);
 			}
 			else {
-				$scope.currentQuestion = null;
+				// $scope.currentQuestion = null;
+				$interval.cancel(countdown);
 			}
 		}, function(err) {
-			alert(err.data.message);
+			if(user.id == 1) {
+				alert(err.data.message);
+			}
 			$scope.submitting = false;
 		});
 	};
-
-	$scope.finish = function() {
-		$window.close();
-	};
 	
+	$scope.scrollToScore = function() {
+		$anchorScroll.yOffset = 95;
+		$anchorScroll('score-sb');
+	}
+
 }])
 
 .controller('ResultController', ['$scope', '$location', function($scope, $location){
