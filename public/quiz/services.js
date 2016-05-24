@@ -138,4 +138,11 @@ angular.module('liangxin-quiz.services', ['ngResource'])
 		items.splice(0, items.length);
 	}
 	
-}]);
+}])
+.filter('choiceLabel', function(){
+	var choiceLabel = ['A', 'B', 'C', 'D', 'E'];
+	return function(choiceIndex){
+		return  choiceLabel[choiceIndex];
+	};
+});
+

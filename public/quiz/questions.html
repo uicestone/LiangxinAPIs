@@ -13,8 +13,8 @@
                 <a ng-show="quiz.score === null">时间: {{ timeLeft | date:'mm:ss' }}</a>
                 <a ng-show="quiz.score !== null">用时: {{ quiz.duration * 1000 | date:'mm:ss' }}</a>
             </li>
-            <li class="prev-course" ng-show="currentQuestion > 0"><a ng-click="goToQuestion(currentQuestion - 1)"><i class="icon md-angle-left"></i><span class="tooltip">上一题</span></a></li>
-            <li class="next-course" ng-show="currentQuestion < quiz.questions.length - 1 && currentQuestion !== null"><a ng-click="goToQuestion(currentQuestion + 1)"><i class="icon md-angle-right"></i><span class="tooltip">下一题</span></a></li>
+            <li class="prev-course" ng-show="currentQuestion > 0"><a ng-click="goToQuestion(currentQuestion - 1)"><i class="icon md-angle-left"></i></a></li>
+            <li class="next-course" ng-show="currentQuestion < quiz.questions.length - 1 && currentQuestion !== null"><a ng-click="goToQuestion(currentQuestion + 1)"><i class="icon md-angle-right"></i></a></li>
             <li class="outline-learn" ng-class="{active:showingOutline}" ng-click="toggleOutline()">
                 <a href="#"><i class="icon md-list"></i></a>
                 <div class="list-item-body outline-learn-body">
@@ -49,11 +49,13 @@
                         <div class="question-content">
                             <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选 {{ quiz.questions[currentQuestion].answer }}</h4>
                             <p>{{ quiz.questions[currentQuestion].title }}</p>
+                            <h4 class="sm correct answer-hint" ng-show="quiz.questions[currentQuestion].user_answer_correct === true">正确</h4>
+                            <h4 class="sm wrong answer-hint" ng-show="quiz.questions[currentQuestion].user_answer_correct === false">错误, 答案为{{ quiz.questions[currentQuestion].answer }}</h4>
                             <div class="answer">
                                 <h4 class="sm">选项</h4>
                                 <ul class="answer-list">
                                    <li ng-repeat="choice in quiz.questions[currentQuestion].choices">
-                                        <input type="radio" id="answer{{$index}}" ng-model="$parent.quiz.questions[currentQuestion].user_answer" ng-value="$index">
+                                        <input type="radio" id="answer{{$index}}" ng-model="$parent.quiz.questions[currentQuestion].user_answer" ng-value="$index | choiceLabel">
                                         <label for="answer{{$index}}">
                                             <i class="icon icon_radio"></i>
                                             {{ choice }}
@@ -62,10 +64,9 @@
                                 </ul>
                             </div>
                             <span ng-show="quiz.questions[currentQuestion].user_answer !== undefined && !submitting">
-                                <a class="mc-btn btn-style-6" ng-click="submit()">
-                                    <span ng-show="currentQuestion < quiz.questions.length - 1">提交, 下一题</span>
-                                    <span ng-show="currentQuestion === quiz.questions.length - 1">交卷</span>
-                                </a>
+                                <a class="mc-btn btn-style-6" ng-click="submit()" ng-show="quiz.questions[currentQuestion].user_answer_correct === undefined">提交</a>
+                                <a class="mc-btn btn-style-6" ng-click="goToQuestion(currentQuestion + 1)" ng-show="quiz.questions[currentQuestion].user_answer_correct !== undefined && currentQuestion < quiz.questions.length - 1">下一题</a>
+                                <a class="mc-btn btn-style-6" ng-click="finish()" ng-show="quiz.questions[currentQuestion].user_answer_correct !== undefined && currentQuestion === quiz.questions.length - 1">交卷</a>
                             </span>
                             <span ng-show="submitting">
                                 提交中...

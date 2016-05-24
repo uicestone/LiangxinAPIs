@@ -6491,6 +6491,16 @@ footer#footer.footer-style-2 {
   color: #666;
   margin-left: 30px;
 }
+.question-content-wrap .question-content .answer-hint {
+  margin-bottom: -37px;
+  font-weight: bold;
+}
+.question-content-wrap .question-content .answer-hint.correct {
+  color: #8F8;
+}
+.question-content-wrap .question-content .answer-hint.wrong {
+  color: #F88;
+}
 .question-content-wrap .question-content .answer {
   margin-top: 45px;
 }

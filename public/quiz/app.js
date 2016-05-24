@@ -75,7 +75,7 @@ angular.module('liangxin-quiz.controllers', [])
 		}, function() {
 			$scope.submitting = false;
 			if($scope.currentQuestion < $scope.quiz.questions.length - 1) {
-				$scope.goToQuestion($scope.currentQuestion + 1);
+				// $scope.goToQuestion($scope.currentQuestion + 1);
 			}
 			else {
 				$scope.currentQuestion = null;
