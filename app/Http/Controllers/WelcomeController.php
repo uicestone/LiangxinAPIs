@@ -28,6 +28,12 @@ class WelcomeController extends Controller {
 	public function quiz()
 	{
 		$user = app()->user;
+		$token = null;
+
+		if(!$user || !$user->exists)
+		{
+			abort(401, '请返回，前往“我的账号”，登陆后再进入竞赛');
+		}
 
 		if($user && $user->exists)
 		{

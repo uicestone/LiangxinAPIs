@@ -38,20 +38,26 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
-		if(!env('APP_DEBUG') && Request::wantsJson())
+		if($this->isHttpException($e))
 		{
-			if($this->isHttpException($e))
+			return $this->renderHttpException($e);
+		}
+		else
+		{
+			if(config('app.debug'))
 			{
-				return response()->json(['message'=>$e->getMessage() ? $e->getMessage() : Response::$statusTexts[$e->getStatusCode()], 'code'=>$e->getStatusCode()], $e->getStatusCode())
-					->setStatusCode($e->getStatusCode(), json_encode($e->getMessage()));
+				return parent::render($request, $e);
 			}
 			else
 			{
-				return response()->json(['message'=>$e->getMessage(), 'code'=>$e->getCode()], $e->getCode());
+				$status = 503;
+				$message = '服务器好像出了一些问题';
+				return response(['message'=>$message, 'code'=>$status])
+					->setStatusCode($status, json_encode($message));
 			}
 		}
 
-		return parent::render($request, $e);
+
 	}
 
 	/**
@@ -63,14 +69,23 @@ class Handler extends ExceptionHandler {
 	protected function renderHttpException(HttpException $e)
 	{
 		$status = $e->getStatusCode();
+		$message = $e->getMessage() ? $e->getMessage() : Response::$statusTexts[$e->getStatusCode()];
 
-		if(env('APP_DEBUG'))
+		if(Request::wantsJson())
 		{
-			return parent::renderHttpException($e);
+			return response(['message'=>$message, 'code'=>$status])
+				->setStatusCode($status, json_encode($message));
 		}
 		else
 		{
-			return response(['code'=>$status, 'message'=>$e->getMessage()]);
+			if (view()->exists("errors.{$status}"))
+			{
+				return response()->view("errors.{$status}", ['code'=>$status, 'message'=>$message], $status);
+			}
+			else
+			{
+				return (new SymfonyDisplayer(config('app.debug')))->createResponse($e);
+			}
 		}
 		
 	}
