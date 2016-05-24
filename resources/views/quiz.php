@@ -17,8 +17,8 @@
 		<link rel="stylesheet" type="text/css" href="<?=url('packages/font-awesome/css/font-awesome.min.css')?>">
 		<link rel="stylesheet" type="text/css" href="<?=url('css/md-font.css')?>">
 		<link rel="stylesheet" type="text/css" href="<?=url('css/quiz.css')?>">
-
-		<script type="text/javascript" src="<?=url('packages/angular/angular.js')?>"></script>
+		
+		<script type="text/javascript" src="<?=url('packages/angular/angular.min.js')?>"></script>
 		<script type="text/javascript" src="<?=url('packages/angular-route/angular-route.min.js')?>"></script>
 		<script type="text/javascript" src="<?=url('packages/angular-resource/angular-resource.min.js')?>"></script>
 		<script type="text/javascript" src="<?=url('packages/angular-bootstrap/ui-bootstrap-tpls.min.js')?>"></script>
@@ -29,8 +29,13 @@
 
 		<script type="text/javascript">
 			var user = <?=json_encode($user)?>;
-
-			if(user) {
+			var token = '<?=$token?>';
+			
+			if(user.id == 1) {
+				window.onerror = function(err){alert(JSON.stringify(err))};
+			}
+			
+			if(user && localStorage) {
 				localStorage.setItem('user', '<?=$user?>');
 				localStorage.setItem('token', '<?=$token?>');
 			}

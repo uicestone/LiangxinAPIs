@@ -64,7 +64,7 @@ angular.module('liangxin-quiz.services', ['ngResource'])
 				}, 5000);
 
 				config.headers['Xinxin-Request-From'] = 'admin';
-				config.headers['Authorization'] = localStorage.getItem('token');
+				config.headers['Authorization'] = token || (localStorage && localStorage.getItem('token'));
 
 				return config;
 			}
