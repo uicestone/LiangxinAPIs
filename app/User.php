@@ -73,7 +73,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 		if($url && \Input::header('Liangxin-Request-From') !== 'admin')
 		{
-			return (env('QINIU_HOST') ? env('QINIU_HOST') : url() . '/') . $url;
+			return (env('CDN_PREFIX') ? env('CDN_PREFIX') : url() . '/') . $url;
 		}
 
 		return $url;

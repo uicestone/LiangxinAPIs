@@ -183,7 +183,7 @@ class Post extends Model {
 		
 		if(in_array($this->type, ['图片', '附件', '封面']) && $url && !(\Request::header('Liangxin-Request-From') === 'admin' && app()->user && app()->user->role === 'app_admin'))
 		{
-			return wholeurlencode(env('QINIU_HOST') . $url);
+			return wholeurlencode(env('CDN_PREFIX') . $url);
 		}
 		
 		return str_contains($url, '%') ? $url : wholeurlencode($url);

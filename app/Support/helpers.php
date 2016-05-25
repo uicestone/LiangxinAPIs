@@ -7,4 +7,16 @@ function wholeurlencode($url)
 	}, $url);
 }
 
+function resource_url($path)
+{
+	if(env('APP_ENV') === 'local' || !env('CDN_PREFIX'))
+	{
+		return url($path);
+	}
+	else
+	{
+		return (env('CDN_PREFIX_SSL') ? env('CDN_PREFIX_SSL') : env('CDN_PREFIX')) . preg_replace('/^\//', '', $path);
+	}
+}
+
 ?>
