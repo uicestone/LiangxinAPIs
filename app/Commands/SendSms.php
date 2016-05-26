@@ -4,7 +4,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
-use Buzz, Log;
+use App\Sms;
 
 class SendSms extends Command implements SelfHandling, ShouldBeQueued {
 
@@ -31,16 +31,17 @@ class SendSms extends Command implements SelfHandling, ShouldBeQueued {
 	 */
 	public function handle()
 	{
-		Log::info('Sending SMS to ' . $this->mobile . ', content: ' . $this->text);
-
-		$client = new Buzz\Browser();
-
-		$client->post('http://yunpian.com/v1/sms/send.json', [], http_build_query([
-			'apikey'=>env('YUNPIAN_APIKEY'),
-			'mobile'=>$this->mobile,
-			'text'=>$this->text
-		]));
-
+		if(is_array($this->mobile))
+		{
+			foreach(array_chunk($this->mobile, 500) as $mobiles)
+			{
+				Sms::send(implode($mobiles), $this->text);
+			}
+		}
+		else
+		{
+			Sms::send($this->mobile, $this->text);
+		}
 	}
 
 }

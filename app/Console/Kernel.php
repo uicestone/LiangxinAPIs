@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel {
 		'App\Console\Commands\Inspire',
 		'App\Console\Commands\CreateImagePosts',
 		'App\Console\Commands\ParseVideoUrl',
+		'App\Console\Commands\SmsSend',
 	];
 
 	/**

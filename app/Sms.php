@@ -6,6 +6,19 @@ class Sms {
 	
 	public static function send($mobile, $text)
 	{
+		if(is_array($mobile))
+		{
+			$results = [];
+			
+			foreach(array_chunk($mobile, 500) as $mobiles)
+			{
+				$response = self::send(implode(',', $mobiles), $text);
+				$results[] = $response;
+			}
+			
+			return $results;
+		}
+		
 		Log::info('Sending SMS to ' . $mobile . ', content: ' . $text);
 		
 		$client = new Buzz\Browser();
@@ -16,7 +29,7 @@ class Sms {
 			'text'=>$text
 		]));
 		
-		return $response;
+		return json_decode($response->getContent());
 	}
 	
 }
