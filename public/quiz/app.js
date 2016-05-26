@@ -54,6 +54,7 @@ angular.module('liangxin-quiz.controllers', [])
 	
 	$scope.quiz = quiz;
 	$scope.showingOutline = false;
+	$scope.bridgeAvailable = Boolean(window.Bridge);
 	$scope.currentQuestion = 0;
 	$scope.question = $scope.quiz.questions[0];
 
@@ -99,6 +100,10 @@ angular.module('liangxin-quiz.controllers', [])
 	$scope.scrollToScore = function() {
 		$anchorScroll.yOffset = 95;
 		$anchorScroll('score-sb');
+	};
+	
+	$scope.close = function() {
+		Bridge.exec('closeWindow');
 	}
 
 }])
