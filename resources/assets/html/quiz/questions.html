@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="question-content">
-                            <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选 {{ question.answer }}</h4>
+                            <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选</h4>
                             <p>{{ question.title }}</p>
                             <h4 class="sm correct answer-hint" ng-show="question.user_answer_correct === true">正确</h4>
                             <h4 class="sm wrong answer-hint" ng-show="question.user_answer_correct === false">错误, 答案为{{ question.answer }}</h4>
@@ -87,7 +87,7 @@
                                     <li ng-repeat="question in quiz.questions" ng-class="{active:$index===currentQuestion}"><i class="icon"></i>第{{$index+1}}题 <i class="fa" ng-class="{'fa-check':question.user_answer_correct===true,'fa-close':question.user_answer_correct===false}"></i></li>
                                 </ul>
                             </div>
-                            <button type="button"class="submit mc-btn btn-style-1" ng-click="close()" ng-show="bridgeAvailable">完成</button>
+                            <button type="button"class="submit mc-btn btn-style-1" ng-click="close()" ng-show="shouldShowCloseButton">完成</button>
                         </aside>
                     </div>
                 </div>

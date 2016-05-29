@@ -48,15 +48,15 @@ angular.module('liangxin-quiz.controllers', [])
 	}
 }])
 
-.controller('QuestionsController', ['$scope', '$location', '$interval', '$timeout', '$anchorScroll', 'quiz', function($scope, $location, $interval, $timeout, $anchorScroll, quiz){
+.controller('QuestionsController', ['$scope', '$location', '$interval', '$timeout', '$anchorScroll', 'quiz', 'Bridge', function($scope, $location, $interval, $timeout, $anchorScroll, quiz, Bridge){
 
 	document.body.scrollTop = 0;
 	
 	$scope.quiz = quiz;
 	$scope.showingOutline = false;
-	$scope.bridgeAvailable = Boolean(window.Bridge);
 	$scope.currentQuestion = 0;
 	$scope.question = $scope.quiz.questions[0];
+	$scope.shouldShowCloseButton = userAgent === 'iOS app';
 
 	var countdown = $interval(function() {
 		$scope.timeLeft = new Date(quiz.timeout_at) - new Date();

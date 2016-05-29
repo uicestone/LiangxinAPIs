@@ -13,23 +13,13 @@
 		<link href='http://fonts.useso.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.useso.com/css?family=Raleway:300,400,700,900' rel='stylesheet' type='text/css'>
 		<!-- Css -->
-		<link rel="stylesheet" type="text/css" href="<?=resource_url('packages/bootstrap/dist/css/bootstrap.min.css')?>">
-		<link rel="stylesheet" type="text/css" href="<?=resource_url('packages/font-awesome/css/font-awesome.min.css')?>">
-		<link rel="stylesheet" type="text/css" href="<?=resource_url('css/md-font.css')?>">
-		<link rel="stylesheet" type="text/css" href="<?=resource_url('css/quiz.css?v=2')?>">
-		
-		<script type="text/javascript" src="<?=resource_url('packages/angular/angular.min.js')?>"></script>
-		<script type="text/javascript" src="<?=resource_url('packages/angular-route/angular-route.min.js')?>"></script>
-		<script type="text/javascript" src="<?=resource_url('packages/angular-resource/angular-resource.min.js')?>"></script>
-		<script type="text/javascript" src="<?=resource_url('packages/angular-bootstrap/ui-bootstrap-tpls.min.js')?>"></script>
-		<script type="text/javascript" src="<?=resource_url('packages/ng-file-upload/ng-file-upload.min.js')?>"></script>
-		
-		<script type="text/javascript" src="<?=resource_url('quiz/services.js')?>"></script>
-		<script type="text/javascript" src="<?=resource_url('quiz/app.js')?>"></script>
+		<link rel="stylesheet" type="text/css" href="<?=resource_url(elixir('assets/css/quiz.css'))?>">
+		<script type="text/javascript" src="<?=resource_url(elixir('assets/js/quiz.js'))?>"></script>
 
 		<script type="text/javascript">
 			var user = <?=json_encode($user)?>;
 			var token = '<?=$token?>';
+			var userAgent = '<?=app()->user_agent?>';
 			
 			if(user.id == 1) {
 				window.onerror = function(err){alert(JSON.stringify(err))};
