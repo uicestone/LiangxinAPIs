@@ -11,11 +11,11 @@ angular.module('liangxin-quiz', [
 	$routeProvider
 		.when('/welcome', {
 			controller: 'WelcomeController',
-			templateUrl: '../quiz/welcome.html'
+			templateUrl: '../assets/html/quiz/welcome.html'
 		})
 		.when('/questions', {
 			controller: 'QuestionsController',
-			templateUrl: '../quiz/questions.html',
+			templateUrl: '../assets/html/quiz/questions.html',
 			resolve: {
 				quiz: ['Quiz', function(Quiz){
 					var quiz = new Quiz();
