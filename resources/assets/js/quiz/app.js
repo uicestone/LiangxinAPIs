@@ -65,11 +65,17 @@ angular.module('liangxin-quiz.controllers', [])
 	$scope.finishedAll = quizzes.length === quiz.attempts_limit;
 	
 	$scope.quizzes = quizzes;
-
-	var countdown = $interval(function() {
-		$scope.timeLeft = new Date(quiz.timeout_at) - new Date();
-	}, 1000);
-
+	
+	if(new Date(quiz.timeout_at) > new Date() || $scope.quiz.score === null) {
+		$scope.countdown = $interval(function() {
+			$scope.timeLeft = new Date(quiz.timeout_at) - new Date();
+			if($scope.timeLeft < 0) {
+				$interval.cancel($scope.countdown);
+				$route.reload();
+			}
+		}, 1000);
+	}
+	
 	$scope.toggleOutline = function() {
 		$scope.showingOutline = !$scope.showingOutline;
 	};
@@ -95,7 +101,7 @@ angular.module('liangxin-quiz.controllers', [])
 			}
 			else {
 				// $scope.currentQuestion = null;
-				$interval.cancel(countdown);
+				$interval.cancel($scope.countdown);
 			}
 		}, function(err) {
 			if(user.id == 1) {
