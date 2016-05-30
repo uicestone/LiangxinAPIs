@@ -45,5 +45,5 @@ Route::model('question', 'App\Question');
 Route::model('quiz', 'App\Quiz');
 
 Route::get('post/{post}', 'PostController@display');
-Route::get('quizzes/{section?}', 'WelcomeController@quiz');
+Route::get('quizzes/{section?}/{id?}', 'WelcomeController@quiz');
 Route::get('credit-policy', 'WelcomeController@creditPolicy');

@@ -82,12 +82,25 @@
                             <div id="score-sb" class="score-sb">
                                 <h4 class="title-sb bold" ng-show="quiz.score > 0">本次通关成功</h4>
                                 <h4 class="title-sb fail bold" ng-show="quiz.score === 0">本次通关失败</h4>
-                                <h4 class="title-sb sm bold" ng-click="scrollToScore()">得分<span>{{ quiz.score }}</span></h4>
+                                <div>
+                                    <h4 class="title-sb sm bold" ng-click="scrollToScore()">
+                                        <a>第{{ quiz.round }}轮 第{{ quiz.attempts }}次</a>
+                                        <span ng-show="quiz.score !== null">得分 {{ quiz.score }}</span>
+                                        <span ng-show="quiz.score === null">正在答题...</span>
+                                    </h4>
+                                </div>
                                 <ul>
                                     <li ng-repeat="question in quiz.questions" ng-class="{active:$index===currentQuestion}"><i class="icon"></i>第{{$index+1}}题 <i class="fa" ng-class="{'fa-check':question.user_answer_correct===true,'fa-close':question.user_answer_correct===false}"></i></li>
                                 </ul>
+                                <div ng-repeat="historyQuiz in quizzes" ng-show="historyQuiz.id !== quiz.id && historyQuiz.score !== null">
+                                    <h4 class="title-sb sm bold" ng-click="scrollToScore();showQuiz(historyQuiz.id)">
+                                        <a>第{{ historyQuiz.round }}轮 第{{ historyQuiz.attempts }}次</a>
+                                        <span>得分 {{ historyQuiz.score }}</span>
+                                    </h4>
+                                </div>
                             </div>
-                            <button type="button"class="submit mc-btn btn-style-1" ng-click="close()" ng-show="shouldShowCloseButton">完成</button>
+                            <button type="button" class="submit mc-btn btn-style-1" ng-click="close()" ng-show="shouldShowCloseButton && finishedAll">完成</button>
+                            <button type="button" class="submit mc-btn btn-style-1" ng-click="continue()" ng-show="!finishedAll && quiz.score !== null">继续答题</button>
                         </aside>
                     </div>
                 </div>

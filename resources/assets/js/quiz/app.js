@@ -13,13 +13,20 @@ angular.module('liangxin-quiz', [
 			controller: 'WelcomeController',
 			templateUrl: '../assets/html/quiz/welcome.html'
 		})
-		.when('/questions', {
+		.when('/questions/:quizId?', {
 			controller: 'QuestionsController',
 			templateUrl: '../assets/html/quiz/questions.html',
 			resolve: {
-				quiz: ['Quiz', function(Quiz){
-					var quiz = new Quiz();
-					return quiz.$save();
+				quiz: ['$route', 'Quiz', function($route, Quiz) {
+					if($route.current.params.quizId) {
+						return Quiz.get({id: $route.current.params.quizId}).$promise;
+					} else {
+						var quiz = new Quiz();
+						return quiz.$save();
+					}
+				}],
+				quizzes: ['Quiz', function(Quiz) {
+					return Quiz.query().$promise;
 				}]
 			}
 		})
@@ -48,15 +55,16 @@ angular.module('liangxin-quiz.controllers', [])
 	}
 }])
 
-.controller('QuestionsController', ['$scope', '$location', '$interval', '$timeout', '$anchorScroll', 'quiz', 'Bridge', function($scope, $location, $interval, $timeout, $anchorScroll, quiz, Bridge){
+.controller('QuestionsController', ['$scope', '$location', '$route', '$interval', '$timeout', '$anchorScroll', 'quiz', 'quizzes', 'Bridge', function($scope, $location, $route, $interval, $timeout, $anchorScroll, quiz, quizzes, Bridge){
 
-	document.body.scrollTop = 0;
-	
 	$scope.quiz = quiz;
 	$scope.showingOutline = false;
 	$scope.currentQuestion = 0;
 	$scope.question = $scope.quiz.questions[0];
 	$scope.shouldShowCloseButton = userAgent === 'iOS app';
+	$scope.finishedAll = quizzes.length === quiz.attempts_limit;
+	
+	$scope.quizzes = quizzes;
 
 	var countdown = $interval(function() {
 		$scope.timeLeft = new Date(quiz.timeout_at) - new Date();
@@ -97,13 +105,36 @@ angular.module('liangxin-quiz.controllers', [])
 		});
 	};
 	
-	$scope.scrollToScore = function() {
-		$anchorScroll.yOffset = 95;
-		$anchorScroll('score-sb');
+	$scope.continue = function() {
+		if($location.path() === '/questions') {
+			$route.reload();
+		}
+
+		$location.path('questions');
 	};
 	
+	$scope.scrollToScore = function() {
+		$timeout(function() {
+			$anchorScroll.yOffset = 95;
+			$anchorScroll('score-sb');
+		});
+	};
+
 	$scope.close = function() {
 		Bridge.exec('closeWindow');
+		$timeout(function() {
+			alert('本次结果已经保存, 如果页面没有关闭, 请手动退出');
+		}, 3000);
+	};
+
+	$scope.showQuiz = function(id) {
+		$location.path('questions/' + id);
+	};
+
+	if($scope.quiz.score === null) {
+		document.body.scrollTop = 0;
+	} else {
+		$scope.scrollToScore();
 	}
 
 }])
