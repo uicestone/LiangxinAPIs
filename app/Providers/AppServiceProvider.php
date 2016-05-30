@@ -1,7 +1,7 @@
 <?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Input;
+use Input, Log;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -22,20 +22,27 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->app->singleton('from_admin', function()
+		{
+			return Input::header('Liangxin-Request-From') === 'admin' || app()->runningInConsole();
+		});
+		
 		$this->app->singleton('user_agent', function()
 		{
-			if(str_contains(' iOS ', Input::server('HTTP_USER_AGENT')))
+			if(str_contains(Input::server('HTTP_USER_AGENT'), 'iPhone'))
 			{
-				return 'iOS app';
+				$ua = 'iOS app';
 			}
-			elseif(str_contains(' Android ', Input::server('HTTP_USER_AGENT')))
+			elseif(str_contains(Input::server('HTTP_USER_AGENT'), 'Android'))
 			{
-				return 'Android app';
+				$ua = 'Android app';
 			}
 			else
 			{
-				return 'browser';
+				$ua = 'browser';
 			}
+			
+			return $ua;
 		});
 	}
 
