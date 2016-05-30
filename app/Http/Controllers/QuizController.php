@@ -17,6 +17,23 @@ class QuizController extends Controller {
 	{
 		$query = Quiz::query();
 		
+		if(!app()->user)
+		{
+			abort(401, '登陆后才能查看竞赛记录');
+		}
+		
+		if(!app()->from_admin || !app()->user->is_admin)
+		{
+			$query->where('user_id', app()->user->id);
+		}
+		
+		if(!Input::query('round'))
+		{
+			$query->ofCurrentRound();
+		}
+		
+		$query->orderBy('created_at', 'desc');
+		
 		$page = Input::query('page') ? Input::query('page') : 1;
 		
 		$per_page = Input::query('per_page') ? Input::query('per_page') : false;
@@ -38,7 +55,11 @@ class QuizController extends Controller {
 			$list_start = 1; $list_end = $list_total;
 		}
 		
-		$results = $query->get();
+		$results = $query->get()->map(function(Quiz $quiz)
+		{
+			$quiz->setAppends(['timeout_at', 'attempts', 'attempts_allowed']);
+			return $quiz;
+		});
 		
 		return response($results)->header('Items-Total', $list_total)->header('Items-Start', $list_start)->header('Items-End', $list_end);
 	}
@@ -55,12 +76,23 @@ class QuizController extends Controller {
 			abort(401, '需要登录后才能参与竞赛');
 		}
 
-		$round = Config::get('quiz_round');
+		$round = 1;
+		
+		foreach(Config::get('quiz_round_date') as $index => $date)
+		{
+			if(time() < strtotime($date))
+			{
+				break;
+			}
+			
+			$round = $index + 1;
+		}
+		
 		$round_time_limit = Config::get('quiz_round_time_limit')->$round;
 		$round_attempt_limit = Config::get('quiz_round_attempt_limit')->$round;
 
 		// check if there's an unfinished quiz of this user
-		$quizzes_existed = Quiz::where('user_id', app()->user->id)->get();
+		$quizzes_existed = Quiz::where('user_id', app()->user->id)->ofCurrentRound()->get();
 
 		foreach($quizzes_existed as $quiz_existed)
 		{

@@ -29,7 +29,9 @@ class Quiz extends Model {
 	
 	public function getAttemptsAttribute()
 	{
-		$attempts = Quiz::where('user_id', app()->user->id)->where('id', '!=', $this->id)->count();
+		$quiz_round_date = Config::get('quiz_round_date');
+		$round_start_date = $quiz_round_date[$this->round - 1];
+		$attempts = Quiz::where('user_id', app()->user->id)->where('round', $this->round)->where('id', '!=', $this->id)->where('created_at', '>=', $round_start_date)->where('created_at', '<', $this->created_at)->count();
 		return $attempts + 1;
 	}
 
@@ -41,6 +43,30 @@ class Quiz extends Model {
 		{
 			return $quiz_round_attempts_limit->{$this->round};
 		}
+	}
+
+	public function scopeOfCurrentRound($query)
+	{
+		$quiz_round_date = Config::get('quiz_round_date');
+
+		$round = 1;
+
+		foreach($quiz_round_date as $index => $date)
+		{
+			if(time() < strtotime($date))
+			{
+				break;
+			}
+
+			$round = $index + 1;
+		}
+
+		$round_start_date = $quiz_round_date[$round - 1];
+
+		$query->where('round', $round);
+		$query->where('created_at', '>', $round_start_date);
+		
+		return $query;
 	}
 
 }
