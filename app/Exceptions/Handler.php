@@ -79,9 +79,9 @@ class Handler extends ExceptionHandler {
 		}
 		else
 		{
-			if (view()->exists("errors.{$status}"))
+			if ($status >= 400 && $status < 500)
 			{
-				return response()->view("errors.{$status}", ['code'=>$status, 'message'=>$message], $status);
+				return response()->view("errors.4xx", ['code'=>$status, 'message'=>$message], $status);
 			}
 			else
 			{
