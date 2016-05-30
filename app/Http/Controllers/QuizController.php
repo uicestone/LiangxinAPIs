@@ -57,7 +57,7 @@ class QuizController extends Controller {
 		
 		$results = $query->get()->map(function(Quiz $quiz)
 		{
-			$quiz->setAppends(['timeout_at', 'attempts', 'attempts_allowed']);
+			$quiz->setAppends(['timeout_at', 'attempts', 'attempts_limit']);
 			return $quiz;
 		});
 		
@@ -140,7 +140,7 @@ class QuizController extends Controller {
 	 */
 	public function show($quiz)
 	{
-		$quiz->setAppends(['timeout_at', 'attempts', 'attempts_allowed']);
+		$quiz->setAppends(['timeout_at', 'attempts', 'attempts_limit']);
 		return $quiz;
 	}
 

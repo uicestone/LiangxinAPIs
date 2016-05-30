@@ -35,7 +35,7 @@ class Quiz extends Model {
 		return $attempts + 1;
 	}
 
-	public function getAttemptsAllowedAttribute()
+	public function getAttemptsLimitAttribute()
 	{
 		$quiz_round_attempts_limit = Config::get('quiz_round_attempt_limit');
 
