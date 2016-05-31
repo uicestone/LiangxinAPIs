@@ -55,7 +55,7 @@
                             <div class="answer">
                                 <h4 class="sm">选项</h4>
                                 <ul class="answer-list">
-                                   <li ng-repeat="choice in question.choices">
+                                   <li ng-repeat="choice in question.choices track by $index">
                                         <input type="radio" id="answer{{$index}}" ng-model="$parent.question.user_answer" ng-value="$index | choiceLabel" ng-disabled="question.user_answer_correct !== undefined">
                                         <label for="answer{{$index}}">
                                             <i class="icon icon_radio"></i>
