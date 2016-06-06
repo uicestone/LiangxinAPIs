@@ -65,8 +65,21 @@ class SmsSend extends Command {
 				$group_ids = explode(',', $this->option('user-groups'));
 				$query->whereIn('group_id', $group_ids);
 			}
-
-			if(!$this->option('users') && !$this->option('user-role') && !$this->option('user-groups') && !$this->option('user-all'))
+			
+			if($this->option('user-not-in-quiz'))
+			{
+				$query->whereNotIn('id', function($query)
+				{
+					$query->select('user_id')->from('quizzes');
+					
+					if(is_numeric($this->option('user-not-in-quiz')))
+					{
+						$query->where('round', $this->option('user-not-in-quiz'));
+					}
+				});
+			}
+			
+			if(!$this->option('users') && !$this->option('user-role') && !$this->option('user-groups') && !$this->option('user-not-in-quiz') && !$this->option('user-all'))
 			{
 				$this->error('用户筛选错误');
 				return;
@@ -116,6 +129,7 @@ class SmsSend extends Command {
 			['users', 'u', InputOption::VALUE_OPTIONAL, '筛选用户ID'],
 			['user-role', 'r', InputOption::VALUE_OPTIONAL, '筛选用户角色'],
 			['user-groups', 'g', InputOption::VALUE_OPTIONAL, '筛选用户组'],
+			['user-not-in-quiz', null, InputOption::VALUE_OPTIONAL, '未参加过某轮竞赛'],
 			['user-all', 'a', InputOption::VALUE_NONE, '全体用户'],
 			['mobile', 'm', InputOption::VALUE_OPTIONAL, '手机号'],
 			['text', 't', InputOption::VALUE_REQUIRED, '文字'],
