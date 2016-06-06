@@ -19,12 +19,6 @@
 		<!-- MetisMenu CSS -->
 		<link href="<?=url('packages')?>/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 
-		<!-- DataTables CSS -->
-		<link href="<?=url('packages')?>/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
-
-		<!-- DataTables Responsive CSS -->
-		<link href="<?=url('packages')?>/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
-
 		<!-- Custom CSS -->
 		<link href="<?=url('css')?>/sb-admin-2.css" rel="stylesheet">
 

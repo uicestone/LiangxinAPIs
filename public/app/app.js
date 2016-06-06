@@ -173,7 +173,12 @@ angular.module('liangxin.users', []).controller('UserController', ['$scope', '$l
 			Alert.add('用户已保存', 'success');
 			$location.replace().url('user/' + user.id);
 		});
-	}
+	};
+	$scope.delete = function(user){
+		user.$delete(function(){
+			history.back();
+		});
+	};
 	$scope.searchGroup = function(name){
 		return Group.query({keyword: name}).$promise;
 	}
