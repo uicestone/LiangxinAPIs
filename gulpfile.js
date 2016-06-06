@@ -13,6 +13,28 @@ var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
 
+    // admin style
+    mix.styles([
+        '../../../public/packages/bootstrap/dist/css/bootstrap.min.css',
+        '../../../public/packages/font-awesome/css/font-awesome.min.css',
+        '../../../public/packages/metisMenu/dist/metisMenu.min.css',
+        'sb-admin-2.css'
+    ], 'public/assets/css/admin.css');
+
+    // quiz JavaScript
+    mix.scripts([
+        '../../../public/packages/angular/angular.min.js',
+        '../../../public/packages/angular-route/angular-route.min.js',
+        '../../../public/packages/angular-resource/angular-resource.min.js',
+        '../../../public/packages/angular-bootstrap/ui-bootstrap-tpls.min.js',
+        '../../../public/packages/ng-file-upload/ng-file-upload.min.js',
+        'admin/services.js',
+        'admin/app.js',
+        '../../../public/packages/jquery/dist/jquery.min.js',
+        '../../../public/packages/metisMenu/dist/metisMenu.min.js',
+        'admin/sb-admin-2.js'
+    ], 'public/assets/js/admin.js');
+    
     // quiz style
     mix.styles([
         '../../../public/packages/bootstrap/dist/css/bootstrap.min.css',
@@ -33,6 +55,7 @@ elixir(function(mix) {
 
     // 版本化所有打包后的CSS和JS
     mix.version([
+        'assets/css/admin.css', 'assets/js/admin.js',
         'assets/css/quiz.css', 'assets/js/quiz.js'
     ]);
 

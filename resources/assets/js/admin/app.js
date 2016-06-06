@@ -13,7 +13,7 @@ angular.module('liangxin', [
 	$routeProvider
 		.when('/user', {
 			controller: 'UserController',
-			templateUrl: '../app/user/list.html',
+			templateUrl: '../assets/html/admin/user/list.html',
 			resolve: {
 				users: ['$route', 'User', function($route, User){
 					return User.query(angular.extend({per_page: 20}, $route.current.params)).$promise;
@@ -22,7 +22,7 @@ angular.module('liangxin', [
 		})
 		.when('/user/:id', {
 			controller: 'UserEditController',
-			templateUrl: '../app/user/edit.html',
+			templateUrl: '../assets/html/admin/user/edit.html',
 			resolve: {
 				user: ['$route', 'User', function($route, User){
 					if($route.current.params.id === 'new'){
@@ -34,7 +34,7 @@ angular.module('liangxin', [
 		})
 		.when('/group', {
 			controller: 'GroupController',
-			templateUrl: '../app/group/list.html',
+			templateUrl: '../assets/html/admin/group/list.html',
 			resolve: {
 				groups: ['$route', 'Group', function($route, Group){
 					return Group.query(angular.extend({per_page: 20}, $route.current.params)).$promise;
@@ -43,7 +43,7 @@ angular.module('liangxin', [
 		})
 		.when('/group/:id', {
 			controller: 'GroupEditController',
-			templateUrl: '../app/group/edit.html',
+			templateUrl: '../assets/html/admin/group/edit.html',
 			resolve: {
 				group: ['$route', 'Group', function($route, Group){
 					if($route.current.params.id === 'new'){
@@ -55,7 +55,7 @@ angular.module('liangxin', [
 		})
 		.when('/post', {
 			controller: 'PostController',
-			templateUrl: '../app/post/list.html',
+			templateUrl: '../assets/html/admin/post/list.html',
 			resolve: {
 				posts: ['$route', 'Post', function($route, Post){
 					return Post.query(angular.extend({per_page: 20}, $route.current.params)).$promise;
@@ -64,7 +64,7 @@ angular.module('liangxin', [
 		})
 		.when('/post/:id', {
 			controller: 'PostEditController',
-			templateUrl: '../app/post/edit.html',
+			templateUrl: '../assets/html/admin/post/edit.html',
 			resolve: {
 				post: ['$route', 'Post', function($route, Post){
 					if($route.current.params.id === 'new'){

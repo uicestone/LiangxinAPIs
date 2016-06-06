@@ -12,28 +12,9 @@
 		<title>新城e家 - 管理后台</title>
 		
 		<base href="<?=url('admin')?>/">
-
-		<!-- Bootstrap Core CSS -->
-		<link href="<?=url('packages')?>/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-		<!-- MetisMenu CSS -->
-		<link href="<?=url('packages')?>/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-
-		<!-- Custom CSS -->
-		<link href="<?=url('css')?>/sb-admin-2.css" rel="stylesheet">
-
-		<!-- Custom Fonts -->
-		<link href="<?=url('packages')?>/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 		
-		<script type="text/javascript" src="<?=url('packages')?>/angular/angular.js"></script>
-		<script type="text/javascript" src="<?=url('packages')?>/angular-route/angular-route.min.js"></script>
-		<script type="text/javascript" src="<?=url('packages')?>/angular-resource/angular-resource.min.js"></script>
-		<script type="text/javascript" src="<?=url('packages')?>/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-		<!--[if lt IE 9]><script type="text/javascript" src="<?=url('packages')?>/ng-file-upload/ng-file-upload-shim.min.js"></script><![endif]-->
-		<script type="text/javascript" src="<?=url('packages')?>/ng-file-upload/ng-file-upload.min.js"></script>
-		
-		<script type="text/javascript" src="<?=url('app')?>/services.js"></script>
-		<script type="text/javascript" src="<?=url('app')?>/app.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?=resource_url(elixir('assets/css/admin.css'))?>">
+		<script type="text/javascript" src="<?=resource_url(elixir('assets/js/admin.js'))?>"></script>
 
 	</head>
 
@@ -127,15 +108,6 @@
 
 		</div>
 		<!-- /#wrapper -->
-
-		<!-- jQuery -->
-		<script src="<?=url('packages')?>/jquery/dist/jquery.min.js"></script>
-
-		<!-- Metis Menu Plugin JavaScript -->
-		<script src="<?=url('packages')?>/metisMenu/dist/metisMenu.min.js"></script>
-
-		<!-- Custom Theme JavaScript -->
-		<script src="<?=url('js')?>/sb-admin-2.js"></script>
 
 		<div class="alert-container" ng-controller="AlertCtrl">
 			<alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-mouseenter="toggleCloseButton($index)" ng-mouseleave="toggleCloseButton($index)">
