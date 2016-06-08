@@ -22,6 +22,7 @@ Route::resource('api/v1/user', 'UserController', ['except' => ['edit', 'create']
 Route::resource('api/v1/post', 'PostController', ['except' => ['edit', 'create']]);
 Route::resource('api/v1/question', 'QuestionController', ['except' => ['edit', 'create']]);
 Route::resource('api/v1/quiz', 'QuizController', ['except' => ['edit', 'create']]);
+Route::get('api/v1/quiz/result/{round}', 'QuizController@getResult');
 
 Route::delete('api/v1/post', 'PostController@destroy');
 

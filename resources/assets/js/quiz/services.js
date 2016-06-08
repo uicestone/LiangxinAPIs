@@ -30,7 +30,8 @@ angular.module('liangxin-quiz.services', ['ngResource'])
 	var quiz = $resource('../api/v1/quiz/:id', {id: '@id'}, {
 		query: {method: 'GET', isArray: true, interceptor: {response: responseInterceptor}},
 		create: {method: 'POST'},
-		update: {method: 'PUT'}
+		update: {method: 'PUT'},
+		getResult: {method: 'GET', isArray: true, url: '../api/v1/quiz/result/:round', params: {round: '@round'}}
 	});
 	
 	quiz.prototype.$save = function(a, b, c, d){

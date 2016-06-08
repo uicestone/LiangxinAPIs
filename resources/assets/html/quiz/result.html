@@ -1,0 +1,23 @@
+<div class="quiz-result">
+    <div class="quiz-result-header round-{{round}}"></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th style="width:45px">排名</th>
+                <th>姓名</th>
+                <th style="width:100px">群组</th>
+                <th>总分</th>
+                <th>用时</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="result in results">
+                <td>{{ $index + 1 }}</td>
+                <td>{{ result.user_name }}</td>
+                <td>{{ result.group_name }}</td>
+                <td>{{ result.total_score }}</td>
+                <td>{{ result.total_duration }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

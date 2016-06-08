@@ -215,4 +215,29 @@ class QuizController extends Controller {
 		$quiz->delete();
 	}
 
+	public function getResult($round)
+	{
+		try
+		{
+			$results = Quiz::where('round', $round)->groupBy('user_id')->orderBy('total_score')->select(DB::raw('user_id, max(created_at) as finish_time, sum(score) as total_score, sec_to_time(sum(duration)) as total_duration'))->take(100)->get()->map(function($result)
+			{
+				$user = $result->user;
+				$group = $user->group;
+
+				return (object)[
+					'user_name'=>$user->name,
+					'group_name'=>$group->name,
+					'total_score'=>(int)$result->total_score,
+					'total_duration'=>$result->total_duration
+				];
+			});
+		}
+		catch(\Error $error)
+		{
+			echo $error->getMessage();
+		}
+
+		return $results;
+	}
+
 }

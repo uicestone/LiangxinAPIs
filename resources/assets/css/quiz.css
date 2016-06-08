@@ -8471,3 +8471,26 @@ footer#footer.footer-style-2 {
   }
 }
 
+.quiz-result-header {
+  height: 150px;
+  background-position: center;
+  background-size: cover;
+}
+
+.quiz-result-header.round-1 {
+  background-image: url('/images/header_result_round_1.jpg');
+}
+
+.quiz-result {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #E9BC45;
+}
+
+.quiz-result .table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: #D4A834;
+}
+

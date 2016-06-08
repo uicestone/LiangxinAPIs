@@ -30,9 +30,14 @@ angular.module('liangxin-quiz', [
 				}]
 			}
 		})
-		.when('/result', {
+		.when('/result/:round', {
 			controller: 'ResultController',
-			templateUrl: '../quiz/result'
+			templateUrl: '../assets/html/quiz/result.html',
+			resolve: {
+				results: ['$route', 'Quiz', function($route, Quiz) {
+					return Quiz.getResult({round: $route.current.params.round}).$promise;
+				}]
+			}
 		});
 
 	$httpProvider.interceptors.push('HttpInterceptor');
@@ -145,8 +150,9 @@ angular.module('liangxin-quiz.controllers', [])
 
 }])
 
-.controller('ResultController', ['$scope', '$location', function($scope, $location){
-
+.controller('ResultController', ['$scope', '$location', '$route', 'results', function($scope, $location, $route, results){
+	$scope.results = results;
+	$scope.round = $route.current.params.round;
 }])
 
 .controller('AlertController', ['$scope', '$rootScope', 'Alert',
