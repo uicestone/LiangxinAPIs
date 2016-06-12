@@ -93,8 +93,8 @@ angular.module('liangxin-quiz.services', ['ngResource'])
 			Alert.close(rejection.config.alert.normal.id);
 			Alert.close(rejection.config.alert.slow.id);
 
-			if(rejection.status === 401){
-				alert(rejection.statusText);
+			if(rejection.status >= 400 && rejection.status < 500){
+				alert(angular.fromJson(rejection.statusText) || rejection.statusText);
 			}
 
 			if(rejection.data.message){
@@ -119,6 +119,11 @@ angular.module('liangxin-quiz.services', ['ngResource'])
 
 	this.add = function(message, type) {
 		var id = new Date().getTime();
+		for(var index in items){
+			if (items[index].msg === message){
+				items.splice(index, 1);
+			}
+		}
 		items.push({id: id, msg: message, type: type === undefined ? 'warning' : type});
 		return id;
 	};

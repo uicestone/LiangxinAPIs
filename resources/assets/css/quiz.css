@@ -8489,3 +8489,39 @@ footer#footer.footer-style-2 {
   background-color: #FFD054;
 }
 
+.alert-container {
+  position: fixed;
+  top: 0;
+  right: 50px;
+  left: 50px;
+  text-align: center;
+  z-index: 2000;
+}
+
+.alert-container .alert{
+  display: inline-block;
+  min-width: 6%;
+  padding: 4px 10px;
+  margin: 0 2px 2px 0;
+  text-align: left;
+  position: relative;
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 2px 5px #888;
+}
+
+.alert-warning {
+  background-color: #f9edbe;
+  border-color: #f0c36d;
+  color: #80663b;
+}
+
+.alert-navigator {
+  display: inline-block;
+  margin-right: -5px;
+}
+
+.alert .close {
+  position: absolute;
+  right: 2px;
+  top: 0;
+}

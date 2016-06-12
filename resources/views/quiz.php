@@ -34,6 +34,17 @@
 
 	</head>
 
-	<body ng-view></body>
+	<body>
+		<div class="alert-container" ng-controller="AlertController">
+			<alert ng-repeat="alert in alerts" type="{{alert.type}}" ng-mouseenter="toggleCloseButton($index)" ng-mouseleave="toggleCloseButton($index)">
+				<button ng-show="alert.closeable" type="button" class="close" ng-click="close(alert.id)">
+					<span aria-hidden="true">×</span>
+					<span class="sr-only">Close</span>
+				</button>
+				{{alert.msg}}
+			</alert>
+		</div>
+		<div ng-view></div>
+	</body>
 
 </html>
