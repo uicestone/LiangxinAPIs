@@ -40,7 +40,19 @@ class WelcomeController extends Controller {
 			$token = $user->token;
 		}
 		
-		return view('quiz', compact('user', 'token'));
+		$round = 1;
+		
+		foreach(Config::get('quiz_round_date') as $index => $date)
+		{
+			if(time() < strtotime($date))
+			{
+				break;
+			}
+			
+			$round = $index + 1;
+		}
+		
+		return view('quiz', compact('user', 'token', 'round'));
 	}
 	
 	public function creditPolicy()

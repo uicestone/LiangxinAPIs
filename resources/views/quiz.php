@@ -19,6 +19,7 @@
 		<script type="text/javascript">
 			var user = <?=json_encode($user)?>;
 			var token = '<?=$token?>';
+			var round = Number(<?=$round?>);
 			var userAgent = '<?=app()->user_agent?>';
 			
 			if(user.id == 1) {

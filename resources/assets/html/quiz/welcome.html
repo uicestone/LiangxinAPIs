@@ -1,6 +1,6 @@
 <div style="position: absolute;top: 0;bottom: 0;background: #7D0302;">
     <img src="../images/quiz-cover.jpg" ng-show="!showingRules">
     <img src="../images/quiz-cover-bottom.jpg" ng-show="!showingRules" ng-click="showRule()">
-    <img src="../images/quiz-rules.jpg" ng-show="showingRules">
-    <img src="../images/quiz-rules-bottom.jpg" ng-show="showingRules" ng-click="startQuiz()">
+    <img src="../images/quiz-rules{{round ? '-round-' + round : ''}}.jpg" ng-show="showingRules">
+    <img src="../images/quiz-rules-bottom{{round ? '-round-' + round : ''}}.jpg" ng-show="showingRules" ng-click="startQuiz()">
 </div>

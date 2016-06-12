@@ -87,9 +87,20 @@ class QuizController extends Controller {
 			
 			$round = $index + 1;
 		}
+
+		if($round > 1)
+		{
+			$round_users = Config::get('quiz_round_' . $round . '_users');
+			
+			if(!in_array(app()->user->id, $round_users))
+			{
+				abort(403, '您未进入复赛, 不能参与此次答题, 欢迎下次继续参与');
+			}
+		}
 		
 		$round_time_limit = Config::get('quiz_round_time_limit')->$round;
 		$round_attempt_limit = Config::get('quiz_round_attempt_limit')->$round;
+		$round_questions = Config::get('quiz_round_questions')->$round;
 
 		// check if there's an unfinished quiz of this user
 		$quizzes_existed = Quiz::where('user_id', app()->user->id)->ofCurrentRound()->get();
@@ -122,7 +133,7 @@ class QuizController extends Controller {
 		else
 		{
 			$quiz = new Quiz();
-			$questions = Question::where('round', $round)->orderBy(DB::raw('RAND()'))->take(10)->get();
+			$questions = Question::where('round', $round)->orderBy(DB::raw('RAND()'))->take($round_questions)->get();
 			$quiz->questions = $questions;
 			$quiz->round = $round;
 			$quiz->duration = null;
