@@ -25,7 +25,7 @@
                                 <div class="list-body">
                                     <a ng-click="goToQuestion($index)">
                                         <h6>第{{ $index + 1 }}题</h6>
-                                        <p>{{ question.title}} </p>
+                                        <p ng-bind-html="question.title"></p>
                                     </a>
                                 </div>
                                 <div class="download">
@@ -49,7 +49,7 @@
                     <div class="col-md-8">
                         <div class="question-content">
                             <h4 class="sm">第{{ currentQuestion + 1 }}题 - 单选</h4>
-                            <p>{{ question.title }}</p>
+                            <p ng-bind-html="question.title"></p>
                             <h4 class="sm correct answer-hint" ng-show="question.user_answer_correct === true">正确</h4>
                             <h4 class="sm wrong answer-hint" ng-show="question.user_answer_correct === false">错误, 答案为{{ question.answer }}</h4>
                             <div class="answer">
@@ -59,7 +59,7 @@
                                         <input type="radio" id="answer{{$index}}" ng-model="$parent.question.user_answer" ng-value="$index | choiceLabel" ng-disabled="question.user_answer_correct !== undefined">
                                         <label for="answer{{$index}}">
                                             <i class="icon icon_radio"></i>
-                                            {{ $index | choiceLabel }}. {{ choice }}
+                                            {{ $index | choiceLabel }}. <span ng-bind-html="choice"></span>
                                         </label>
                                     </li>
                                 </ul>

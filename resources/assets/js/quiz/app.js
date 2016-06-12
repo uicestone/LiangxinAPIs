@@ -7,7 +7,7 @@ angular.module('liangxin-quiz', [
 	'liangxin-quiz.services',
 	'liangxin-quiz.controllers'
 ])
-.config(['$routeProvider', '$httpProvider', '$locationProvider', function($routeProvider, $httpProvider, $locationProvider) {
+.config(['$routeProvider', '$httpProvider', '$locationProvider', '$sceProvider', function($routeProvider, $httpProvider, $locationProvider, $sceProvider) {
 	$routeProvider
 		.when('/welcome', {
 			controller: 'WelcomeController',
@@ -42,6 +42,7 @@ angular.module('liangxin-quiz', [
 
 	$httpProvider.interceptors.push('HttpInterceptor');
 	$locationProvider.html5Mode(true);
+	$sceProvider.enabled(false);
 
 }]);
 
@@ -50,6 +51,7 @@ angular.module('liangxin-quiz.controllers', [])
 .controller('WelcomeController', ['$scope', '$location', function($scope, $location){
 	
 	$scope.showingRules = false;
+	$scope.round = round;
 	
 	$scope.showRule = function() {
 		document.body.scrollTop = 0;
