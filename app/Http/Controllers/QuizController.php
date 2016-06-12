@@ -90,7 +90,7 @@ class QuizController extends Controller {
 
 		if($round > 1)
 		{
-			$round_users = Config::get('quiz_round_' . $round . '_users');
+			$round_users = Config::get('quiz_round_' . ($round - 1) . '_winners');
 			
 			if(!in_array(app()->user->id, $round_users))
 			{
@@ -240,12 +240,20 @@ class QuizController extends Controller {
 				$group = $user->group;
 
 				return (object)[
+					'user_id'=>$user->id,
 					'user_name'=>$user->name,
 					'group_name'=>$group->name,
 					'total_score'=>(int)$result->total_score,
 					'total_duration'=>$result->total_duration
 				];
 			});
+			
+			$round_users = Config::get('quiz_round_' . $round . '_users');
+			
+			if(!$round_users)
+			{
+				Config::set('quiz_round_' . $round . '_winners', $results->map(function($user){ return $user->user_id; })->toArray());
+			}
 		}
 		catch(\Error $error)
 		{
