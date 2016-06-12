@@ -1,6 +1,6 @@
 <?php namespace App\Console\Commands;
 
-use App\User;
+use App\User, App\Config;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -79,7 +79,12 @@ class SmsSend extends Command {
 				});
 			}
 			
-			if(!$this->option('users') && !$this->option('user-role') && !$this->option('user-groups') && !$this->option('user-not-in-quiz') && !$this->option('user-all'))
+			if($this->option('user-win-round'))
+			{
+				$query->whereIn('id', Config::get('quiz_round_' . $this->option('user-win-round') . '_winners'));
+			}
+
+			if(!$this->option('users') && !$this->option('user-role') && !$this->option('user-groups') && !$this->option('user-not-in-quiz') && !$this->option('user-win-round') && !$this->option('user-all'))
 			{
 				$this->error('用户筛选错误');
 				return;
@@ -92,6 +97,8 @@ class SmsSend extends Command {
 
 			$this->info('即将向 ' . implode(',', array_column($users->toArray(), 'name')) . ' 发送短信');
 
+			sleep(5);
+			
 			$mobiles = $users->map(function($user)
 			{
 				return $user->contact;
@@ -130,6 +137,7 @@ class SmsSend extends Command {
 			['user-role', 'r', InputOption::VALUE_OPTIONAL, '筛选用户角色'],
 			['user-groups', 'g', InputOption::VALUE_OPTIONAL, '筛选用户组'],
 			['user-not-in-quiz', null, InputOption::VALUE_OPTIONAL, '未参加过某轮竞赛'],
+			['user-win-round', null, InputOption::VALUE_OPTIONAL, '从某轮竞赛晋级'],
 			['user-all', 'a', InputOption::VALUE_NONE, '全体用户'],
 			['mobile', 'm', InputOption::VALUE_OPTIONAL, '手机号'],
 			['text', 't', InputOption::VALUE_REQUIRED, '文字'],
