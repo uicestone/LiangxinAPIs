@@ -248,7 +248,7 @@ class QuizController extends Controller {
 				];
 			});
 			
-			$round_users = Config::get('quiz_round_' . $round . '_users');
+			$round_users = Config::get('quiz_round_' . $round . '_winners');
 			
 			if(!$round_users)
 			{
