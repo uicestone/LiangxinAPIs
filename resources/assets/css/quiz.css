@@ -8472,13 +8472,17 @@ footer#footer.footer-style-2 {
 }
 
 .quiz-result-header {
-  height: 150px;
-  background-position: center;
+  height: 167px;
+  background-position: center top;
   background-size: cover;
 }
 
 .quiz-result-header.round-1 {
-  background-image: url('/images/header_result_round_1.jpg');
+  background-image: url('/images/quiz-result-header-round-1.jpg');
+}
+
+.quiz-result-header.round-2 {
+  background-image: url('/images/quiz-result-header-round-2.jpg');
 }
 
 .quiz-result {

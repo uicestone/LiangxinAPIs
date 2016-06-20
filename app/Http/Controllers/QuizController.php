@@ -230,11 +230,15 @@ class QuizController extends Controller {
 	{
 		try
 		{
+			$quiz_round_winner_limit = Config::get('quiz_round_winner_limit');
+			
+			$quiz_winner_limit = isset($quiz_round_winner_limit->$round) ? $quiz_round_winner_limit->$round : 100; 
+			
 			$results = Quiz::where('round', $round)
 				->groupBy('user_id')
 				->orderBy('total_score', 'desc')->orderBy('total_duration')
 				->select(DB::raw('user_id, max(created_at) as finish_time, sum(score) as total_score, sec_to_time(sum(duration)) as total_duration'))
-				->take(100)->get()->map(function($result)
+				->take($quiz_winner_limit)->get()->map(function($result)
 			{
 				$user = $result->user;
 				$group = $user->group;
