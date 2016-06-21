@@ -94,7 +94,7 @@ class QuizController extends Controller {
 			
 			if(!in_array(app()->user->id, $round_users))
 			{
-				abort(403, '您未进入复赛, 不能参与此次答题, 欢迎下次继续参与');
+				abort(403, '您未进入决赛, 不能参与此次答题, 欢迎下次继续参与');
 			}
 		}
 		
