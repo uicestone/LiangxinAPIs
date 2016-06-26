@@ -7,7 +7,8 @@
 	<meta name="format-detection" content="telephone=no">
 	<style>
 		body{
-			padding: 24px;
+			margin:0;
+			padding: <?=$display === 'full-content' ? '0' : '24px'?>;
 		}
 		.title{
 			font-size: 15px;
@@ -16,15 +17,17 @@
 		.desc{
 			font-size: 8px;
 		}
+		header{
+			margin-bottom: 32px;
+		}
 		section{
-			margin-top: 32px;
 			line-height: 1.5;
 			text-indent: 2em;
 			font-size: 10px
 		}
 
 		section p{
-			margin: 10px 0;
+			margin: 0 0 10px;
 			font-size: 20px;
 			word-wrap: break-word;
 		}
@@ -41,10 +44,12 @@
 	</style>
 </head>
 <body>
+	<?php if($display !== 'full-content'): ?>
 	<header>
 		<div class="title"><?=$post->title?></div>
 	</header>
 	<hr />
+	<?php endif; ?>
 	<section>
 		<?php foreach($post->images as $image){ ?>
 		<img src="<?=$image->url?>">

@@ -355,7 +355,8 @@ class PostController extends Controller {
 	 */
 	public function display(Post $post)
 	{
-		return view('post', compact('post'));
+		$display = Input::query('display');
+		return view('post', compact('post', 'display'));
 	}
 
 	/**
