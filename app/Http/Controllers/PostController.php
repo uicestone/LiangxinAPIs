@@ -347,6 +347,11 @@ class PostController extends Controller {
 			$post->addVisible('class_type');
 		}
 		
+		if($post->type === '活动' && app()->user->role === 'app_admin')
+		{
+			$post->content .= '<img src="' . $post->qrcode . '" style="width:100%" />';
+		}
+		
 		return $post;
 	}
 
