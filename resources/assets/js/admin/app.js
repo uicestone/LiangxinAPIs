@@ -245,18 +245,20 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
     });
 	
 	$scope.$watch('poster', function(){
-		$scope.upload($scope.poster, 'poster');
+		$scope.upload($scope.poster, {type: '封面'}, function(post){
+			$scope.post.poster = post;
+		});
 	})
 	
-    $scope.upload = function (file, key) {
+    $scope.upload = function (file, fields, callback) {
 		
 		if(!file) return;
-		
+
 		Upload.upload({
-			url: '../api/v1/post' + ($scope.post.id ? '/' + $scope.post.id : ''),
-			fields: angular.extend({_method: $scope.post.id ? 'put' : 'post'}, $scope.post),
+			url: '../api/v1/post',
 			file: file,
-			fileFormDataName: key || (!$scope.post.id && $scope.post.type === '图片' ? 'images[]' : 'file')
+			fileFormDataName: 'file',
+			fields: fields
 		})
 //		.progress(function (evt) {
 //			var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -264,15 +266,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 //		})
 		.success(function (post, status, headers, config) {
 			Alert.add('文件上传成功', 'success');
-			
-			if(post[0]){
-				post = post[0];
-			}
-			
-			$location.replace().url('post/' + post.id);
-			
-			$scope.post.url = post.url;
-			$scope.post.poster = post.poster;
+			$scope.post.poster = post;
 		})
 //		.error(function (data, status, headers, config) {
 //			console.log('error status: ' + status);

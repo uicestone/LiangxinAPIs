@@ -58,7 +58,7 @@ class Post extends Model {
 	
 	public function poster()
 	{
-		return $this->hasOne('App\Post', 'id', 'poster_id');
+		return $this->belongsTo('App\Post');
 	}
 	
 	public function attendees()

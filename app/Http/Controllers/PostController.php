@@ -261,11 +261,6 @@ class PostController extends Controller {
 			throw new HttpException(400, '请指定文章类型');
 		}
 		
-		if(!Input::data('title'))
-		{
-			throw new HttpException(400, '请指定文章标题');
-		}
-		
 		return $this->update($post);
 	}
 
@@ -331,7 +326,7 @@ class PostController extends Controller {
 			}
 		}
 
-		if(in_array($post->type, ['图片', '附件', '视频', '横幅', '活动']))
+		if(in_array($post->type, ['图片', '附件', '视频', '横幅', '活动','封面']))
 		{
 			$post->addVisible(['url']);
 		}
@@ -530,6 +525,12 @@ class PostController extends Controller {
 				$post->poster->save();
 			}
 			
+		}
+		elseif(Input::data('poster'))
+		{
+			$poster = Post::find(Input::data('poster')['id']);
+			$post->poster()->associate($poster);
+			$post->save();
 		}
 
 		$post->save();

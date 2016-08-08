@@ -17,7 +17,7 @@
 			<div class="form-group" ng-show="post.type !== '图片' && post.type !== '封面'">
 				<label class="control-label col-sm-2">封面</label>
 				<div class="col-sm-10" ng-model="poster" ngf-drop ngf-select ngf-accept="'image/*'" ngf-drag-over-class="has-success">
-					<img ng-show="post.poster" ng-src="../{{ post.poster.url }}" ngf-src="poster" style="max-width:100%">
+					<img ng-show="post.poster" ng-src="../{{ post.poster.url }}" style="max-width:100%">
 					<button ng-show="!post.poster" ng-model="poster" ngf-select ngf-accept="'image/*'" class="btn btn-default">上传</button>
 				</div>
 			</div>
