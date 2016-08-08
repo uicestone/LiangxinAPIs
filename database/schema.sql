@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4529
+# Version 4541
 #
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.6.28-0ubuntu0.14.04.1)
+# Host: 127.0.0.1 (MySQL 5.6.30-0ubuntu0.14.04.1)
 # Database: liangxin
-# Generation Time: 2016-04-25 07:30:59 +0000
+# Generation Time: 2016-08-08 15:34:39 +0000
 # ************************************************************
 
 
@@ -160,6 +160,40 @@ CREATE TABLE `posts` (
 
 
 
+# Dump of table questions
+# ------------------------------------------------------------
+
+CREATE TABLE `questions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `num` smallint(5) unsigned NOT NULL,
+  `round` smallint(5) unsigned NOT NULL,
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `choices` text NOT NULL,
+  `answer` varchar(255) NOT NULL DEFAULT '',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table quizzes
+# ------------------------------------------------------------
+
+CREATE TABLE `quizzes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `questions` text NOT NULL,
+  `round` smallint(5) unsigned NOT NULL,
+  `score` smallint(6) DEFAULT NULL,
+  `duration` smallint(5) unsigned DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table users
 # ------------------------------------------------------------
 
@@ -175,12 +209,18 @@ CREATE TABLE `users` (
   `password` char(60) DEFAULT NULL,
   `token` char(60) DEFAULT NULL,
   `last_ip` varchar(15) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT '2015-01-01 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `contact` (`contact`),
   KEY `name` (`name`),
   KEY `group_id` (`group_id`),
   KEY `password` (`password`),
   KEY `department_id` (`department_id`),
+  KEY `updated_at` (`updated_at`),
+  KEY `created_at` (`created_at`),
+  KEY `deleted_at` (`deleted_at`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `users_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `groups` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
