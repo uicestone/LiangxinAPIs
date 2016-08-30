@@ -12,12 +12,24 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	use Authenticatable, CanResetPassword, SoftDeletes;
 
 	/**
-	 * The database table used by the model.
+	 * Append attributes to query when building a query.
 	 *
-	 * @var string
+	 * @param  array|string  $attributes
+	 * @return $this
 	 */
-	protected $table = 'users';
-
+	public function append($attributes)
+	{
+		if (is_string($attributes)) {
+			$attributes = func_get_args();
+		}
+		
+		$this->appends = array_unique(
+			array_merge($this->appends, $attributes)
+		);
+		
+		return $this;
+	}
+	
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -79,6 +91,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		}
 
 		return $url;
+	}
+	
+	public function getAttendStatusAttribute()
+	{
+		if(!isset($this->pivot))
+		{
+			return null;
+		}
+		
+		return $this->pivot->status;
 	}
 	
 }
