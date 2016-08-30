@@ -281,7 +281,7 @@ class PostController extends Controller {
 		
 		if($post->type === '活动')
 		{
-			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status', 'articles', 'images', 'qrcode']);
+			$post->addVisible(['event_date', 'event_address', 'event_type', 'due_date', 'has_due_date', 'content', 'excerpt', 'attendees', 'attended', 'attend_status', 'articles', 'images']);
 			$post->load('attendees');
 			$post->attendees->map(function($item)
 			{
@@ -290,7 +290,7 @@ class PostController extends Controller {
 				$item->append('attend_status');
 				return $item;
 			});
-			$post->append(['articles', 'has_due_date', 'attended', 'qrcode']);
+			$post->append(['articles', 'has_due_date', 'attended']);
 		}
 
 		if($post->type === '课堂')
