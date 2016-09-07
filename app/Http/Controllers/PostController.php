@@ -291,6 +291,11 @@ class PostController extends Controller {
 				return $item;
 			});
 			$post->append(['articles', 'has_due_date', 'attended']);
+			
+			if(app()->user->role === 'app_admin' || app()->user->id === $post->author->id)
+			{
+				$post->content .= '<p><img src="' . $post->qrcode . '" style="width:100%" /></p>';
+			}
 		}
 
 		if($post->type === '课堂')
@@ -340,11 +345,6 @@ class PostController extends Controller {
 		if($post->type === '服务')
 		{
 			$post->addVisible('class_type');
-		}
-		
-		if($post->type === '活动' && app()->user->role === 'app_admin')
-		{
-			$post->content .= '<img src="' . $post->qrcode . '" style="width:100%" />';
 		}
 		
 		return $post;
