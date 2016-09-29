@@ -189,16 +189,6 @@ class Post extends Model {
 		return str_contains($url, '%') ? $url : wholeurlencode($url);
 	}
 	
-	public function getTitleAttribute($title)
-	{
-		if($this->type === '课堂')
-		{
-			return str_limit($title, 15);
-		}
-		
-		return $title;
-	}
-	
 	public function getExcerptAttribute($excerpt)
 	{
 		if($this->type === '视频')

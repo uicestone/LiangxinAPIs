@@ -130,6 +130,7 @@ class PostController extends Controller {
 			if($post->type === '课堂')
 			{
 				$post->addVisible(['class_type']);
+				$post->title = str_limit($post->title, 15);
 			}
 			
 			if($post->type === '横幅')
