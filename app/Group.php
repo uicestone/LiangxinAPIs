@@ -15,6 +15,11 @@ class Group extends Model {
 		'members'=>'integer'
 	];
 	
+	public function users()
+	{
+		return $this->hasMany('App\User');
+	}
+	
 	public function parent()
 	{
 		return $this->belongsTo('App\Group');
@@ -84,5 +89,12 @@ class Group extends Model {
 		}
 		
 		return $url;
+	}
+	
+	public function updateMembersCount()
+	{
+		$members_count = $this->users()->count();
+		$this->members = $members_count;
+		$this->save();
 	}
 }

@@ -102,6 +102,14 @@ class UserController extends Controller {
 	 */
 	public function update(User $user)
 	{
+		$input_group = Input::data('group');
+		
+		if($input_group && is_array($input_group) && isset($input_group['id']))
+		{
+			$previous_group = $user->group;
+			$new_group = Group::find($input_group['id']);
+		}
+		
 		$user->fill(Input::data());
 		
 		if(app()->user && app()->user->role === 'app_admin')
@@ -149,6 +157,12 @@ class UserController extends Controller {
 		}
 		
 		$user->save();
+		
+		if(isset($input_group))
+		{
+			$previous_group->updateMembersCount();
+			$new_group->updateMembersCount();
+		}
 		
 		return $this->show($user);
 	}
