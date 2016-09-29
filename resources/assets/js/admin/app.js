@@ -231,7 +231,7 @@ angular.module('liangxin.posts', ['ngFileUpload']).controller('PostController', 
 		return User.query({keyword: name, with_group: true}).$promise;
 	}
 	$scope.searchPost = function(name){
-		return Post.query({keyword: name}).$promise;
+		return Post.query({keyword: name, except_id: $scope.post.id}).$promise;
 	}
 	
 	$scope.remove = function(post){

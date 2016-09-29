@@ -66,6 +66,11 @@ class PostController extends Controller {
 			});
 		}
 		
+		if(Input::query('except_id'))
+		{
+			$query->where('id', '!=', Input::query('except_id'));
+		}
+		
 		$order_by = Input::query('order_by') ? Input::query('order_by') : 'created_at';
 
 		if(Input::query('order'))
