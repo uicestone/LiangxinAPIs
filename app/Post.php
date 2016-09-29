@@ -189,6 +189,16 @@ class Post extends Model {
 		return str_contains($url, '%') ? $url : wholeurlencode($url);
 	}
 	
+	public function getTitleAttribute($title)
+	{
+		if($this->type === '课堂')
+		{
+			return str_limit($title, 15);
+		}
+		
+		return $title;
+	}
+	
 	public function getExcerptAttribute($excerpt)
 	{
 		if($this->type === '视频')
@@ -208,7 +218,7 @@ class Post extends Model {
 			return str_limit(strip_tags($this->content), 64);
 		}
 		
-		return $excerpt;
+		return str_limit($excerpt, 64);
 	}
 
 	public function setExcerptAttribute($excerpt)
