@@ -150,6 +150,7 @@ class PostController extends Controller {
 			if(in_array($post->type, ['课堂', '活动', '文章', '服务', '视频']))
 			{
 				$post->addVisible('excerpt');
+				$post->excerpt = str_limit($post->excerpt, 64);
 			}
 			
 			if(in_array($post->type, ['课堂', '活动', '文章', '图片']))

@@ -191,6 +191,11 @@ class Post extends Model {
 	
 	public function getExcerptAttribute($excerpt)
 	{
+		if(app()->from_admin)
+		{
+			return $excerpt;
+		}
+		
 		if($this->type === '视频')
 		{
 			if(json_decode($excerpt))
@@ -205,10 +210,10 @@ class Post extends Model {
 		
 		if(!$excerpt)
 		{
-			return str_limit(strip_tags($this->content), 64);
+			return strip_tags($this->content);
 		}
 		
-		return str_limit($excerpt, 64);
+		return $excerpt;
 	}
 
 	public function setExcerptAttribute($excerpt)
@@ -218,6 +223,19 @@ class Post extends Model {
 			$excerpt = json_encode($excerpt);
 		}
 		$this->attributes['excerpt'] = $excerpt;
+	}
+	
+	public function getContentAttribute($content)
+	{
+		if(app()->from_admin)
+		{
+			return $content;
+		}
+		
+		if(!$content && $this->excerpt)
+		{
+			return $this->excerpt;
+		}
 	}
 	
 	public function getCommentsCountAttribute()
