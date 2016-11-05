@@ -232,10 +232,12 @@ class Post extends Model {
 			return $content;
 		}
 		
-		if(!$content && $this->excerpt)
+		if(!$content && $this->getOriginal('excerpt'))
 		{
-			return $this->excerpt;
+			return $this->getOriginal('excerpt');
 		}
+		
+		return $content;
 	}
 	
 	public function getCommentsCountAttribute()
