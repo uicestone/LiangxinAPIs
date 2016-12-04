@@ -101,6 +101,11 @@ class PostController extends Controller {
 			$per_page = false;
 		}
 		
+		if(Input::query('group_id'))
+		{
+			$per_page = false;
+		}
+		
 		$list_total = $query->count();
 		
 		if($per_page)
