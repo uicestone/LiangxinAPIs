@@ -160,7 +160,11 @@ class UserController extends Controller {
 		
 		if(isset($input_group))
 		{
-			$previous_group->updateMembersCount();
+			if($previous_group)
+			{
+				$previous_group->updateMembersCount();
+			}
+			
 			$new_group->updateMembersCount();
 		}
 		
