@@ -179,6 +179,8 @@ class UserController extends Controller {
 	 */
 	public function destroy(User $user)
 	{
+		$group = $user->group;
+		$group->updateMembersCount();
 		$user->delete();
 	}
 	
