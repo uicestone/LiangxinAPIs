@@ -91,17 +91,7 @@ class PostController extends Controller {
 		
 		$per_page = Input::query('per_page') ? Input::query('per_page') : 10;
 		
-		if(Input::query('favored_user_id') && !Input::query('per_page'))
-		{
-			$per_page = false;
-		}
-		
-		if(Input::query('type') === '服务')
-		{
-			$per_page = false;
-		}
-		
-		if(Input::query('group_id'))
+		if((Input::query('favored_user_id') || Input::query('author_id') || Input::query('group_id') || Input::query('type') === '服务') && !Input::query('per_page'))
 		{
 			$per_page = false;
 		}
