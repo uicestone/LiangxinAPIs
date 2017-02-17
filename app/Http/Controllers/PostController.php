@@ -151,10 +151,10 @@ class PostController extends Controller {
 			{
 				$post->addVisible(['class_type']);
 				
-				if(!app()->from_admin)
-				{
-					$post->title = str_limit($post->title, 15);
-				}
+//				if(!app()->from_admin)
+//				{
+//					$post->title = str_limit($post->title, 15);
+//				}
 			}
 			
 			if($post->type === '横幅')
@@ -168,7 +168,7 @@ class PostController extends Controller {
 				
 				if(!app()->from_admin)
 				{
-					$post->excerpt = str_limit($post->excerpt, 64);
+					$post->excerpt = str_limit($post->excerpt, 20);
 				}
 			}
 			
