@@ -232,7 +232,7 @@ class Post extends Model {
 			return $content;
 		}
 		
-		if(!$content && $this->getOriginal('excerpt'))
+		if(!$content && $this->getOriginal('excerpt') && $this->type !== '课堂')
 		{
 			return $this->getOriginal('excerpt');
 		}
