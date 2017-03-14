@@ -310,7 +310,7 @@ class PostController extends Controller {
 			});
 			$post->append(['articles', 'has_due_date', 'attended']);
 			
-			if(app()->user->role === 'app_admin' || app()->user->id === $post->author->id)
+			if(!app()->from_admin && (app()->user->role === 'app_admin' || app()->user->id === $post->author->id))
 			{
 				$post->content .= '<p><img src="' . $post->qrcode . '" style="width:100%" /></p>';
 			}
