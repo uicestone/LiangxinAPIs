@@ -16,7 +16,7 @@ elixir(function(mix) {
     // admin style
     mix.styles([
         '../../../public/packages/bootstrap/dist/css/bootstrap.min.css',
-        '../../../public/packages/font-awesome/css/font-awesome.min.css',
+        '../../../public/packages/fontawesome/css/font-awesome.min.css',
         '../../../public/packages/metisMenu/dist/metisMenu.min.css',
         'sb-admin-2.css'
     ], 'public/assets/css/admin.css');
@@ -38,7 +38,7 @@ elixir(function(mix) {
     // quiz style
     mix.styles([
         '../../../public/packages/bootstrap/dist/css/bootstrap.min.css',
-        '../../../public/packages/font-awesome/css/font-awesome.min.css',
+        '../../../public/packages/fontawesome/css/font-awesome.min.css',
         'md-font.css',
         'quiz.css'
     ], 'public/assets/css/quiz.css');
@@ -60,7 +60,7 @@ elixir(function(mix) {
     ]);
 
     // 复制CSS中用到的资源相对路径
-    mix.copy('public/packages/font-awesome/fonts', 'public/build/assets/fonts');
+    mix.copy('public/packages/fontawesome/fonts', 'public/build/assets/fonts');
     mix.copy('resources/assets/css/mdfonts', 'public/build/assets/css/mdfonts');
     mix.copy('resources/assets/html', 'public/assets/html');
 
