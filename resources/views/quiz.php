@@ -10,8 +10,8 @@
 		<base href="<?=url('quizzes')?>/">
 
 		<!-- Google font -->
-		<link href='http://fonts.useso.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Raleway:300,400,700,900' rel='stylesheet' type='text/css'>
+		<!-- <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'> -->
+		<!-- <link href='http://fonts.googleapis.com/css?family=Raleway:300,400,700,900' rel='stylesheet' type='text/css'> -->
 		<!-- Css -->
 		<link rel="stylesheet" type="text/css" href="<?=resource_url(elixir('assets/css/quiz.css'))?>">
 		<script type="text/javascript" src="<?=resource_url(elixir('assets/js/quiz.js'))?>"></script>
