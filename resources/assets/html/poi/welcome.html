@@ -1,0 +1,25 @@
+<div class="map">
+	<div class="map-scroller">
+		<div class="logo">
+			<img src="/images/plogo.png">
+			<h3>嘉定新城（马陆镇）</h3>
+			<h3>党建地图</h3>
+		</div>
+		<img src="/images/poi.svg" ng-style="{width: zoom * 100 + '%'}">
+	</div>
+	<div class="magnify">
+		<i class="fa fa-search-minus" ng-click="zoomOut()"></i>
+		<i class="fa fa-search-plus" ng-click="zoomIn()"></i>
+	</div>
+</div>
+<ul class="menu">
+	<li class="item" style="background:#00aae4">
+		<a href="service-center"><img src="/images/btn-service.svg"></a>
+	</li>
+	<li class="item" style="background:#76d03a">
+		<a href="workshop"><img src="/images/btn-workshop.svg"></a>
+	</li>
+	<li class="item" style="background:#ffae26">
+		<a href="consultant"><img src="/images/btn-consultant.svg"></a>
+	</li>
+</ul>

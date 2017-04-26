@@ -1,0 +1,34 @@
+<div class="poi-list {{category}}">
+	<header>
+		<h1><img src="/images/{{category}}.svg">{{ listTitle }}</h1>
+	</header>
+
+	<div class="container">
+		<div ng-repeat="poi in pois">
+			<div class="title">
+				<h2>{{ poi.title }}</h2>
+			</div>
+			<div class="content">
+				<div class="name">
+					<i class="fa fa-user-o"></i> {{ poi.author.name }}
+				</div>
+				<div class="phone" ng-if="category=='service'">
+					<i class="fa fa-phone"></i> {{ poi.excerpt }}
+				</div>
+				<div class="phone" ng-if="category!='service'">
+					<i class="fa fa-phone"></i> {{ poi.author.contact }}
+				</div>
+				<div class="mobile" ng-if="category=='service'">
+					<i class="fa fa-mobile"></i> {{ poi.author.contact }}
+				</div>
+				<div class="address" ng-if="category!='consultant'">
+					<i class="fa fa-map-marker"></i> {{ poi.event_address }}
+				</div>
+				<div class="companies" ng-if="category=='consultant'">
+					<i class="fa fa-th-list"></i>
+					<div>{{ poi.content }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
