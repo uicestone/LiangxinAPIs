@@ -137,14 +137,9 @@ class PostController extends Controller {
 				$post->attendee_count = $post->attendees()->count();
 			}
 			
-			if($post->type === '课堂')
+			if(in_array($post->type, ['课堂', '地图']))
 			{
-				$post->addVisible(['class_type']);
-				
-//				if(!app()->from_admin)
-//				{
-//					$post->title = str_limit($post->title, 15);
-//				}
+				$post->addVisible(['class_type']);				
 			}
 			
 			if($post->type === '横幅')
@@ -152,7 +147,7 @@ class PostController extends Controller {
 				$post->addVisible('banner_position');
 			}
 			
-			if(in_array($post->type, ['课堂', '活动', '文章', '服务', '视频']))
+			if(in_array($post->type, ['课堂', '活动', '文章', '服务', '视频', '地图']))
 			{
 				$post->addVisible('excerpt');
 				
@@ -170,7 +165,7 @@ class PostController extends Controller {
 
 			if(in_array($post->type, ['横幅', '图片', '视频', '附件']))
 			{
-				$post->addVisible(['url']);	
+				$post->addVisible(['url']);
 			}
 			
 			if(in_array($post->type, ['横幅', '课堂', '视频', '活动', '服务']))
@@ -181,6 +176,11 @@ class PostController extends Controller {
 				{
 					$post->poster->addVisible('url');
 				}
+			}
+
+			if(in_array($post->type, ['地图']))
+			{
+				$post->addVisible('content', 'event_address');
 			}
 			
 			return $post;
@@ -339,7 +339,7 @@ class PostController extends Controller {
 			$post->addVisible('banner_position');
 		}
 		
-		if(in_array($post->type, ['课堂', '活动', '文章', '服务', '视频']))
+		if(in_array($post->type, ['课堂', '活动', '文章', '服务', '视频', '地图']))
 		{
 			$post->addVisible('excerpt');
 		}
@@ -372,9 +372,14 @@ class PostController extends Controller {
 			$post->append('images');
 		}
 		
-		if($post->type === '服务')
+		if(in_array($post->type, ['服务', '地图']))
 		{
 			$post->addVisible('class_type');
+		}
+		
+		if(in_array($post->type, ['地图']))
+		{
+			$post->addVisible('content', 'event_address');
 		}
 		
 		return $post;
