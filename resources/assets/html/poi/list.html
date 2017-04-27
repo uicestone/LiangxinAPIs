@@ -4,7 +4,7 @@
 	</header>
 
 	<div class="container">
-		<div ng-repeat="poi in pois">
+		<div ng-repeat="poi in pois | orderBy:'title'">
 			<div class="title">
 				<h2>{{ poi.title }}</h2>
 			</div>
