@@ -78,6 +78,10 @@ angular.module('liangxin-poi.controllers', [])
 		$location.url($location.path() + '/' + poi.id);
 	};
 
+	$scope.back = function () {
+		window.history.back();
+	};
+
 }])
 
 .controller('PoiDetailController', ['$scope', '$location', 'poi', function($scope, $location, poi){
